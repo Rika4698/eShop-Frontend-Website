@@ -105,19 +105,29 @@ const Header = () => {
                         </Link>
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem className="lg:hidden">
+                       
+                            <DropdownMenuItem className="lg:hidden">
+                     <Link href="/all-product"   className={`text-[14px] uppercase ${path === "/all-product"
+            ? "text-green-600 font-semibold"
+            : "text-gray-700"
+        }`}>  Products </Link>
+              </DropdownMenuItem>
+
+                 <DropdownMenuItem className="lg:hidden">
+                    <Link href="/flashSale" className={`text-[14px] uppercase ${
+          path === "/flashSale"
+            ? "text-green-600 font-semibold"
+            : "text-gray-700"
+        }`}>   Flash Sale      </Link>
+                                                            
+          </DropdownMenuItem>
+           <DropdownMenuItem className="lg:hidden">
                         <Link
                     href="/contact" className={`text-[14px] uppercase ${path === "/contact" ? "text-green-600 font-semibold" : "text-gray-700"}`}>
                                  Contact
                                                           
                                  </Link>
                              </DropdownMenuItem>
-                            <DropdownMenuItem className="lg:hidden">
-                     <Link href="/all-product"   className={`text-[14px] uppercase ${path === "/all-product"
-            ? "text-green-600 font-semibold"
-            : "text-gray-700"
-        }`}>  ALL Products </Link>
-              </DropdownMenuItem>
 
                  <DropdownMenuItem className="lg:hidden">
                     <Link href="/news" className={`text-[14px] uppercase ${
