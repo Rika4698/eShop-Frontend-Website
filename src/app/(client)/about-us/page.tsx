@@ -34,11 +34,16 @@ export default function AboutUs() {
 
     return (
         <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50">
+            
             {/* Hero Section */}
             <div className="relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-green-400/10 to-blue-400/10"></div>
                 
-                <div className={`relative max-w-7xl mx-auto px-4 md:px-10 lg:px-20 py-16 transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                <div className={`relative max-w-7xl mx-auto px-4 md:px-10 lg:px-20 py-10 transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                    <h2 className="text-3xl md:text-5xl font-bold text-center text-green-700 underline mb-9">
+  About <span className="text-green-500 ">Us</span>
+</h2>
+
                     <div className="flex flex-col lg:flex-row items-center gap-12">
                         {/* Content Section */}
                         <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-start">

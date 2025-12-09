@@ -15,10 +15,10 @@ const Footer = () => {
                 <div className="w-full sm:w-[25%] ">
                     <div className="flex -ml-3 ">
                     <Image src="/logo.png" width={50} height={50} alt="logo"
-                         className="w-[65px] md:w-[80px] mb-[10px]"/>
+                         className="w-[70px] md:w-[80px] mb-[10px]"/>
                          <div>
-                          <h2 className="md:text-3xl text-[20px] font-bold text-green-800">
-                 E<span className="md:text-2xl text-[16px] text-green-500">Shop</span> 
+                          <h2 className="md:text-3xl text-[22px] font-bold text-green-800">
+                 E<span className="md:text-2xl text-[20px] text-green-500">Shop</span> 
                  </h2>
               <p className="text-[12px] md:text-sm text-gray-400 flex">
                      Online Shopping

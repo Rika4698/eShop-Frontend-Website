@@ -121,6 +121,18 @@ const Header = () => {
         }`}>   Flash Sale      </Link>
                                                             
           </DropdownMenuItem>
+           
+            <DropdownMenuItem className="lg:hidden">
+                        <Link
+                    href="/about-us" className={`text-[14px] uppercase ${path === "/about-us" ? "text-green-600 font-semibold" : "text-gray-700"}`}>
+                                 About us
+                                                          
+                                 </Link>
+                             </DropdownMenuItem>
+
+
+
+
            <DropdownMenuItem className="lg:hidden">
                         <Link
                     href="/contact" className={`text-[14px] uppercase ${path === "/contact" ? "text-green-600 font-semibold" : "text-gray-700"}`}>
