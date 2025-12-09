@@ -81,7 +81,7 @@ const Header = () => {
 
     return (
         <div className={path === "/dashboard" ? "hidden" : ""}>
-            <div className="lg:px-2 md:px-0 overflow-hidden py-2">
+            <div className="lg:px-2 md:px-0 overflow-hidden py-2 lg:py-0">
                 <div className="border-b-[1px] pb-2">
                     <div className="lg:container lg:mx-auto">
                         <div className="flex justify-between lg:items-center lg:justify-between gap-16 md:gap-0">
