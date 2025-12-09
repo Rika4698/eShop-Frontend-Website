@@ -32,14 +32,14 @@ const Footer = () => {
                                                 Dhaka, Bangladesh.
                                             </a></span>
                         <span><a
-                            className="text-[0.9rem] flex items-center gap-[8px] hover:text-blue-400 cursor-pointer">
+                            className="text-[0.9rem] flex items-center gap-[8px] hover:text-green-400 cursor-pointer">
                                                 <MdOutlineEmail className="text-[1.1rem]"/>
                                                EShop@gmail.com
                                             </a></span>
                         <span><a
-                            className="text-[0.9rem] flex items-center gap-[8px] hover:text-blue-400 cursor-pointer">
+                            className="text-[0.9rem] flex items-center gap-[8px] hover:text-green-400 cursor-pointer">
                                                 <MdOutlineLocalPhone className="text-[1.1rem]"/>
-                                                +88015558996
+                                                 +8801555899684
                                             </a></span>
                     </div>
                 </div>

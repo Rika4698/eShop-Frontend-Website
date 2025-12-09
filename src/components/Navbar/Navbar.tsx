@@ -44,7 +44,7 @@ const Navbar = () => {
   
   return (
     <div className={path === "/dashboard" ? "hidden" : ""}>
-      <div className={`lg:flex hidden items-center justify-between lg:container lg:mx-auto bg-white lg:px-3 xl:px-0 pb-2`}>
+      <div className={`lg:flex hidden items-center justify-between lg:container  lg:mx-auto bg-white lg:px-4  pb-2 `}>
         <div>
           <Select >
             <SelectTrigger className="w-[220px] px-4 bg-[#80b500] text-white font-bold rounded-lg">
