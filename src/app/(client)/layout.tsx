@@ -1,3 +1,4 @@
+import Footer from "@/components/shared/Footer";
 import Header from "@/components/shared/Header";
 import React from "react";
 
@@ -11,7 +12,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <main className="w-full  min-h-screen">
         <div className="lg:container lg:mx-auto lg:px-4 px-2">{children}</div>
       </main>
-      
+      <Footer/>
     </>
   );
 };

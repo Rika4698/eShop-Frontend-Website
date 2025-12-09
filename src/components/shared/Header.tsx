@@ -192,24 +192,24 @@ const Header = () => {
 {/* login */}
 
                 <div className="-ml-5 md:ml-0">
-                <Link href="">
+              
               <HoverCard>
                   <HoverCardTrigger asChild>
                       <div className="flex justify-center items-center gap-2.5 md:gap-6  px-1 md:py-4">
                      <div>
-                   {isLoading ? ( <div className="animate-pulse w-10 h-10 rounded-full bg-gray-400" /> ) : userData ? ( 
+                   {isLoading ? ( 
+                    <div className="animate-pulse w-10 h-10 rounded-full bg-gray-400" /> ) : userData ? ( 
                    <UserDropDown user={userData} /> ) : (
                          <Link href="/login">
-                      <div className="block">
+                    
                    <div className=" flex  justify-center items-center gap-2 border-2 md:border-4 border-[#80b500] rounded-lg px-2 py-1.5">
-                          <div>
+                        
                   <FaRegUser className="hidden md:block hover:text-red-400 font-semibold duration-300" />
-                         </div>
+                      
                    <div className="font-bold">
                      {" "} Login
                           </div>
                          </div>
-                           </div>
                     </Link>      )}
                         </div>
 
@@ -235,7 +235,7 @@ const Header = () => {
                         </HoverCardTrigger>
 
                          </HoverCard>
-                          </Link>
+                          
                             </div> 
                         </div>
 
