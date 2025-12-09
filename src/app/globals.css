@@ -64,3 +64,39 @@
     --chart-5: 340 75% 55%;
   }
 }
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes float {
+     0%, 100% { transform: translateY(0px); }
+ 50% { transform: translateY(-20px); }
+   }
+ .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+@layer components {
+  .center {
+    @apply flex justify-center items-center;
+  }
+
+  .layout_container {
+    @apply max-w-[1586px] mx-auto px-[10px] sm:px-[20px] md:px-[30px] lg:px-[50] xl:px-[80px];
+  }
+}
+
+input:focus,
+textarea:focus,
+input:hover,
+textarea:hover,
+button:hover,
+button:focus {
+  box-shadow: none !important;
+}
