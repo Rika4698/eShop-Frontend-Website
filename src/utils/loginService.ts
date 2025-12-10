@@ -68,3 +68,10 @@ export const loginUser = async (userData: Record<string, any>) => {
     throw new Error(error.message || "An unexpected error occurred");
   }
 };
+
+
+export const logoutService = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete("accessToken");
+  cookieStore.delete("refreshToken");
+};
