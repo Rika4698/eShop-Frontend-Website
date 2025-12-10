@@ -2,81 +2,142 @@
 "use client";
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export default function NewsFeed() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
 
- useEffect(() => {
-  const timer = setTimeout(() => setIsVisible(true), 0);
-  return () => clearTimeout(timer);
-}, []);
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const newsData = [
     {
       id: 1,
-      image: "https://i.ibb.co.com/WNswQhCt/images.jpg",
-      category: "Fashion",
-      title: "Summer Collection 2025: Latest Trends in Fashion",
-      excerpt: "Discover the hottest fashion trends this summer. From vibrant colors to minimalist designs, explore what's trending in Bangladesh's fashion scene.",
-      date: "Dec 8, 2025",
-      author: "Fashion Team",
-      readTime: "5 min read"
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800",
-      category: "Electronics",
-      title: "Top 10 Gadgets That Will Change Your Life in 2025",
-      excerpt: "Technology is evolving rapidly. Check out the must-have gadgets that are revolutionizing how we work, play, and connect with each other.",
-      date: "Dec 7, 2025",
-      author: "Tech Insider",
-      readTime: "7 min read"
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800",
-      category: "Home & Living",
-      title: "Transform Your Home: Interior Design Tips for 2025",
-      excerpt: "Create your dream home with these expert interior design tips. Learn how to maximize space and style on any budget.",
-      date: "Dec 6, 2025",
-      author: "Home Decor",
+      image: "https://images.pexels.com/photos/1130980/pexels-photo-1130980.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Books",
+      title: "Top 10 Must-Read Books for Self-Improvement in 2025",
+      excerpt: "Discover the most inspiring books that will transform your mindset and boost your productivity. From bestselling authors to hidden gems, find your next favorite read.",
+      date: "Dec 10, 2024",
+      author: "Book Club BD",
       readTime: "6 min read"
     },
     {
-      id: 4,
-      image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800",
-      category: "Fashion",
-      title: "Sneaker Culture: The Rise of Limited Edition Footwear",
-      excerpt: "Sneakers have become more than just footwear. Dive into the world of limited edition kicks and streetwear culture in Bangladesh.",
-      date: "Dec 5, 2025",
-      author: "Sneaker Hub",
+      id: 2,
+      image: "https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Grocery",
+      title: "Organic Shopping Guide: How to Choose Fresh Groceries",
+      excerpt: "Learn expert tips for selecting the freshest organic vegetables, fruits, and pantry essentials. Save money while eating healthier with our comprehensive grocery guide.",
+      date: "Dec 9, 2024",
+      author: "Health & Wellness",
+      readTime: "5 min read"
+    },
+    {
+      id: 3,
+      image: "https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Fruits",
+      title: "Seasonal Fruits: Nutritional Benefits You Need to Know",
+      excerpt: "Explore the amazing health benefits of seasonal fruits available in Bangladesh. From mangoes to lychees, discover nature's superfoods for every season.",
+      date: "Dec 8, 2024",
+      author: "Nutrition Expert",
       readTime: "4 min read"
     },
     {
+      id: 4,
+      image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800",
+      category: "Fashion",
+      title: "Fashion Trends 2025: Sustainable Style That Stands Out",
+      excerpt: "Stay ahead of the fashion curve with eco-friendly clothing choices. Discover the latest trends in sustainable fashion and how to build a stylish, responsible wardrobe.",
+      date: "Dec 7, 2024",
+      author: "Fashion Forward",
+      readTime: "7 min read"
+    },
+    {
       id: 5,
-      image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800",
-      category: "Electronics",
-      title: "Smart Home Revolution: Make Your Home Intelligent",
-      excerpt: "From voice assistants to automated lighting, discover how smart home technology is making life easier and more efficient.",
-      date: "Dec 4, 2025",
-      author: "Smart Living",
+      image: "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Pet Shop",
+      title: "Complete Pet Care Guide: Keep Your Furry Friends Happy",
+      excerpt: "Everything you need to know about pet nutrition, grooming, and healthcare. Expert advice to ensure your pets live their best lives with proper care and love.",
+      date: "Dec 6, 2024",
+      author: "Pet Care Pro",
       readTime: "8 min read"
     },
     {
       id: 6,
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800",
-      category: "Shopping",
-      title: "Online Shopping Tips: How to Get the Best Deals",
-      excerpt: "Master the art of online shopping with our expert tips. Learn when to buy, how to compare prices, and never miss a great deal again.",
-      date: "Dec 3, 2025",
-      author: "Shopping Pro",
+      image: "https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Books",
+      title: "Children's Books That Inspire Creativity and Learning",
+      excerpt: "The best educational and entertaining books for kids of all ages. Build your child's library with stories that spark imagination and foster a love for reading.",
+      date: "Dec 5, 2024",
+      author: "Kids Corner",
       readTime: "5 min read"
+    },
+    {
+      id: 7,
+      image: "https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Grocery",
+      title: "Smart Grocery Shopping: Save Money Without Compromising Quality",
+      excerpt: "Master the art of budget-friendly grocery shopping. Learn meal planning strategies, coupon tips, and how to get maximum value from your purchases.",
+      date: "Dec 4, 2024",
+      author: "Money Saver",
+      readTime: "6 min read"
+    },
+    {
+      id: 8,
+      image: "https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Fruits",
+      title: "Exotic Fruits to Try: Expand Your Taste Horizons",
+      excerpt: "Step beyond the ordinary with exotic fruits available in Bangladesh. Discover unique flavors, nutritional benefits, and delicious ways to enjoy these tropical treats.",
+      date: "Dec 3, 2024",
+      author: "Foodie Guide",
+      readTime: "5 min read"
+    },
+    {
+      id: 9,
+      image: "https://images.pexels.com/photos/325876/pexels-photo-325876.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Fashion",
+      title: "Wardrobe Essentials: Build Your Perfect Capsule Collection",
+      excerpt: "Create a versatile wardrobe with timeless pieces that never go out of style. From classic jeans to statement accessories, invest in quality fashion staples.",
+      date: "Dec 2, 2024",
+      author: "Style Guru",
+      readTime: "6 min read"
+    },
+    {
+      id: 10,
+      image: "https://images.pexels.com/photos/406014/pexels-photo-406014.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Pet Shop",
+      title: "Choosing the Perfect Pet: A Beginner's Complete Guide",
+      excerpt: "Thinking about getting a pet? Learn about different pet types, their care requirements, and how to choose the right companion for your lifestyle and family.",
+      date: "Dec 1, 2024",
+      author: "Pet Adoption",
+      readTime: "9 min read"
+    },
+    {
+      id: 11,
+      image: "https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Books",
+      title: "Business Books That Changed Entrepreneurs' Lives",
+      excerpt: "Unlock your entrepreneurial potential with these game-changing business books. Learn from successful founders and develop strategies for business growth.",
+      date: "Nov 30, 2024",
+      author: "Business Insider",
+      readTime: "7 min read"
+    },
+    {
+      id: 12,
+      image: "https://images.pexels.com/photos/4197439/pexels-photo-4197439.jpeg?auto=compress&cs=tinysrgb&w=800",
+      category: "Grocery",
+      title: "Kitchen Staples Checklist: Never Run Out of Essentials",
+      excerpt: "Build the perfect pantry with our comprehensive grocery checklist. Ensure you always have essential ingredients on hand for quick, delicious meals.",
+      date: "Nov 29, 2024",
+      author: "Home Chef",
+      readTime: "4 min read"
     }
   ];
 
-  const categories = ['all', 'Fashion', 'Electronics', 'Home & Living', 'Shopping'];
+  const categories = ['all', 'Books', 'Grocery', 'Fruits', 'Fashion', 'Pet Shop'];
 
   const filteredNews = activeTab === 'all' 
     ? newsData 
@@ -84,6 +145,7 @@ export default function NewsFeed() {
 
   return (
     <div className="w-full bg-gradient-to-br from-gray-50 via-white to-green-50 min-h-screen">
+
       {/* Hero Banner Section */}
       <div className="relative overflow-hidden bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600">
         <div className="absolute inset-0 bg-black/20"></div>
@@ -95,39 +157,39 @@ export default function NewsFeed() {
             <div className="flex-1 text-white space-y-6">
               <div className="inline-block">
                 <span className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold animate-pulse">
-                  🔥 Trending Now
+                  🔥 Trending Stories
                 </span>
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Stay Updated with
-                <span className="block mt-2">Latest Shopping Trends</span>
+                Discover Latest Trends
+                <span className="block mt-2">in Your Favorite Categories</span>
               </h1>
               
               <p className="text-lg text-white/90 leading-relaxed max-w-xl">
-                Discover the newest products, exclusive deals, and insider tips from Bangladesh's most trusted e-commerce platform. Your daily dose of shopping inspiration starts here.
+                From books to fashion, grocery tips to pet care - explore expert insights, helpful guides, and trending stories across all your favorite shopping categories.
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4">
                 <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-xl">
-                  <span className="text-2xl">📰</span>
+                  <span className="text-2xl">📚</span>
                   <div>
-                    <div className="font-bold text-xl">50+</div>
-                    <div className="text-sm text-white/80">Articles</div>
+                    <div className="font-bold text-xl">Books</div>
+                    <div className="text-sm text-white/80">Learn & Grow</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-xl">
-                  <span className="text-2xl">✍️</span>
+                  <span className="text-2xl">🛒</span>
                   <div>
-                    <div className="font-bold text-xl">Daily</div>
-                    <div className="text-sm text-white/80">Updates</div>
+                    <div className="font-bold text-xl">Grocery</div>
+                    <div className="text-sm text-white/80">Fresh Daily</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-xl">
-                  <span className="text-2xl">🎯</span>
+                  <span className="text-2xl">🍎</span>
                   <div>
-                    <div className="font-bold text-xl">100%</div>
-                    <div className="text-sm text-white/80">Authentic</div>
+                    <div className="font-bold text-xl">Fruits</div>
+                    <div className="text-sm text-white/80">Stay Healthy</div>
                   </div>
                 </div>
               </div>
@@ -138,18 +200,19 @@ export default function NewsFeed() {
               <div className="relative animate-min-float">
                 <div className="absolute -inset-4 bg-white/20 rounded-3xl blur-2xl"></div>
                 <Image
-                  src="https://i.ibb.co.com/k2rSz1sg/istockphoto-1332363471-612x612.jpg"
+                  src="https://images.unsplash.com/photo-1556740758-90de374c12ad?w=800"
                   alt="Shopping News"
-                  width={600} height={500}
+                  width={600} 
+                  height={500}
                   className="relative w-full h-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
                 />
                 
                 {/* Floating Badge */}
                 <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-4 shadow-2xl animate-bounce">
                   <div className="text-center">
-                    <div className="text-3xl mb-1">🎉</div>
-                    <div className="text-sm font-bold text-green-600">New Stories</div>
-                    <div className="text-xs text-gray-600">Every Day</div>
+                    <div className="text-3xl mb-1">✨</div>
+                    <div className="text-sm font-bold text-green-600">Fresh Content</div>
+                    <div className="text-xs text-gray-600">Daily Updates</div>
                   </div>
                 </div>
               </div>
@@ -190,15 +253,16 @@ export default function NewsFeed() {
           {filteredNews.map((news, index) => (
             <div
               key={news.id}
-              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden "
+              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              {/* Image Container */}
+              {/* Image */}
               <div className="relative overflow-hidden h-56">
                 <Image
                   src={news.image}
                   alt={news.title}
-                  width={600} height={500}
+                  width={600} 
+                  height={500}
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
                 
@@ -264,9 +328,9 @@ export default function NewsFeed() {
             <div className="inline-block mb-4">
               <span className="text-6xl animate-bounce inline-block">📧</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold">Never Miss an Update!</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">Stay in the Loop!</h2>
             <p className="text-lg text-white/90">
-              Subscribe to our newsletter and get the latest news, exclusive deals, and shopping tips delivered straight to your inbox.
+              Subscribe to get the latest tips, guides, and exclusive offers from Books, Grocery, Fruits, Fashion & Pet Care categories delivered to your inbox.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -275,9 +339,11 @@ export default function NewsFeed() {
                 placeholder="Enter your email address"
                 className="flex-1 max-w-md px-6 py-4 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/50"
               />
+              <Link href="/contact">
               <button className="bg-white text-green-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transform hover:-translate-y-1 transition-all duration-300 shadow-lg whitespace-nowrap">
                 Subscribe Now 🚀
               </button>
+              </Link>
             </div>
 
             <p className="text-sm text-white/70 pt-4">
@@ -286,8 +352,6 @@ export default function NewsFeed() {
           </div>
         </div>
       </div>
-
-   
     </div>
   );
 }

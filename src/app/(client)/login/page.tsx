@@ -59,6 +59,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-tr from-green-300 via-sky-200 to-blue-300 relative">
+      
       {/* Background overlay */}
       <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
 

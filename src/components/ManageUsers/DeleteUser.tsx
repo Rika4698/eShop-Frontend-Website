@@ -34,10 +34,10 @@ const DeleteUser: React.FC<IProps> = ({ user, isOpen, setIsOpen }) => {
         <DialogHeader>
           <DialogTitle>Delete User</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete the user <strong>{user.email}</strong>? This action cannot be undone.
+            Are you sure you want to delete the user <strong className="font-bold text-red-500">{user.email}</strong>? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className="gap-2">
           <Button
             variant="outline"
             onClick={() => setIsOpen(false)}

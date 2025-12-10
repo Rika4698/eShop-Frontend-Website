@@ -1,4 +1,4 @@
-import React from "react";
+
 
 import Image from "next/image";
 import BlogCard from "./BlogCard";
@@ -125,7 +125,7 @@ const BlogPage = () => {
               </div>
             </div>
 
-            {/* Advertisement Banner */}
+            {/* Ad Banner */}
           <div className="mt-4">
                     <Image src="/book.png" width={350} height={300} alt="" className=' h-full rounded-lg' />
                 </div>

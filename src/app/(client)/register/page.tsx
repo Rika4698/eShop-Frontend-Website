@@ -84,17 +84,17 @@ export default function Registration() {
   <div
   className="min-h-screen w-full flex items-center justify-center px-4 bg-gradient-to-br from-green-300 via-sky-200 to-blue-300 relative"
 >
-  {/* Soft Overlay */}
+
   <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
 
-  {/* Sign Up Card */}
+
   <div className="relative z-10 w-full max-w-md bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30 rounded-2xl p-8 my-6">
     <h1 className="text-center text-2xl md:text-3xl font-extrabold text-white mb-6 drop-shadow">
       Create Your Account
     </h1>
 
     <form onSubmit={handleSubmit(handleSignUp)} className="space-y-5">
-      {/* Username */}
+   
       <div>
         <label className="block text-white mb-1" htmlFor="username">Username *</label>
         <input

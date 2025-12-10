@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { useUpdateUserStatusMutation } from "@/redux/features/users/userApi";
 import { IUser, UserStatus } from "@/types/modal";
-import { Edit } from "lucide-react";
+
 import { useState } from "react";
 
 interface IProps {
@@ -44,7 +44,7 @@ const SuspendUser: React.FC<IProps> = ({ user, setIsOpen, isOpen }) => {
         <DialogHeader>
           <DialogTitle>Confirm Suspension</DialogTitle>
           <DialogDescription>
-            Are you sure you want to suspend this user: {user?.email}?
+            Are you sure you want to suspend this user: <span className="font-bold text-green-800">{user?.email}</span> ?
           </DialogDescription>
         </DialogHeader>
 
@@ -52,7 +52,7 @@ const SuspendUser: React.FC<IProps> = ({ user, setIsOpen, isOpen }) => {
           <div className="text-red-500 mb-2">{errorMessage}</div>
         )}
 
-        <DialogFooter>
+        <DialogFooter className="gap-2">
           <Button variant="outline" onClick={() => setIsOpen(false)}>
             Cancel
           </Button>

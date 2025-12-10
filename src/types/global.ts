@@ -8,6 +8,13 @@ export type TError = {
     status: number;
 };
 
+export interface QueryParams {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  role?: string;
+}
+
 export type TMeta = {
     limit: number;
     page: number;

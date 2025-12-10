@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import DashboardHeader from "@/components/shared/DashboardHeader";
 import Sidebar from "@/components/shared/DashboardSidebar";
 
 
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction,  useState } from "react";
 
 
 import { useAppSelector } from "@/redux/hooks";

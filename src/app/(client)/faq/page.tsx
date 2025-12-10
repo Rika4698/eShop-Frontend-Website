@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus, Minus, MessageCircleQuestion, CheckCircle, HelpCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Faq() {
   const [openIndex, setOpenIndex] = useState(0);
@@ -47,7 +48,7 @@ export default function Faq() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left Side - Decorative Image */}
+          {/* Left Side */}
           <div className="relative">
             <div className="sticky top-8">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
@@ -88,7 +89,7 @@ export default function Faq() {
             </div>
           </div>
 
-          {/* Right Side - FAQ Items */}
+          {/* Right Side  */}
           <div className="space-y-4">
             {faqs.map((faq, index) => (
               <div
@@ -154,7 +155,7 @@ export default function Faq() {
           </div>
         </div>
 
-        {/* Bottom CTA Section */}
+        {/*  CTA Section */}
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl p-8 md:p-12 shadow-2xl">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
@@ -163,9 +164,11 @@ export default function Faq() {
             <p className="text-white/90 mb-6 text-lg">
               Our support team is here to help you 24/7
             </p>
+            <Link href="/contact">
             <button className="bg-white text-green-600 font-semibold px-8 py-4 rounded-full hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
               Contact Support
             </button>
+            </Link>
           </div>
         </div>
       </div>

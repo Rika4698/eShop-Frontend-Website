@@ -9,8 +9,8 @@ interface BlogCardProps {
       date: string;
       category: string;
       tags: string;
-      tips?: string;  // Make 'tips' optional
-      food?: string;  // Make 'food' optional
+      tips?: string;  
+      food?: string;  
     };
   }
 
@@ -18,7 +18,7 @@ const BlogCard = ({ item }: BlogCardProps) => {
   const { image, title, paragraph, readMore, date, category,tags } = item || {};
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden transition hover:shadow-lg">
-      {/* Blog Image */}
+ 
       <Image 
         src={image} 
         alt={title}
@@ -29,7 +29,7 @@ const BlogCard = ({ item }: BlogCardProps) => {
       
       {/* Blog Content */}
       <div className="p-6 space-y-4">
-        {/* Blog Metadata */}
+   
         <div className="flex flex-wrap gap-4 text-sm text-gray-500">
           <span className="flex items-center gap-2">
             <Clock size={16} className="text-[#7fad39]" />

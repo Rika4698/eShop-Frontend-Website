@@ -1,82 +1,104 @@
 "use client";
 
+import { useState, useMemo, useCallback } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import NextSearchBox from "@/components/uiElements/NextSearchBox";
 import UserRoleSelector from "@/components/ManageUsers/UserRoleSelector";
 import UsersTable from "@/components/ManageUsers/UsersTable";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import NextSearchBox from "@/components/uiElements/NextSearchBox";
 import { useGetAllTypeUsersQuery } from "@/redux/features/users/userApi";
-import { useState } from "react";
+import { UserRole } from "@/types/modal";
 
-const MangeUsersView = () => {
-  const [query, setQuery] = useState({
+const ManageUsersView = () => {
+  const [query, setQuery] = useState<{
+    page: number;
+    limit: number;
+    searchTerm: string;
+    role: UserRole | " ";
+  }>({
     page: 1,
     limit: 10,
-    role: "",
     searchTerm: "",
+    role: " ", 
   });
 
   const { page, limit, searchTerm, role } = query;
 
-  const { data, isFetching } = useGetAllTypeUsersQuery({
-    page,
-    limit,
-    searchTerm,
-    role,
+  const { data, isFetching } = useGetAllTypeUsersQuery(undefined, {
+    refetchOnMountOrArgChange: true,
   });
 
-  const totalUsers = data?.meta?.total || 0; 
-  const totalPages = Math.ceil(totalUsers / limit);
+  const filteredUsers = useMemo(() => {
+    if (!data || !data.data) return [];
 
-  const handlePageChange = (newPage: number) => {
+    const term = searchTerm.trim().toLowerCase();
+
+    return data.data.filter((user) => {
+      const matchesSearch =
+        !term ||
+        (user.name?.toLowerCase().includes(term) ?? false) ||
+        (user.email?.toLowerCase().includes(term) ?? false) ||
+        (user.role?.toLowerCase().includes(term) ?? false);
+
+      const matchesRole = !role || role === " " || user.role === role;
+
+      return matchesSearch && matchesRole;
+    });
+  }, [data, searchTerm, role]);
+
+  const totalUsers = filteredUsers.length;
+  const totalPages = Math.ceil(totalUsers / limit);
+  const paginatedUsers = filteredUsers.slice((page - 1) * limit, page * limit);
+
+  const handleSearchChange = useCallback((newSearchTerm: string) => {
+    console.log("Search term changed:", newSearchTerm); 
+    setQuery((prev) => ({ ...prev, searchTerm: newSearchTerm, page: 1 }));
+  }, []);
+
+
+
+  const handleRoleChange = useCallback((newRole: UserRole | " ") => {
+    setQuery((prev) => ({ ...prev, role: newRole, page: 1 }));
+  }, []);
+
+
+
+  const handlePageChange = useCallback((newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setQuery((prev) => ({ ...prev, page: newPage }));
     }
-  };
+  }, [totalPages]);
 
-  const handleSearchChange = (newSearchTerm: string) => {
-    setQuery((prev) => ({ ...prev, searchTerm: newSearchTerm, page: 1 }));
-  };
-
-  const handleRoleChange = (newRole: string) => {
-    setQuery((prev) => ({
-      ...prev,
-      role: newRole.trim() === "" ? "" : newRole,
-      page: 1,
-    }));
-  };
+  
 
   return (
     <Card className="w-full mx-auto relative">
       <CardHeader>
         <CardTitle>User Management</CardTitle>
       </CardHeader>
+
       <CardContent>
-        {/* Search Box */}
         <NextSearchBox
           className="mb-4"
-          placeholder="e.g. first name, last name or email"
+          placeholder="Search by email or role"
           onValueChange={handleSearchChange}
-          debounceTimeOut={500}
         />
 
-        {/* Role Selector */}
-        <UserRoleSelector onRoleChange={handleRoleChange} />
+        <UserRoleSelector 
+          onRoleChange={handleRoleChange} 
+          selectedRole={role}
+        />
 
-        {/* Table */}
         {isFetching ? (
           <div>Loading...</div>
         ) : (
           <UsersTable
-            users={data?.data || []}
+            users={paginatedUsers}
             isLoading={isFetching}
-            onDelete={(userId: string) => {
-              console.log("User deleted:", userId);
-            }}
+            onDelete={(id) => console.log("Deleted", id)}
           />
         )}
 
-        {/* Pagination Controls */}
-        <div className="flex justify-center items-center mt-4 space-x-2">
+        <div className="flex justify-center mt-4 space-x-2">
           <button
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
@@ -85,17 +107,17 @@ const MangeUsersView = () => {
             Previous
           </button>
 
-          {Array.from({ length: totalPages }, (_, index) => (
+          {Array.from({ length: totalPages }, (_, idx) => (
             <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
+              key={idx}
+              onClick={() => handlePageChange(idx + 1)}
               className={`px-3 py-1 border rounded ${
-                page === index + 1
-                  ? "bg-blue-500 text-white"
+                page === idx + 1
+                  ? "bg-green-700 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               }`}
             >
-              {index + 1}
+              {idx + 1}
             </button>
           ))}
 
@@ -106,6 +128,10 @@ const MangeUsersView = () => {
           >
             Next
           </button>
+        </div>
+
+        <div className="text-center mt-2 text-sm text-gray-500">
+          Total Users: {totalUsers}
         </div>
       </CardContent>
 
@@ -118,4 +144,4 @@ const MangeUsersView = () => {
   );
 };
 
-export default MangeUsersView;
+export default ManageUsersView;

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Select,
   SelectContent,
@@ -6,26 +8,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserRole } from "@/types/modal";
-
-import React, { useState } from "react";
+import React from "react";
 
 interface IProps {
   onRoleChange: (role: UserRole | " ") => void;
+  selectedRole?: UserRole | " ";
 }
 
-const UserRoleSelector: React.FC<IProps> = ({ onRoleChange }) => {
-  const [roleFilter, setRoleFilter] = useState<UserRole | " ">(" ");
-
-  const handlechange = (value: UserRole) => {
-    onRoleChange(value);
-    setRoleFilter(value);
-  };
-
+const UserRoleSelector: React.FC<IProps> = ({
+  onRoleChange,
+  selectedRole = " ",
+}) => {
   return (
     <div className="mb-4">
       <Select
-        onValueChange={(value) => handlechange(value as UserRole)}
-        defaultValue=" "
+        value={selectedRole} // Use value instead of defaultValue for controlled component
+        onValueChange={(value) => onRoleChange(value as UserRole | " ")}
       >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Filter by role" />
