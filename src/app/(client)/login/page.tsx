@@ -55,9 +55,7 @@ export default function Login() {
     }
   };
 
-  const handleClickLogin = (email: string, password: string) => {
-    handleLogin({ email, password });
-  };
+ 
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-tr from-green-300 via-sky-200 to-blue-300 relative">
@@ -91,7 +89,7 @@ export default function Login() {
             <input
               type="text"
               {...register("email", { required: "Email is required" })}
-              className="w-full p-3 mt-1 rounded-lg bg-white/30 border border-white/40 focus:ring-2 focus:ring-green-200 outline-none text-black placeholder-white/70"
+              className="w-full p-3 mt-1 rounded-lg bg-white/30 border border-white/40 focus:ring-2 focus:ring-green-200 outline-none text-black "
               placeholder="Enter your email"
             />
             {errors.email && (
@@ -105,7 +103,7 @@ export default function Login() {
             <input
               type={showPassword ? "text" : "password"}
               {...register("password", { required: "Password is required" })}
-              className="w-full p-3 mt-1 rounded-lg bg-white/30 border border-white/40 focus:ring-2 focus:ring-green-200 outline-none text-black placeholder-white/70"
+              className="w-full p-3 mt-1 rounded-lg bg-white/30 border border-white/40 focus:ring-2 focus:ring-green-200 outline-none text-black "
               placeholder="Enter your password"
             />
             <span

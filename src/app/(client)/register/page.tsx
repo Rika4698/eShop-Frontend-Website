@@ -135,7 +135,7 @@ export default function Registration() {
           placeholder="Enter Password"
           {...register("password", {
             required: "Password is required",
-            minLength: { value: 6, message: "Must be at least 6 characters" },
+            minLength: { value: 8, message: "Must be at least 8 characters" },
           })}
           className="w-full px-4 py-2 rounded-lg bg-white/70 border focus:ring-2 focus:ring-indigo-400 focus:outline-none"
         />

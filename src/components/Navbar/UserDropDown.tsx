@@ -45,7 +45,7 @@ export function UserDropDown({ user }: UserDropDownProps) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button className="center p-[5px] rounded-full cursor-pointer">
-                    <div className="w-[40px] h-[40px] rounded-full overflow-hidden">
+                    <div className="w-[40px] h-[40px] rounded-full overflow-hidden bg-gray-100 border border-gray-200">
                         <Image
                             alt="profile"
                             src={
@@ -54,7 +54,7 @@ export function UserDropDown({ user }: UserDropDownProps) {
                             }
                             width={80}
                             height={80}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover "
                         />
                     </div>
                 </button>

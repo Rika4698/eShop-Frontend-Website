@@ -236,7 +236,7 @@ const Header = () => {
                         </div>
 
                      <div onClick={() => setOpenWishlist(true) } >
-                      <div title="Product Comparison" className="bg-[#170f0d] w-[45px] relative h-[45px] flex justify-center items-center rounded-full">
+                      <div title="Product Comparison" className="bg-[#170f0d] w-[40px] relative h-[40px] flex justify-center items-center rounded-full">
                        
                          <FaArrowRightArrowLeft className="text-[21px] text-gray-500 font-bold" />
                        <span className="bg-[#7fad39] top-[-2px] right-[-3px] absolute w-[18px] h-[18px] flex justify-center items-center rounded-full text-white">
@@ -246,7 +246,7 @@ const Header = () => {
                          </div>
 
                    <div  onClick={() =>  setOpenCart(true) }  >
-                     <div title="My Cart" className="bg-[#fff1ee] w-[45px] relative h-[45px] flex justify-center items-center rounded-full">
+                     <div title="My Cart" className="bg-[#fff1ee] w-[40px] relative h-[40px] flex justify-center items-center rounded-full">
                         <Image  src="https://goatmoves.com/assets/images/static/cart.svg"  width={20} height={10} alt=""
                             className="text-red-200"/>
                      {/* {cartProduct.length >0 && (<span className="bg-[#7fad39] top-[-2px] right-[-3px] absolute w-[18px] h-[18px] flex justify-center items-center rounded-full text-white">
