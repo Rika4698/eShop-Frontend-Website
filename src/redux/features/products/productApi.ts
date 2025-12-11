@@ -1,11 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-wrapper-object-types */
 /* eslint-disable prefer-const */
 
 import { baseApi } from "@/redux/api/baseApi";
+import { TResponseRedux } from "@/types/global";
+import { IProduct } from "@/types/modal";
 
 
 
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+
+   createProduct: builder.mutation({
+      query: (data) => {
+          return {
+              url: "/products/create-product",
+              method: "POST",
+              body: data,
+          };
+      },
+      invalidatesTags: ["products"],
+  }),
+
+
     getAllProducts: builder.query({
       query: (queryObj) => {
         const {
@@ -20,7 +37,7 @@ const productApi = baseApi.injectEndpoints({
           vendorId,
         } = queryObj || {};
 
-        let url = "/products";
+        let url = "/products/all-product";
         let params = new URLSearchParams();
 
         if (searchTerm) {
@@ -70,7 +87,56 @@ const productApi = baseApi.injectEndpoints({
       },
       providesTags: ["products"],
     }),
+
+
+    getSingleProduct: builder.query({
+      query: (id) => {
+        let url = `/products/${id}`;
+
+        return {
+          url,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: TResponseRedux<any>) => {
+        return response.data;
+      },
+      providesTags: ["products"],
+    }),
+
+
+
+     updateProduct: builder.mutation({
+  query: ({payload, productId }) => ({
+    url: `/products/${productId}`, 
+    method: 'PATCH',
+    body:   payload,
+  }),
+  invalidatesTags: ["products"],
+}),
   
+
+
+duplicateProduct: builder.mutation<{ data: IProduct }, String>({
+  query: (productId) => ({
+    url: `/products/duplicate/${productId}`,
+    method: "POST",
+  }),
+  invalidatesTags: ["products"],
+}),
+
+
+
+
+ deleteProduct: builder.mutation<{ data: IProduct }, String>({
+      query: (productId) => ({
+        url: `/products/${productId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["products"],
+    }),
+  
+
    
   
 
@@ -81,6 +147,11 @@ const productApi = baseApi.injectEndpoints({
 })
 
 export const {
+  useCreateProductMutation,
   useGetAllProductsQuery,
+  useUpdateProductMutation,
+  useDuplicateProductMutation,
+  useDeleteProductMutation,
+  useGetSingleProductQuery
  
 } = productApi;

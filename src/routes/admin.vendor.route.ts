@@ -1,8 +1,10 @@
-
 import { NavItem } from "@/types/modal";
 import { BsFileEarmarkPost } from "react-icons/bs";
 import { CiShop, CiViewList } from "react-icons/ci";
 import { GrServices } from "react-icons/gr";
+import { FaRegRectangleList } from "react-icons/fa6";
+
+
 
 export const adminLinks: NavItem[] = [
    {
@@ -29,3 +31,17 @@ export const adminLinks: NavItem[] = [
 ];
 
 
+export const vendorLinks: NavItem[] = [
+  {
+    href: "/dashboard/vendor",
+    Icon: GrServices,
+    title: "Vendor Dashboard",
+  },
+  {
+    href: "/dashboard/vendor/manage-products",
+    Icon: FaRegRectangleList,
+    title: "Manage Products",
+  },
+
+
+];
