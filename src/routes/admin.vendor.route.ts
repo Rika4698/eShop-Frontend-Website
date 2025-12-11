@@ -4,7 +4,7 @@ import { CiShop, CiViewList } from "react-icons/ci";
 import { GrServices } from "react-icons/gr";
 import { FaRegRectangleList } from "react-icons/fa6";
 import { LiaShippingFastSolid } from "react-icons/lia";
-
+import { MdOutlineReviews, MdReviews } from "react-icons/md";
 
 
 export const adminLinks: NavItem[] = [
@@ -52,6 +52,11 @@ export const vendorLinks: NavItem[] = [
     href: "/dashboard/vendor/manage-orders",
     Icon: LiaShippingFastSolid,
     title: "Manage Orders",
+  },
+   {
+    href: "/dashboard/vendor/manage-reviews",
+    Icon: MdOutlineReviews,
+    title: "Manage Reviews",
   },
 
 

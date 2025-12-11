@@ -119,13 +119,24 @@ const ShopForm: React.FC<IProps> = ({ initialValues }) => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="logo">Logo</Label>
-                <Input
-                  id="logo"
-                  type="file"
-                  onChange={handleLogoChange}
-                  accept="image/*"
-                  
-                />
+                
+                <label
+    htmlFor="logo"
+    className="flex items-center justify-between border rounded-md px-3 py-2 cursor-pointer bg-gray-50 hover:bg-gray-100"
+  >
+    <span className="font-medium text-sm">
+      {logo.file ? logo.file.name : "Upload files"}
+    </span>
+
+    <Input
+      id="logo"
+      type="file"
+      accept="image/*"
+      className="hidden"
+      onChange={handleLogoChange}
+     
+    />
+  </label>
                 {logo.url && (
                   <div className="mt-4">
                     <h3 className="text-lg font-semibold mb-2">Logo Preview</h3>
