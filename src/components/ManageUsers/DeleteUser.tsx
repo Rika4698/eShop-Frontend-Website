@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,22 +10,33 @@ import {
 } from "@/components/ui/dialog";
 import { useDeleteUserMutation } from "@/redux/features/users/userApi";
 import { IUser } from "@/types/modal";
+import { toast } from "sonner";
 
 interface IProps {
   user: IUser;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  
 }
 
 const DeleteUser: React.FC<IProps> = ({ user, isOpen, setIsOpen }) => {
   const [deleteUser, { isLoading, error }] = useDeleteUserMutation();
 
+
   const handleConfirmDelete = async () => {
     try {
-      await deleteUser(user.id).unwrap(); // Perform the delete action
-      setIsOpen(false); // Close the modal after successful delete
-    } catch (err) {
-      console.error("Error deleting user:", err); // Handle any errors
+      await deleteUser(user.id).unwrap(); // Perform delete action
+
+      // Show success toast
+       toast.success(`${user.email} has been deleted successfully!`, { duration: 3000 });
+
+      setIsOpen(false); // Close modal
+    } catch (err: any) {
+      console.error("Error deleting user:", err);
+
+      // Show error toast
+      toast.error(err?.data?.message || "Failed to delete user.");
+    
     }
   };
 

@@ -33,7 +33,7 @@ import {
     const handleDelete = async () => {
       try {
         // Call the deleteCategory mutation
-        const res = await deleteCategory(categoryId);
+        const res = await deleteCategory(categoryId).unwrap();
   
         // If the response has an error
         if (res.error) {

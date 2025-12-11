@@ -37,18 +37,6 @@ const UsersTable: React.FC<IProps> = ({ users, isLoading, onDelete }) => {
     setIsDeleteOpen(true);
   };
 
-  const confirmDelete = async () => {
-    if (!deleteUserId) return; // Ensure a user ID is set
-
-    try {
-      await onDelete(deleteUserId); // Call the delete handler with the user ID
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    } finally {
-      setIsDeleteOpen(false); 
-      setDeleteUserId(null); 
-    }
-  };
 
   return (
       <div>
@@ -85,12 +73,15 @@ const UsersTable: React.FC<IProps> = ({ users, isLoading, onDelete }) => {
 
               <TableCell>
                 <div className="flex items-center space-x-2">
-                  <Button
-                    onClick={() => handleSuspendClick(user)}
-                    variant="outline" title="Suspend"
-                  >
-                    <LucideMoreVertical className="w-4 h-4" />
-                  </Button>
+                  {user.status !== "BLOCKED" && (
+                   <Button
+    onClick={() => handleSuspendClick(user)}
+    variant="outline"
+    title="Suspend"
+  >
+    <LucideMoreVertical className="w-4 h-4" />
+  </Button>
+          )}
 
                   <Button
                     onClick={() => handleDeleteClick(user.id)}
@@ -118,6 +109,7 @@ const UsersTable: React.FC<IProps> = ({ users, isLoading, onDelete }) => {
           user={users.find((u) => u.id === deleteUserId)!}
           isOpen={isDeleteOpen}
           setIsOpen={setIsDeleteOpen}
+          
         />
       )}
     </div>

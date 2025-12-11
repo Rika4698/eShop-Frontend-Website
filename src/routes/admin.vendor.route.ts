@@ -20,6 +20,11 @@ export const adminLinks: NavItem[] = [
     Icon: BsFileEarmarkPost,
     title: "Manage Categories",
   },
+  {
+    href: "/dashboard/admin/manage-shops",
+    Icon: CiShop,
+    title: "Manage Shops",
+  },
   
 ];
 
