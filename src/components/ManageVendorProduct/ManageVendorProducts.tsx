@@ -2,34 +2,45 @@
 
 import Loading from "@/app/loading";
 import DashboardHeading from "@/components/uiElements/DashboardHeading";
-import { Pagination } from "@nextui-org/pagination";
-
 import ProductTable from "@/components/ManageProducts/ProductTable";
-
 import { PenIcon } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import useUserDetails from "@/hooks/useUser";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
+import { useGetAllProductsQuery } from "@/redux/features/products/productApi";
 
 const ManageVendorProducts = () => {
-  const { userData: vendorData, isFetching } = useUserDetails();
+  const { userData: vendorData, isFetching: userFetching } = useUserDetails();
   const { data: categories, isLoading: categoryLoading } = useGetAllCategoriesQuery(undefined);
+  
   const [currentPage, setCurrentPage] = useState(1);
   const dataPerPage = 6;
+
+  // Fetch products directly from product API with vendorId filter
+  const { data: productsData, isLoading: productsLoading, refetch } = useGetAllProductsQuery({
+    vendorId: vendorData?.userData?.id,
+    page: currentPage,
+    limit: dataPerPage,
+  }, {
+    skip: !vendorData?.userData?.id, // Skip query if vendorId is not available
+    refetchOnMountOrArgChange: true, // Refetch on mount or when args change
+  });
 
   // Page Change Handler
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  // Calculate Pagination Data
-  const startIndex = (currentPage - 1) * dataPerPage;
-  const endIndex = startIndex + dataPerPage;
-  const paginatedProducts =
-    vendorData?.userData?.products?.slice(startIndex, endIndex) || [];
-  const totalProducts = vendorData?.userData?.products?.length || 0;
+  const products = productsData?.data || [];
+  const totalProducts = productsData?.meta?.total || 0;
   const totalPages = Math.ceil(totalProducts / dataPerPage);
+
+  const isLoading = userFetching || categoryLoading || productsLoading;
+
+  if (isLoading && !products.length) {
+    return <Loading />;
+  }
 
   return (
     <div>
@@ -51,7 +62,11 @@ const ManageVendorProducts = () => {
       </div>
 
       {/* Product Table */}
-      <ProductTable products={paginatedProducts} categories={categories || []} isLoading={isFetching || categoryLoading} />
+      <ProductTable 
+        products={products} 
+        categories={categories || []} 
+        isLoading={productsLoading} 
+      />
 
       {/* Pagination */}
       {totalProducts > 0 && (

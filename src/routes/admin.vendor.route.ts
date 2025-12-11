@@ -3,6 +3,7 @@ import { BsFileEarmarkPost } from "react-icons/bs";
 import { CiShop, CiViewList } from "react-icons/ci";
 import { GrServices } from "react-icons/gr";
 import { FaRegRectangleList } from "react-icons/fa6";
+import { LiaShippingFastSolid } from "react-icons/lia";
 
 
 
@@ -41,6 +42,16 @@ export const vendorLinks: NavItem[] = [
     href: "/dashboard/vendor/manage-products",
     Icon: FaRegRectangleList,
     title: "Manage Products",
+  },
+   {
+    href: "/dashboard/vendor/update-shop",
+    Icon: GrServices,
+    title: "Update Shop",
+  },
+   {
+    href: "/dashboard/vendor/manage-orders",
+    Icon: LiaShippingFastSolid,
+    title: "Manage Orders",
   },
 
 

@@ -1,27 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-wrapper-object-types */
 /* eslint-disable prefer-const */
-
 import { baseApi } from "@/redux/api/baseApi";
 import { TResponseRedux } from "@/types/global";
 import { IProduct } from "@/types/modal";
 
-
-
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-
-   createProduct: builder.mutation({
+    createProduct: builder.mutation({
       query: (data) => {
-          return {
-              url: "/products/create-product",
-              method: "POST",
-              body: data,
-          };
+        return {
+          url: "/products/create-product",
+          method: "POST",
+          body: data,
+        };
       },
       invalidatesTags: ["products"],
-  }),
-
+    }),
 
     getAllProducts: builder.query({
       query: (queryObj) => {
@@ -43,24 +38,19 @@ const productApi = baseApi.injectEndpoints({
         if (searchTerm) {
           params.append("searchTerm", searchTerm);
         }
-
         if (category) {
           params.append("category", category);
         }
-
         if (vendorId) {
           params.append("vendorId", vendorId);
         }
-
         if (flashSale !== undefined) {
           params.append("flashSale", flashSale);
         }
-
         if (minPrice > 500 || maxPrice < 7000) {
           params.append("minPrice", minPrice);
           params.append("maxPrice", maxPrice);
         }
-
         if (sort) {
           if (sort === "desc") {
             params.append("sortBy", "price");
@@ -70,7 +60,6 @@ const productApi = baseApi.injectEndpoints({
             params.append("sortOrder", "asc");
           }
         }
-
         if (page && limit) {
           params.append("page", page);
           params.append("limit", limit);
@@ -85,14 +74,21 @@ const productApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ["products"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map(({ id }: { id: string }) => ({
+                type: "products" as const,
+                id,
+              })),
+              { type: "products", id: "LIST" },
+            ]
+          : [{ type: "products", id: "LIST" }],
     }),
-
 
     getSingleProduct: builder.query({
       query: (id) => {
         let url = `/products/${id}`;
-
         return {
           url,
           method: "GET",
@@ -101,50 +97,41 @@ const productApi = baseApi.injectEndpoints({
       transformResponse: (response: TResponseRedux<any>) => {
         return response.data;
       },
-      providesTags: ["products"],
+      providesTags: (result, error, id) => [{ type: "products", id }],
     }),
 
+    updateProduct: builder.mutation({
+      query: ({ payload, productId }) => ({
+        url: `/products/${productId}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { productId }) => [
+        { type: "products", id: productId },
+        { type: "products", id: "LIST" },
+      ],
+    }),
 
+    duplicateProduct: builder.mutation<{ data: IProduct }, string>({
+      query: (productId) => ({
+        url: `/products/duplicate/${productId}`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: "products", id: "LIST" }],
+    }),
 
-     updateProduct: builder.mutation({
-  query: ({payload, productId }) => ({
-    url: `/products/${productId}`, 
-    method: 'PATCH',
-    body:   payload,
-  }),
-  invalidatesTags: ["products"],
-}),
-  
-
-
-duplicateProduct: builder.mutation<{ data: IProduct }, String>({
-  query: (productId) => ({
-    url: `/products/duplicate/${productId}`,
-    method: "POST",
-  }),
-  invalidatesTags: ["products"],
-}),
-
-
-
-
- deleteProduct: builder.mutation<{ data: IProduct }, String>({
+    deleteProduct: builder.mutation<{ data: IProduct }, string>({
       query: (productId) => ({
         url: `/products/${productId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["products"],
+      invalidatesTags: (result, error, productId) => [
+        { type: "products", id: productId },
+        { type: "products", id: "LIST" },
+      ],
     }),
-  
-
-   
-  
-
-
-
-}),
-
-})
+  }),
+});
 
 export const {
   useCreateProductMutation,
@@ -152,6 +139,5 @@ export const {
   useUpdateProductMutation,
   useDuplicateProductMutation,
   useDeleteProductMutation,
-  useGetSingleProductQuery
- 
+  useGetSingleProductQuery,
 } = productApi;

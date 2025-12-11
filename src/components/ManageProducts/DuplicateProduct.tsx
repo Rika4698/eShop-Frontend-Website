@@ -1,65 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useDuplicateProductMutation } from "@/redux/features/products/productApi";
-
-import { useState } from "react";
-import { FaRegCopy } from "react-icons/fa";
+import { Copy } from "lucide-react";
+import React from "react";
+import { FaSpinner } from "react-icons/fa6";
 import { toast } from "sonner";
-const DuplicateProduct = ({ productId }: { productId: string }) => {
-  const [open, setOpen] = useState(false);
-  const [duplicate, { isLoading }] = useDuplicateProductMutation()
+
+interface IProps {
+  productId: string;
+}
+
+const DuplicateProduct: React.FC<IProps> = ({ productId }) => {
+  const [duplicateProduct, { isLoading }] = useDuplicateProductMutation();
 
   const handleDuplicate = async () => {
     try {
-      await duplicate(productId).unwrap();
-      
-
+      const result = await duplicateProduct(productId).unwrap();
       toast.success("Product duplicated successfully");
-      setOpen(false);
-    } catch (error) {toast.error("Something went wrong");}
+    } catch (error: any) {
+      console.error("Duplicate error:", error || "Same duplicate product");
+      toast.error(error?.data?.message || "Failed to duplicate product");
+    }
   };
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button title="Duplicate" className="w-[40px] h-[40px] bg-[#7fad39] text-white rounded-full center hover:bg-main">
-          <FaRegCopy />
-        </button>
-      </DialogTrigger>
-      <DialogContent className="w-[555px]">
-        <DialogHeader>
-          <DialogTitle>Duplicate Product</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to create a copy of this product ?
-          </DialogDescription>
-        </DialogHeader>
 
-        <DialogFooter className="sm:justify-start gap-2">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => setOpen(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            className="bg-[#80b500] text-white"
-            onClick={handleDuplicate}
-            disabled={isLoading}
-          >
-            {isLoading ? "Duplicating..." : "Confirm Duplication"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+  return (
+    <Button
+      onClick={handleDuplicate}
+      disabled={isLoading}
+      title="Duplicate"
+      className="center bg-blue-600 hover:bg-blue-700 text-white rounded-full w-[40px] h-[40px] p-0"
+    >
+      {isLoading ? (
+        <FaSpinner className="animate-spin h-4 w-4" />
+      ) : (
+        <Copy className="h-4 w-4" />
+      )}
+    </Button>
   );
 };
 

@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import { trimText } from "@/utils/trimText";
 import { Trash2 } from "lucide-react";
 import React from "react";
@@ -24,21 +23,16 @@ interface IProps {
 
 const ProductDelete: React.FC<IProps> = ({ productId, productName }) => {
   const [open, setOpen] = React.useState(false);
-
-  const [deleteProduct, { isLoading }] = useDeleteProductMutation()
-
-
+  const [deleteProduct, { isLoading }] = useDeleteProductMutation();
 
   const handleDelete = async () => {
-
     try {
-     await deleteProduct(productId).unwrap();
-
+      const result = await deleteProduct(productId).unwrap();
       toast.success("Product deleted successfully");
       setOpen(false);
-      
-    } catch (error) {
-      toast.error("Something went wrong");
+    } catch (error: any) {
+      console.error("Delete error:", error);
+      toast.error(error?.data?.message || "Failed to delete product");
       setOpen(false);
     }
   };
@@ -46,7 +40,10 @@ const ProductDelete: React.FC<IProps> = ({ productId, productName }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button title="Delete" className="center bg-red-600 hover:bg-red-700 text-white rounded-full w-[40px] h-[40px]">
+        <button
+          title="Delete"
+          className="center bg-red-600 hover:bg-red-700 text-white rounded-full w-[40px] h-[40px]"
+        >
           <Trash2 className="h-4 w-4" />
         </button>
       </DialogTrigger>
@@ -55,8 +52,7 @@ const ProductDelete: React.FC<IProps> = ({ productId, productName }) => {
           <DialogTitle>Delete Product</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete the product &quot;
-            {trimText(productName, 25)}
-            &quot;? This action cannot be undone.
+            {trimText(productName, 25)}&quot;? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:justify-start gap-2">
@@ -64,6 +60,7 @@ const ProductDelete: React.FC<IProps> = ({ productId, productName }) => {
             type="button"
             variant="secondary"
             onClick={() => setOpen(false)}
+            disabled={isLoading}
           >
             Cancel
           </Button>

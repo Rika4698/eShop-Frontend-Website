@@ -36,6 +36,16 @@ const userApi = baseApi.injectEndpoints({
   }),
 
 
+    updateVendor: builder.mutation({
+      query: (vendorInfo) => ({
+        url: "/users/update-vendor",
+        method: "PATCH",
+        body: vendorInfo,
+      }),
+      invalidatesTags: ["users"],
+    }),
+
+
     deleteUser: builder.mutation({
     query: (userId) => ({
       url: `/users/${userId}`, 
@@ -58,5 +68,6 @@ useGetAllTypeUsersQuery,
 useUpdateUserStatusMutation,
 useDeleteUserMutation,
 useSingleVendorStatusUpdatedMutation,
+useUpdateVendorMutation,
 
 } = userApi;
