@@ -230,26 +230,35 @@ export default function CreateProductForm() {
               Images
             </label>
 
-            <label
-              htmlFor="image"
-              className="col-span-3 flex items-center justify-between border rounded-md px-3 py-2 cursor-pointer bg-gray-50 hover:bg-gray-100"
-            >
-              <span className="font-medium text-sm">
-                {watch("image")?.length
-                  ? `${watch("image")?.length} file(s) selected`
-                  : "Upload files"}
-              </span>
+        <label
+    htmlFor="image"
+    className="col-span-3 flex flex-col border rounded-md px-3 py-2 cursor-pointer bg-gray-50 hover:bg-gray-100"
+  >
+    <span className="font-medium text-base mb-2">
+      {watch("image") && watch("image")!.length > 0
+        ? "Selected files:"
+        : "Upload files"}
+    </span>
 
-              <Input
-                id="image"
-                type="file"
-                multiple
-                className="hidden"
-                {...register("image", {
-                  required: "At least one image is required",
-                })}
-              />
-            </label>
+    {/* List selected file names safely */}
+    {watch("image") &&
+      watch("image")!.length > 0 &&
+      Array.from(watch("image")!).map((file: File, index: number) => (
+        <span key={index} className="text-sm text-gray-700">
+          {file.name}
+        </span>
+      ))}
+
+    <Input
+      id="image"
+      type="file"
+      multiple 
+      className="hidden"
+      {...register("image", {
+        required: "At least one image is required",
+      })}
+    />
+  </label>
 
             {errors.image && (
               <p className="col-start-2 col-span-3 text-red-500 text-sm">

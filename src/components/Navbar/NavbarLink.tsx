@@ -4,7 +4,7 @@ import React from "react";
 
 import Link from "next/link";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "../ui/navigate-menu";
-import Image from "next/image";
+
 interface Component {
   title: string;
   path: string;

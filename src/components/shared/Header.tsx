@@ -61,10 +61,18 @@ const Header = () => {
     }, [searchTerm]);
 
     console.log(allProductsResponse);
+
     const handleClickOutside = (event: MouseEvent) => {
         const searchInput = document.querySelector("#search-input");
+        const searchDropdown = document.querySelector("#search-dropdown");
 
-        if (searchInput && !searchInput.contains(event.target as Node)) {
+
+        if (
+            searchInput &&
+            !searchInput.contains(event.target as Node) &&
+            searchDropdown &&
+            !searchDropdown.contains(event.target as Node)
+        ) {
             setSearchTerm("");
             setIsSearchOpen(false);
         }
@@ -77,12 +85,15 @@ const Header = () => {
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
+
     }, []);
+
+
 
     return (
         <div className={path === "/dashboard" ? "hidden" : ""}>
             <div className="lg:px-2 md:px-0 overflow-hidden py-2 lg:py-0">
-                <div className="border-b-[1px] pb-2">
+                <div className="border-b-[1px] pb-2 lg:border-white">
                     <div className="lg:container lg:mx-auto">
                         <div className="flex justify-between lg:items-center lg:justify-between gap-16 md:gap-0">
                             <div className="flex items-center ">
@@ -177,36 +188,31 @@ const Header = () => {
 
 
 
-                        <div className="lg:flex  items-center hidden ml-[100px] gap-6">
-                          <div>
-                     <div className="relative search-container">
-                         <input  id="search-input"
-                          value={searchTerm}
-                          onChange={(e) =>
-                      setSearchTerm( e.target.value)}
-               onFocus={() =>setIsSearchOpen(true) }
-         onClick={(e) =>  e.stopPropagation() } // Prevent click from propagating
-                     className="bg-[#f3f4f7] outline-none px-8 py-3 rounded-md md:w-[440px] xl:w-[600px]"
-                   type="text"
-                  placeholder="Search for products..."/>
+              <div className="lg:flex items-center hidden ml-[100px] gap-6">
+  <div className="relative ">
+    <div className="relative search-container">
+      <input
+        id="search-input"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onFocus={() => setIsSearchOpen(true)}
+        onClick={(e) => e.stopPropagation()}
+        className="bg-[#f3f4f7] outline-none px-8 py-3 rounded-sm md:w-[440px] xl:w-[600px]"
+        type="text"
+        placeholder="Search for products name..."
+      />
 
-             <div className="absolute right-0 cursor-pointer -top-0 bg-[#80b500] px-6 py-3"> <Search className="text-white " />
-            </div>
-              {isSearchOpen && ( <div className="absolute top-full left-0 right-0 bg-white shadow-lg z-10">
-                   <div className="grid grid-cols-1 gap-1 justify-center items-center">
-           {isLoading ? Array.from({   length: 3, }).map((_, index ) => (
-              <div key={ index } > 
-                <Loading />
-                </div>  ) ): allProductsResponse?.data?.map( ( singleProduct: IProduct ) => (
-                 <div key={singleProduct.id }  >
-                      <NavSearchProductCard
-                         singleProduct={singleProduct }/>
-                 </div> ) )}
-                          </div>
-                         </div>   )}
-                               </div>
-                          </div>
-                 </div>
+      <div className="absolute right-0 cursor-pointer top-0 bg-[#25a817] px-6 py-3 rounded-r-sm">
+        <Search className="text-white" />
+      </div>
+
+     
+    </div>
+  </div>
+</div>
+
+
+
                  </div>
 
 
@@ -224,7 +230,7 @@ const Header = () => {
                    <UserDropDown user={userData} /> ) : (
                          <Link href="/login">
                     
-                   <div className=" flex  justify-center items-center gap-2 border-2 md:border-4 border-[#80b500] rounded-lg px-2 py-1.5">
+                   <div className=" flex  justify-center items-center gap-2 border-2 md:border-4 border-[#0eb313] rounded-lg px-2 py-1.5">
                         
                   <FaRegUser className="hidden md:block hover:text-red-400 font-semibold duration-300" />
                       
@@ -263,6 +269,69 @@ const Header = () => {
 
                     </div>
                 </div>
+
+
+                  {/* Search Results Dropdown  */}
+                                {isSearchOpen && searchTerm && (
+                                    <div
+                                        id="search-dropdown"
+                                        className="absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:ml-[280px] xl:ml-[300px] top-full mt-0 bg-white shadow-2xl rounded-lg border border-gray-200 md:w-[440px] xl:w-[600px] max-h-[500px] overflow-y-auto z-[150]"
+                                        style={{
+                                            boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
+                                        }}
+                                    >
+                                        {isLoading ? (
+                                            <div className="p-4">
+                                                {Array.from({ length: 3 }).map((_, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="flex items-center gap-3 p-3 border-b border-gray-100 last:border-b-0"
+                                                    >
+                                                        <div className="w-16 h-16 bg-gray-200 rounded-md animate-pulse" />
+                                                        <div className="flex-1">
+                                                            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2 animate-pulse" />
+                                                            <div className="h-3 bg-gray-200 rounded w-1/2 animate-pulse" />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : allProductsResponse?.data?.length > 0 ? (
+                                            <div>
+                                                {allProductsResponse.data.map((singleProduct: IProduct) => (
+                                                    <div
+                                                        key={singleProduct.id}
+                                                        onClick={() => {
+                                                            setSearchTerm("");
+                                                            setIsSearchOpen(false);
+                                                        }}
+                                                    >
+                                                        <NavSearchProductCard singleProduct={singleProduct} />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="p-6 text-center text-gray-500">
+                                                <svg
+                                                    className="w-12 h-12 mx-auto mb-2 text-gray-300"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                    />
+                                                </svg>
+                                                <p className="text-sm">No products found</p>
+                                                <p className="text-xs text-gray-400 mt-1">
+                                                    Try searching with different keywords
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
             </div>
             {/* {openCart && <Cart setOpenCart={setOpenCart} openCart={openCart} />}
             {openWishlist && (

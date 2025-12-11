@@ -4,8 +4,8 @@ import { BiMenuAltLeft } from "react-icons/bi";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Select, SelectContent, SelectGroup, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
-
-
+import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
+import { ICategory } from "@/types/modal";
 
 
 import NavbarLink from "./NavbarLink";
@@ -14,7 +14,7 @@ import NavbarLink from "./NavbarLink";
 
 const Navbar = () => {
   const path = usePathname();
-
+  const { data: allCategories, } = useGetAllCategoriesQuery(undefined);
   const Home = [
     {
       title: "About Us",
@@ -47,7 +47,7 @@ const Navbar = () => {
       <div className={`lg:flex hidden items-center justify-between lg:max-w-full lg:mx-auto bg-white lg:px-4 xl:px-8  py-2 `}>
         <div>
           <Select >
-            <SelectTrigger className="w-[220px] px-4 bg-[#80b500] text-white font-bold rounded-lg">
+            <SelectTrigger className="w-[220px] px-4 bg-[#1c9d29] text-white font-bold rounded-sm">
             <BiMenuAltLeft
               size={30}  className="text-white font-bold"/>
               <SelectValue placeholder="ALL CATEGORIES" />
@@ -55,7 +55,21 @@ const Navbar = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>CATEGORIES</SelectLabel>
-             
+               {allCategories?.map((category: ICategory) => {
+                  // Create params for each category
+                  const params = new URLSearchParams();
+                  params.set("product", category.name);
+
+                  return (
+                    <Link
+                      key={category?.id}
+                      href={`/all-products?category=${category.name}`}
+                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {category?.name}
+                    </Link>
+                  );
+                })}
               </SelectGroup>
             </SelectContent>
           </Select>

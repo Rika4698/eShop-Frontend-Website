@@ -9,7 +9,7 @@ const Banner = () => {
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:gap-5">
         {/* Main Large Banner - Grocery */}
         <div className="col-span-4 group">
-          <div className="relative w-full xl:h-[450px] lg:h-[355px] md:h-[290px] h-[320px] rounded-xl overflow-hidden shadow-lg">
+          <div className="relative w-full xl:h-[450px] lg:h-[355px] md:h-[290px] h-[320px] rounded-sm overflow-hidden shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1400&q=80"
               alt="Fresh Grocery"
@@ -44,7 +44,7 @@ const Banner = () => {
               </p>
               
               <Link href="/all-products">
-                <button className="bg-gradient-to-r from-[#7ed321] to-[#5fb200] hover:from-[#5fb200] hover:to-[#7ed321] transition-all duration-300 rounded-full text-sm md:text-base font-semibold text-white px-6 md:px-8 py-3 md:py-4 flex items-center gap-2 w-fit shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <button className="bg-gradient-to-r from-[#33d321] to-[#03b200] hover:from-[#00b224] hover:to-[#1dcb34] transition-all duration-300 rounded-full text-sm md:text-base font-semibold text-white px-6 md:px-8 py-3 md:py-4 flex items-center gap-2 w-fit shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                   <ShoppingBag className="w-5 h-5" />
                   Shop Grocery
                   <MoveRight className="w-5 h-5" />
@@ -56,7 +56,7 @@ const Banner = () => {
 
         {/* Side Banner - Pet Care */}
         <div className="col-span-2 group">
-          <div className="relative w-full xl:h-[450px] lg:h-[355px] md:h-[290px] h-[280px] rounded-xl overflow-hidden shadow-lg">
+          <div className="relative w-full xl:h-[450px] lg:h-[355px] md:h-[290px] h-[280px] rounded-sm overflow-hidden shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1415369629372-26f2fe60c467?w=800&q=80"
               alt="Pet Care Products"
@@ -91,7 +91,7 @@ const Banner = () => {
       <div className="grid md:grid-cols-2 grid-cols-1 gap-4 md:gap-5 mt-4 md:mt-5">
         {/* Bottom Left - Fashion */}
         <div className="group">
-          <div className="relative w-full lg:h-[260px] md:h-[220px] h-[240px] rounded-xl overflow-hidden shadow-lg">
+          <div className="relative w-full lg:h-[260px] md:h-[220px] h-[240px] rounded-sm overflow-hidden shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=80"
               alt="Fashion Collection"
@@ -124,7 +124,7 @@ const Banner = () => {
 
         {/* Bottom Right - Books */}
         <div className="group">
-          <div className="relative w-full lg:h-[260px] md:h-[220px] h-[240px] rounded-xl overflow-hidden shadow-lg">
+          <div className="relative w-full lg:h-[260px] md:h-[220px] h-[240px] rounded-sm overflow-hidden shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=1200&q=80"
               alt="Books Collection"

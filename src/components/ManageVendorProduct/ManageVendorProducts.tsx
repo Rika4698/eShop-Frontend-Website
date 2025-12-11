@@ -13,7 +13,7 @@ import { useGetAllProductsQuery } from "@/redux/features/products/productApi";
 const ManageVendorProducts = () => {
   const { userData: vendorData, isFetching: userFetching } = useUserDetails();
   const { data: categories, isLoading: categoryLoading } = useGetAllCategoriesQuery(undefined);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const dataPerPage = 6;
 
@@ -41,6 +41,8 @@ const ManageVendorProducts = () => {
   if (isLoading && !products.length) {
     return <Loading />;
   }
+
+  console.log(products);
 
   return (
     <div>

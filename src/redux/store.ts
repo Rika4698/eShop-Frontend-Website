@@ -12,6 +12,10 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { baseApi } from "./api/baseApi";
+import compareProductReducer from "../redux/features/productCompare/compareSlice";
+import productReducer from "../redux/features/products/productSlice";
+
+
 
 
 const persistConfig = {
@@ -19,16 +23,26 @@ const persistConfig = {
   storage,
 };
 
-
+const productsPersistConfig = {
+  key: "products",
+  storage,
+};
 
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
+
+const persistedProductReducer = persistReducer(
+  productsPersistConfig,
+  productReducer
+);
 
 // Function to make the store
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedReducer,
+    products: persistedProductReducer,
+    compareProducts: compareProductReducer,
     
   },
   middleware: (getDefaultMiddleware) =>

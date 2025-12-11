@@ -84,22 +84,22 @@ const Footer = () => {
                                placeholder="Email address"/>
 
                         <button
-                            className="px-4 h-[67%] rounded-r-md bg-[#80b500] text-white absolute top-[24px] right-0">Submit
+                            className="px-4 h-[67%] rounded-r-md bg-[#169122] text-white absolute top-[24px] right-0">Submit
                         </button>
                     </div>
                 </div>
                 <div className=" flex justify-start mt-5">
                  <div className="flex items-center flex-wrap gap-[10px] text-text">
-                    <a className="text-[1.3rem] p-1.5 cursor-pointer rounded-full text-white bg-[#80b500] transition-all duration-300">
+                    <a className="text-[1.3rem] p-1.5 cursor-pointer rounded-full text-white bg-[#169122] transition-all duration-300">
                         <CgFacebook/>
                     </a>
-                    <a className="text-[1.2rem] p-1.5 cursor-pointer rounded-full text-white bg-[#80b500] transition-all duration-300">
+                    <a className="text-[1.2rem] p-1.5 cursor-pointer rounded-full text-white bg-[#169122] transition-all duration-300">
                         <BsTwitter/>
                     </a>
-                    <a className="text-[1.2rem] p-1.5 cursor-pointer rounded-full text-white bg-[#80b500] transition-all duration-300">
+                    <a className="text-[1.2rem] p-1.5 cursor-pointer rounded-full text-white bg-[#169122] transition-all duration-300">
                         <BsInstagram/>
                     </a>
-                    <a className="text-[1.2rem] p-1.5 cursor-pointer rounded-full text-white bg-[#80b500] transition-all duration-300">
+                    <a className="text-[1.2rem] p-1.5 cursor-pointer rounded-full text-white bg-[#169122] transition-all duration-300">
                         <BsLinkedin/>
                     </a>
                 </div></div>

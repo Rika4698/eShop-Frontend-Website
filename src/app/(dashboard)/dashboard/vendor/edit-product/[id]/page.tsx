@@ -169,13 +169,22 @@ export default function EditProductPage() {
 
   <label
     htmlFor="image"
-    className="flex items-center justify-between border rounded-md px-3 py-2 cursor-pointer bg-gray-50 hover:bg-gray-100 mt-1"
+    className="col-span-3 flex flex-col border rounded-md px-3 py-2 cursor-pointer bg-gray-50 hover:bg-gray-100"
   >
-    <span className="font-medium text-sm">
-      {(watchImages?.length ?? 0) > 0
-        ? `${watchImages?.length} file(s) selected`
+   <span className="font-medium text-base mb-2">
+      {watch("image") && watch("image")!.length > 0
+        ? "Selected files:"
         : "Upload files"}
     </span>
+
+    {/* List selected file names safely */}
+    {watch("image") &&
+      watch("image")!.length > 0 &&
+      Array.from(watch("image")!).map((file: File, index: number) => (
+        <span key={index} className="text-sm text-gray-700">
+          {file.name}
+        </span>
+      ))}
 
     <Input
       id="image"
