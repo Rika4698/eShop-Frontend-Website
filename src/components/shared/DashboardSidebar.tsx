@@ -102,7 +102,7 @@ router.push("/login");
          {/* Cross icon for mobile/md */}
       {isOpen && (
         <X
-          className="absolute top-4 right-4 z-50 cursor-pointer text-3xl text-white bg-[#80b500] rounded-full p-1 lg:hidden"
+          className="absolute top-4 right-4 z-50 cursor-pointer text-3xl text-white bg-[#00b512] rounded-full p-1 lg:hidden"
           onClick={() => setIsopen(false)}
         />
       )}
@@ -110,7 +110,7 @@ router.push("/login");
       {/* Toggle Arrow (mobile only) */}
       <ArrowLeft
         className={cn(
-          "fixed z-20 top-[15%] cursor-pointer rounded-full border bg-[#80b500] text-white text-3xl lg:flex hidden"
+          "fixed z-20 top-[15%] cursor-pointer rounded-full border bg-[#00b512] text-white text-3xl lg:flex hidden"
         )}
         style={{
           transition: "0.3s",
@@ -134,7 +134,7 @@ router.push("/login");
       <div className="px-4 py-10">
         <Button
           onClick={handleLogout}
-          className="w-[90%] mx-auto bg-[#80b500] hover:bg-[#7fad39]"
+          className="w-[90%] mx-auto bg-[#1eb500] hover:bg-[#39ad4e]"
         >
           Logout
         </Button>

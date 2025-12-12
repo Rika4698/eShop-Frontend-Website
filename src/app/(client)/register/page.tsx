@@ -80,6 +80,8 @@ export default function Registration() {
     }
   };
 
+
+
   return (
   <div
   className="min-h-screen w-full flex items-center justify-center px-4 bg-gradient-to-br from-green-300 via-sky-200 to-blue-300 relative"
@@ -96,10 +98,10 @@ export default function Registration() {
     <form onSubmit={handleSubmit(handleSignUp)} className="space-y-5">
    
       <div>
-        <label className="block text-white mb-1" htmlFor="username">Username *</label>
+        <label className="block text-white mb-1" htmlFor="name">Username *</label>
         <input
           type="text"
-          id="username"
+          id="name"
           placeholder="Enter Name"
           {...register("name", { required: "Username is required" })}
           className="w-full px-4 py-2 rounded-lg bg-white/70 border focus:ring-2 focus:ring-indigo-400 focus:outline-none"

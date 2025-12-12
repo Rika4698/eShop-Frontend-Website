@@ -269,7 +269,7 @@ export default function CreateProductForm() {
 
           <Button
             type="submit"
-            className="w-full bg-[#638d24] hover:bg-[#426014]"
+            className="w-full bg-[#1d9421] hover:bg-[#426014]"
           >
             Create Product
           </Button>

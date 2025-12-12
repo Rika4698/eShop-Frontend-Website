@@ -201,7 +201,7 @@ export default function EditProductPage() {
     </p>
   )}
 </div>
-          <Button type="submit" className="w-full bg-[#7fad39] hover:bg-[#405d15]">
+          <Button type="submit" className="w-full bg-[#31a635] hover:bg-[#405d15]">
             Update Product
           </Button>
         </form>

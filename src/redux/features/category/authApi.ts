@@ -26,6 +26,57 @@ const authApi = baseApi.injectEndpoints({
       providesTags: ["users"],
     }),
 
+    getSingleVendor: builder.query({
+      query: (id: string) => {
+        return {
+          url: `/users/get-vendor/${id}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: TResponseRedux<any>) => {
+        return response.data;
+      },
+      providesTags: ["users"],
+    }),
+
+
+    getSingleCustomer: builder.query({
+      query: (email: string) => {
+        return {
+          url: `/users/get-customer/${email}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: TResponseRedux<any>) => {
+        return response.data;
+      },
+      providesTags: ["users"],
+    }),
+
+
+    changePassword: builder.mutation({
+      query: (passwordInfo) => {
+        return {
+          url: "/auth/change-password",
+          method: "POST",
+          body: passwordInfo,
+        };
+      },
+      invalidatesTags: ["users"],
+    }),
+
+
+    forgotPassword: builder.mutation({
+      query: (userData) => {
+        return {
+          url: "/auth/forgot-password",
+          method: "POST",
+          body: userData,
+        };
+      },
+      invalidatesTags: ["users"],
+    }),
+
   }),
    overrideExisting: false,
 });
@@ -33,5 +84,9 @@ const authApi = baseApi.injectEndpoints({
 export const {
   useLoginMutation,
   useGetMyProfileQuery,
+  useChangePasswordMutation,
+  useForgotPasswordMutation,
+  useGetSingleCustomerQuery,
+  useGetSingleVendorQuery,
 
 } = authApi;

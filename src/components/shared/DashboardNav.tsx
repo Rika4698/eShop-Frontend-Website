@@ -44,7 +44,7 @@ export function DashboardNav({ navLinks }: DashboardNavProps) {
               : "py-[8px] pl-[12px] w-[90%] hover:underline",
             isActive
               ? depth === 0
-                ? "bg-[#80b500] shadow-md text-white text-xl"
+                ? "bg-[#27b500] shadow-md text-white text-xl"
                 : "bg-gray-100 text-primary"
               : "transparent",
             depth > 0 && ""
@@ -61,7 +61,7 @@ export function DashboardNav({ navLinks }: DashboardNavProps) {
               "p-[8px] rounded-[5px]",
               isActive
                 ? depth === 0
-                  ? "bg-[#80b500] text-white"
+                  ? "bg-[#27b500] text-white"
                   : "text-primary"
                 : ""
             )}

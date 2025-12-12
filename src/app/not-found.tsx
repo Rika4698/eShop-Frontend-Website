@@ -1,11 +1,12 @@
-import { TriangleAlertIcon } from "lucide-react";
+
 import Link from "next/link";
 
 export default function Component() {
   return (
     <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-md text-center">
-        <TriangleAlertIcon className="mx-auto h-12 w-12 text-green-600" />
+        <h1 className="text-green-600 text-7xl sm:text-9xl font-bold">404</h1>
+        {/* <TriangleAlertIcon className="mx-auto h-12 w-12 text-green-600" /> */}
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-green-600">
           Oops, page not found!
         </h1>

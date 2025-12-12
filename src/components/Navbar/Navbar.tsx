@@ -9,11 +9,13 @@ import { ICategory } from "@/types/modal";
 
 
 import NavbarLink from "./NavbarLink";
+import { useState } from "react";
 
 
 
 const Navbar = () => {
   const path = usePathname();
+   const [categoryOpen, setCategoryOpen] = useState(false);
   const { data: allCategories, } = useGetAllCategoriesQuery(undefined);
   const Home = [
     {
@@ -46,7 +48,7 @@ const Navbar = () => {
     <div className={path === "/dashboard" ? "hidden" : ""}>
       <div className={`lg:flex hidden items-center justify-between lg:max-w-full lg:mx-auto bg-white lg:px-4 xl:px-8  py-2 `}>
         <div>
-          <Select >
+          <Select open={categoryOpen} onOpenChange={setCategoryOpen} >
             <SelectTrigger className="w-[220px] px-4 bg-[#1c9d29] text-white font-bold rounded-sm">
             <BiMenuAltLeft
               size={30}  className="text-white font-bold"/>

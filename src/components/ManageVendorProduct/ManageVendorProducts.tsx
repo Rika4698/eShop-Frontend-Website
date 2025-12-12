@@ -57,7 +57,7 @@ const ManageVendorProducts = () => {
       <div className="w-full h-full flex items-center justify-end gap-[5px] mb-[23px]">
         <Link
           href="/dashboard/vendor/create-product"
-          className="inline-block bg-[#71b40d] text-white font-semibold px-4 py-2 rounded-md transition-colors duration-300 hover:bg-[#416815]"
+          className="inline-block bg-[#10b40d] text-white font-semibold px-4 py-2 rounded-md transition-colors duration-300 hover:bg-[#416815]"
         >
           Create Product <PenIcon className="inline-block ml-2" />
         </Link>
@@ -89,7 +89,7 @@ const ManageVendorProducts = () => {
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
                 className={`px-4 py-2 rounded-full transition-all duration-300 
-                ${currentPage === index + 1 ? "bg-[#80b500] text-white" : "bg-gray-200 text-rose-600 hover:bg-[#80b500] hover:text-white"}`}
+                ${currentPage === index + 1 ? "bg-[#00b515] text-white" : "bg-gray-200 text-rose-600 hover:bg-[#80b500] hover:text-white"}`}
               >
                 {index + 1}
               </button>

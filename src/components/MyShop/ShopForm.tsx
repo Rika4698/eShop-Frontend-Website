@@ -22,7 +22,7 @@ interface IProps {
 }
 
 const validationSchema = Yup.object({
-  name: Yup.string()
+  shopName: Yup.string()
     .required("Shop name is required")
     .min(3, "Shop name must be at least 3 characters"),
   description: Yup.string()
@@ -79,7 +79,7 @@ const ShopForm: React.FC<IProps> = ({ initialValues }) => {
         <CardContent>
           <Formik
             initialValues={{
-              name: initialValues?.shopName || "",
+              shopName: initialValues?.shopName || "",
               description: initialValues?.description || "",
               logo: "", // You can leave this empty or handle initial value for logo
             }}
@@ -88,16 +88,16 @@ const ShopForm: React.FC<IProps> = ({ initialValues }) => {
           >
             <Form className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Shop Name</Label>
+                <Label htmlFor="shopName">Shop Name</Label>
                 <Field
-                  name="name"
-                  id="name"
+                  name="shopName"
+                  id="shopName"
                   as={Input}
                   placeholder="Enter your shop name"
                   className="input"
                 />
                 <ErrorMessage
-                  name="name"
+                  name="shopName"
                   component="div"
                   className="text-red-500 text-sm"
                 />
@@ -155,7 +155,7 @@ const ShopForm: React.FC<IProps> = ({ initialValues }) => {
                   
                 )}
               </div>
-              <Button type="submit" className="w-full bg-[#7fad39] hover:bg-black">
+              <Button type="submit" className="w-full bg-[#33a730]    hover:bg-[#1c8618]">
                 {initialValues ? "Update Shop" : "Create Shop"}
               </Button>
             </Form>

@@ -17,14 +17,14 @@ import Link from "next/link";
 
 import Loading from "@/app/loading";
 import useUserDetails from "@/hooks/useUser";
-// import { selectCompareProducts } from "@/redux/features/productCompare/compareSlice";
+import { selectCompareProducts } from "@/redux/features/productCompare/compareSlice";
 import { useGetAllProductsQuery } from "@/redux/features/products/productApi";
-// import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { IProduct } from "@/types/modal";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import NavSearchProductCard from "../Home/NavSearchCard";
-// import Cart from "../Navbar/Cart";
+import Cart from "../Navbar/Cart";
 import { UserDropDown } from "../Navbar/UserDropDown";
 import ProductComparison from "../productComparison/ComparisonModal";
 
@@ -32,12 +32,12 @@ const Header = () => {
     const path = usePathname();
 
     const { userData } = useUserDetails();
-    // const cartProduct = useAppSelector((state) => state.products.cart);
+    const cartProduct = useAppSelector((state) => state.products.cart);
     const [openCart, setOpenCart] = useState(false);
     const [openWishlist, setOpenWishlist] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-    // const productsForComparison = useAppSelector(selectCompareProducts);
+    const productsForComparison = useAppSelector(selectCompareProducts);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const { data: allProductsResponse, isLoading } = useGetAllProductsQuery(
@@ -242,21 +242,21 @@ const Header = () => {
                         </div>
 
                      <div onClick={() => setOpenWishlist(true) } >
-                      <div title="Product Comparison" className="bg-[#170f0d] w-[40px] relative h-[40px] flex justify-center items-center rounded-full">
+                      <div title="Product Comparison" className="bg-[#d3d0d0] w-[40px] relative h-[40px] flex justify-center items-center rounded-full">
                        
                          <FaArrowRightArrowLeft className="text-[21px] text-gray-500 font-bold" />
-                       <span className="bg-[#7fad39] top-[-2px] right-[-3px] absolute w-[18px] h-[18px] flex justify-center items-center rounded-full text-white">
-                      {/* {  productsForComparison.length } */}
+                       <span className="bg-[#48a42e] top-[-2px] right-[-3px] absolute w-[18px] h-[18px] flex justify-center items-center rounded-full text-white">
+                      {  productsForComparison.length }
                               </span>
                          </div>
                          </div>
 
                    <div  onClick={() =>  setOpenCart(true) }  >
-                     <div title="My Cart" className="bg-[#fff1ee] w-[40px] relative h-[40px] flex justify-center items-center rounded-full">
-                        <Image  src="https://goatmoves.com/assets/images/static/cart.svg"  width={20} height={10} alt=""
-                            className="text-red-200"/>
-                     {/* {cartProduct.length >0 && (<span className="bg-[#7fad39] top-[-2px] right-[-3px] absolute w-[18px] h-[18px] flex justify-center items-center rounded-full text-white">
-                        {  cartProduct.length } </span> )} */}
+                     <div title="My Cart" className="bg-white w-[40px] relative h-[40px] flex justify-center items-center rounded-full">
+                        <Image  src="https://i.ibb.co.com/HfVwqKXh/images-1.jpg"  width={30} height={20} alt=""
+                            className="text-red-200 rounded-full"/>
+                     {cartProduct.length >0 && (<span className="bg-[#35ab39] top-[-2px] right-[-3px] absolute w-[18px] h-[18px] flex justify-center items-center rounded-full text-white">
+                        {  cartProduct.length } </span> )}
                               </div>
                              </div>
                                </div>
@@ -333,13 +333,13 @@ const Header = () => {
                                     </div>
                                 )}
             </div>
-            {/* {openCart && <Cart setOpenCart={setOpenCart} openCart={openCart} />}
+            {openCart && <Cart setOpenCart={setOpenCart} openCart={openCart} />}
             {openWishlist && (
                 <ProductComparison
                     setOpenWishlist={setOpenWishlist}
                     openWishlist={openWishlist}
                 />
-            )} */}
+            )}
         </div>
     );
 };

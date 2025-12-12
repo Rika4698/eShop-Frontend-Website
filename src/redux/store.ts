@@ -14,7 +14,7 @@ import storage from "redux-persist/lib/storage";
 import { baseApi } from "./api/baseApi";
 import compareProductReducer from "../redux/features/productCompare/compareSlice";
 import productReducer from "../redux/features/products/productSlice";
-
+import couponReducer from "../redux/features/coupon/couponSlice";
 
 
 
@@ -28,12 +28,21 @@ const productsPersistConfig = {
   storage,
 };
 
+const couponPersistConfig = {
+  key: "coupon",
+  storage,
+};
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
 
 const persistedProductReducer = persistReducer(
   productsPersistConfig,
   productReducer
+);
+
+const persistedCouponReducer = persistReducer(
+  couponPersistConfig,
+  couponReducer
 );
 
 // Function to make the store
@@ -43,6 +52,7 @@ export const store = configureStore({
     auth: persistedReducer,
     products: persistedProductReducer,
     compareProducts: compareProductReducer,
+     coupon: persistedCouponReducer,
     
   },
   middleware: (getDefaultMiddleware) =>

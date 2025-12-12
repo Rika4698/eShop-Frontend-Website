@@ -46,6 +46,32 @@ const userApi = baseApi.injectEndpoints({
     }),
 
 
+     followUser: builder.mutation({
+      query: (vendorInfo) => ({
+        url: "/users/follow",
+        method: "POST",
+        body: vendorInfo,
+      }),
+      transformResponse: (response: TResponseRedux<IUser[]>) => {
+        return response.data;
+      },
+      invalidatesTags: ["users"],
+    }),
+
+
+    unfollowUser: builder.mutation({
+      query: (vendorInfo) => ({
+        url: "/users/unfollow",
+        method: "DELETE",
+        body: vendorInfo,
+      }),
+      transformResponse: (response: TResponseRedux<IUser[]>) => {
+        return response.data;
+      },
+      invalidatesTags: ["users"],
+    }),
+
+
     deleteUser: builder.mutation({
     query: (userId) => ({
       url: `/users/${userId}`, 
@@ -69,5 +95,7 @@ useUpdateUserStatusMutation,
 useDeleteUserMutation,
 useSingleVendorStatusUpdatedMutation,
 useUpdateVendorMutation,
+useFollowUserMutation,
+useUnfollowUserMutation,
 
 } = userApi;

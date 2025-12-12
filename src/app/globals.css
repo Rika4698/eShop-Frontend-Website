@@ -103,6 +103,22 @@
   }
 }
 
+ .slider-thumb::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          background: #4da11d;
+          border-radius: 50%;
+          border: 3px solid white;
+          box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+          cursor: pointer;
+          transition: 0.2s;
+        }
+        .slider-thumb::-webkit-slider-thumb:hover {
+          transform: scale(1.15);
+        }
+
 input:focus,
 textarea:focus,
 input:hover,

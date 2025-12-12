@@ -10,10 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/redux/features/auth/authSlice";
-// import { clearCoupon } from "@/redux/features/coupon/couponSlice";
-// import { clearCart } from "@/redux/features/products/productSlice";
+import { clearCoupon } from "@/redux/features/coupon/couponSlice";
+import { clearCart } from "@/redux/features/products/productSlice";
 import { useAppDispatch } from "@/redux/hooks";
-// import { logoutService } from "@/utils/loginService";
+import { logoutService } from "@/utils/loginService";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ interface UserDropDownProps {
         userData: {
             role: string;
             image?: string;
+            logo?:string;
         };
     };
 }
@@ -32,14 +33,15 @@ export function UserDropDown({ user }: UserDropDownProps) {
 
     const handleLogout = () => {
         dispatch(logout());
-        // dispatch(clearCart());
-        // dispatch(clearCoupon());
-        // logoutService();
+        dispatch(clearCart());
+        dispatch(clearCoupon());
+        logoutService();
 
         toast.success("Logged out successfully", { duration: 3000 });
     };
 
     // console.log(user?.role,"role");
+    // console.log(users);
 
     return (
         <DropdownMenu>
@@ -49,7 +51,7 @@ export function UserDropDown({ user }: UserDropDownProps) {
                         <Image
                             alt="profile"
                             src={
-                                users?.image ||
+                                users?.image || users?.logo ||
                                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                             }
                             width={80}

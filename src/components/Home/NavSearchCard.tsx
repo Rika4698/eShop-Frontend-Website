@@ -7,8 +7,8 @@ const NavSearchProductCard = ({
 }: {
   singleProduct: IProduct;
 }) => {
-  const params = new URLSearchParams();
-  params.set("product", singleProduct.id);
+  // const params = new URLSearchParams();
+  // params.set("product", singleProduct.id);
 
   const discountPercentage = (singleProduct?.discount ?? 0) / 100;
   const discountAmount = singleProduct.price * discountPercentage;
@@ -17,7 +17,7 @@ const NavSearchProductCard = ({
     : singleProduct.price;
 
   return (
-    <Link href={`/productDetails?${params.toString()}`}>
+    <Link href={`/product/${singleProduct.id}`}>
       <div className="hover:bg-gray-50 transition-all duration-200 border-b border-gray-100 last:border-b-0">
         <div className="flex items-center gap-3 p-3">
           {/* Product Image */}
@@ -49,15 +49,15 @@ const NavSearchProductCard = ({
               {singleProduct.flashSale ? (
                 <>
                   <span className="text-sm text-gray-400 line-through">
-                    ${singleProduct.price.toFixed(2)}
+                    {singleProduct.price.toFixed(2)} TK
                   </span>
                   <span className="text-base font-bold text-green-600">
-                    ${discountedPrice.toFixed(2)}
+                    {discountedPrice.toFixed(2)} TK
                   </span>
                 </>
               ) : (
                 <span className="text-base font-semibold text-gray-800">
-                  ${singleProduct.price.toFixed(2)}
+                  {singleProduct.price.toFixed(2)} TK
                 </span>
               )}
             </div>

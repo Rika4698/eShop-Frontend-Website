@@ -141,7 +141,7 @@ const CreateCategory = () => {
           </Button>
           <Button
             onClick={handleCreateCategory}
-            className="center bg-[#80b500] gap-[5px]"
+            className="center bg-[#0fb500] gap-[5px]"
           >
             Create
             <FaSpinner className="hidden" />

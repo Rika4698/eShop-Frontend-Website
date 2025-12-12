@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import useUserDetails from "@/hooks/useUser";
 import { useGetAllOrdersQuery } from "@/redux/features/orders/orderApi";
 import { IOrder } from "@/types/modal";
+import Image from "next/image";
 
 const OrderList = () => {
   const { userData } = useUserDetails();
@@ -74,10 +75,11 @@ const OrderList = () => {
                           {index + 1 + (currentPage - 1) * dataPerPage}
                         </td>
                         <td className="py-4 px-4">
-                          <img
+                          <Image
                             src={
                               singleOrder?.orderDetails[0]?.product?.image[0]
                             }
+                            width={20} height={20}
                             alt="product"
                             className="w-12 h-12 rounded-md object-cover border"
                           />
@@ -120,7 +122,7 @@ const OrderList = () => {
                     key={page}
                     className={`px-3 py-1 rounded-md text-sm ${
                       currentPage === page
-                        ? "bg-blue-500 text-white"
+                        ? "bg-green-700 text-white"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                     onClick={() => handlePageChange(page)}
