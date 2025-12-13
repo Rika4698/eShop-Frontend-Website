@@ -21,11 +21,13 @@ const useUserDetails = () => {
         setIsRefetching(false);
       });
     }
-  }, [token, refetch]);
+  }, [token]);
 
   const effectiveLoading = isLoading || isRefetching;
 
-  return { userData: data || null, isLoading: effectiveLoading,isFetching, };
+  return { userData: token ? data : null, 
+    isLoading: effectiveLoading,
+    isFetching,  };
 };
 
 export default useUserDetails;

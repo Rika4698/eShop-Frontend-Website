@@ -76,7 +76,7 @@ const CreateCategory = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="center gap-[5px]">
+        <Button variant="outline" className="text-white bg-green-600 hover:bg-green-700 hover:text-white center gap-[5px]">
           Add Category
           <Plus className="w-[15px]" />
         </Button>

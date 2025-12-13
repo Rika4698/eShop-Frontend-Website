@@ -29,7 +29,7 @@ const productsPersistConfig = {
 };
 
 const couponPersistConfig = {
-  key: "coupon",
+  key: "coupons",
   storage,
 };
 

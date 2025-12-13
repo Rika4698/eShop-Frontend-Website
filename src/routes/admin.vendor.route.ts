@@ -5,7 +5,9 @@ import { GrServices } from "react-icons/gr";
 import { FaRegRectangleList } from "react-icons/fa6";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { MdOutlineReviews, MdReviews } from "react-icons/md";
-
+import { CiUser } from "react-icons/ci";
+import { RiLockPasswordLine, RiUserSettingsLine } from "react-icons/ri";
+import { BiDollar } from "react-icons/bi";
 
 export const adminLinks: NavItem[] = [
    {
@@ -28,6 +30,22 @@ export const adminLinks: NavItem[] = [
     Icon: CiShop,
     title: "Manage Shops",
   },
+  {
+    href: "/dashboard/admin/transactions",
+    Icon: BiDollar,
+    title: "Transactions",
+  },
+  {
+    href: "/dashboard/admin/all-reviews",
+    Icon: MdReviews,
+    title: "Reviews",
+  },
+   {
+    href: "/dashboard/admin/coupon",
+    Icon: BiDollar,
+    title: "Coupon",
+  },
+  
   
 ];
 
@@ -60,4 +78,28 @@ export const vendorLinks: NavItem[] = [
   },
 
 
+];
+
+
+export const customerLinks: NavItem[] = [
+  {
+    href: "/dashboard/customer",
+    title: "User Profile",
+    Icon: CiUser,
+  },
+  {
+    href: "/dashboard/customer/settings",
+    title: "Account setting",
+    Icon: RiUserSettingsLine,
+  },
+  {
+    href: "/dashboard/customer/my-orders",
+    title: "My Orders",
+    Icon: RiLockPasswordLine,
+  },
+  {
+    href: "/dashboard/customer/followed-shop",
+    title: "Favourite Shop",
+    Icon: RiLockPasswordLine,
+  },
 ];

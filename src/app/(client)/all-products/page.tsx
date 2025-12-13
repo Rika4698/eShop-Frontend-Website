@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // export default AllProducts;
@@ -36,7 +37,8 @@ const AllProducts = () => {
   const [dataPerPage, setDataPerPage] = useState(12);
   const [minPrice, setMinPrice] = useState(100);
   const [maxPrice, setMaxPrice] = useState(10000);
-  const [activeCategory, setActiveCategory] = useState<string | null>(selectedCategory|| null); 
+  const [activeCategory, setActiveCategory] = useState<string | null>(
+  selectedCategory || null);
   const { data: allCategories } = useGetAllCategoriesQuery(undefined);
   const { data: allProductsResponse, isLoading, refetch } =
 
@@ -54,14 +56,26 @@ const totalPages = Math.ceil(
   (allProductsResponse?.meta?.total || 0) / dataPerPage
 );
 
+useEffect(() => {
+  if (selectedCategory) {
+    setActiveCategory(selectedCategory);
+  } else {
+    setActiveCategory(null);
+  }
+  setCurrentPage(1);
+}, [selectedCategory]);
+
 // Debounce search term for performance
 useEffect(() => {
   const handler = setTimeout(() => setDebouncedSearchTerm(searchTerm), 300);
   return () => clearTimeout(handler);
 }, [searchTerm]);
+
+
+
   useEffect(() => {
     refetch();
-  }, [selectedCategories, sort, debouncedSearchTerm, minPrice, maxPrice, currentPage, refetch]);
+  }, [ activeCategory,selectedCategories, sort, debouncedSearchTerm, minPrice, maxPrice, currentPage, refetch]);
 
 
   const handleCategorySelect = (category: string) => {
@@ -88,7 +102,7 @@ useEffect(() => {
   
   return (
     <div className="lg:container lg:mx-auto lg:px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">All Products</h1>
+      <h1 className="text-3xl md:text-5xl text-green-700 font-bold mb-6 text-center">All Products</h1>
 
       <div className="grid grid-cols-12 gap-6">
         {/* Filters Section - Left Side */}

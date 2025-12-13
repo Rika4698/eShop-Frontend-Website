@@ -31,7 +31,7 @@ import ProductComparison from "../productComparison/ComparisonModal";
 const Header = () => {
     const path = usePathname();
 
-    const { userData } = useUserDetails();
+    const { userData, isLoading: userLoading  } = useUserDetails();
     const cartProduct = useAppSelector((state) => state.products.cart);
     const [openCart, setOpenCart] = useState(false);
     const [openWishlist, setOpenWishlist] = useState(false);
@@ -168,6 +168,37 @@ const Header = () => {
         }`}>        Blog  </Link>
                                                          
                  </DropdownMenuItem>
+
+                  <DropdownMenuItem>
+         <Link  href="/faq"  className={`text-[14px] uppercase ${
+          path === "/faq"
+            ? "text-green-600 font-semibold"
+            : "text-gray-700"
+        }`}>        FAQ </Link>
+                                                         
+                 </DropdownMenuItem>
+
+
+                  <DropdownMenuItem>
+         <Link  href="/conditions"  className={`text-[14px] uppercase ${
+          path === "/conditions"
+            ? "text-green-600 font-semibold"
+            : "text-gray-700"
+        }`}>     Terms and Conditions </Link>
+                                                         
+                 </DropdownMenuItem>
+
+
+                  <DropdownMenuItem>
+         <Link  href="/policy"  className={`text-[14px] uppercase ${
+          path === "/policy"
+            ? "text-green-600 font-semibold"
+            : "text-gray-700"
+        }`}>       Privacy Policy </Link>
+                                                         
+                 </DropdownMenuItem>
+
+
                   </DropdownMenuContent>
                      </DropdownMenu>
                   </div>
@@ -225,7 +256,7 @@ const Header = () => {
                   <HoverCardTrigger asChild>
                       <div className="flex justify-center items-center gap-2.5 md:gap-6  px-1 md:py-4">
                      <div>
-                   {isLoading ? ( 
+                   {userLoading ? ( 
                     <div className="animate-pulse w-10 h-10 rounded-full bg-gray-400" /> ) : userData ? ( 
                    <UserDropDown user={userData} /> ) : (
                          <Link href="/login">

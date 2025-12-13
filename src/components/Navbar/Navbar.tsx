@@ -2,7 +2,7 @@
 
 import { BiMenuAltLeft } from "react-icons/bi";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Select, SelectContent, SelectGroup, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { ICategory } from "@/types/modal";
@@ -13,9 +13,11 @@ import { useState } from "react";
 
 
 
+
 const Navbar = () => {
-  const path = usePathname();
-   const [categoryOpen, setCategoryOpen] = useState(false);
+ const path = usePathname();
+  const router = useRouter();
+  const [categoryOpen, setCategoryOpen] = useState(false);
   const { data: allCategories, } = useGetAllCategoriesQuery(undefined);
   const Home = [
     {
@@ -42,6 +44,11 @@ const Navbar = () => {
       path: "/policy",
     },
   ];
+
+   const handleCategoryClick = (categoryName: string) => {
+    router.push(`/all-products?category=${categoryName}`);
+    setCategoryOpen(false); // Close dropdown
+  };
   
   
   return (
@@ -57,21 +64,15 @@ const Navbar = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>CATEGORIES</SelectLabel>
-               {allCategories?.map((category: ICategory) => {
-                  // Create params for each category
-                  const params = new URLSearchParams();
-                  params.set("product", category.name);
-
-                  return (
-                    <Link
-                      key={category?.id}
-                      href={`/all-products?category=${category.name}`}
-                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
-                    >
-                      {category?.name}
-                    </Link>
-                  );
-                })}
+                {allCategories?.map((category: ICategory) => (
+                  <div
+                    key={category.id}
+                    className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                    onClick={() => handleCategoryClick(category.name)}
+                  >
+                    {category.name}
+                  </div>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -127,5 +128,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// 

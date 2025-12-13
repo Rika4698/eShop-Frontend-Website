@@ -21,18 +21,22 @@ import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { GrCompare } from "react-icons/gr";
 import { toast } from "sonner";
 import WarningModal from "../shared/ConflictWarningModal";
+import { RiH2 } from "react-icons/ri";
 
 interface ProductCardProps {
     singleProduct: IProduct;
     isCompareActive?: boolean;
     setIsCompareActive?: {};
-    compareProducts: IProduct[];
+    compareProducts?: IProduct[];
+    categoryName?:string;
 }
-const HomePageProductCard = ({
-    singleProduct,
-}: {
-    singleProduct: IProduct;
-}) => {
+const HomePageProductCard = (
+    { singleProduct,
+  categoryName,
+}: ProductCardProps
+    ) => {
+
+    
     const params = new URLSearchParams();
     params.set("product", singleProduct.id);
     const { cart } = useAppSelector((state) => state.products);
@@ -43,7 +47,7 @@ const HomePageProductCard = ({
     const router = useRouter();
     const dispatch = useAppDispatch();
     const productsForComparison = useAppSelector(selectCompareProducts);
-
+console.log(singleProduct,"sa");
     const [addRecentProduct] = useAddRecentProductMutation();
 
     const addProductToCart = () => {
@@ -123,11 +127,13 @@ const HomePageProductCard = ({
     };
 
     console.log("from redux", productsForComparison);
+
+
     return (
         <div className="bg-[#F1F1F1 ">
             <div className="py-2 lg:py-6 shadow-d borer mt-2">
                 <div className="">
-                    <div className="lg:h-[420px] bg-white  cursor-pointer group shadow-lg rounded-md border p-3">
+                    <div className="lg:h-[420px] bg-white  cursor-pointer group shadow-lg rounded-md border p-3 ">
      {/* Image Section */}
    <div className="relative overflow-hidden rounded-lg">
                             <Image
@@ -180,8 +186,8 @@ const HomePageProductCard = ({
 
 
      <Link
-      href={`/product?${params.toString()}`}
-                                                        className="w-[38px] shadow-md border h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all"
+      href={`/product/${singleProduct.id}`}
+      className="w-[38px] shadow-md border h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all"
       >
     <Eye className="w-[50px]" />
         </Link>
@@ -206,19 +212,19 @@ const HomePageProductCard = ({
              </div>
    ) : (
    <div className="flex justify-center">
-                                    <ul className="flex gap-3 h-[715px] lg:h-[40px] rounded-full bg-opacity-90 opacity-0 group-hover:opacity-100 transition-all duration-700  top-[180px] justify-center items-center  absolute group-hover:bottom-0">
-                                        <li className="w-[38px] shadow-md border h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#36931e] hover:text-white hover:rotate-[360deg] transition-all">
-                                            <button>
-                                                <FaArrowRightArrowLeft className="w-[50px]" />
-                                            </button>
-                                        </li>
-                                        <Link
-                                            href={`/product?${params.toString()}`}
-                                            className="w-[38px] shadow-md border h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all"
-                                        >
-                                            <Eye className="w-[50px]" />
-                                        </Link>
-                                    </ul>
+   <ul className="flex gap-3 h-[715px] lg:h-[40px] rounded-full bg-opacity-90 opacity-0 group-hover:opacity-100 transition-all duration-700  top-[180px] justify-center items-center  absolute group-hover:bottom-0">
+   <li className="w-[38px] shadow-md border h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#36931e] hover:text-white hover:rotate-[360deg] transition-all">
+          <button>
+      <FaArrowRightArrowLeft className="w-[50px]" />
+          </button>
+              </li>
+            <Link
+         href={`/product/${singleProduct.id}`}
+       className="w-[38px] shadow-md border h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all"
+                              >
+            <Eye className="w-[50px]" />
+                  </Link>
+                   </ul>
                                     <span
                                         onClick={handleAddToCart}
                                         className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-40 h-[75px] rounded-t-full bg-primary text-white flex flex-col items-center justify-center text-sm font-semibold opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300 cursor-pointer border border-white"
@@ -235,10 +241,10 @@ const HomePageProductCard = ({
 </div>
                         {/* view details  */}
                         <div>
-                            <Link href={`/product?${params.toString()}`}>
-                                <div className="gap-2 flex-1 flex-col">
+                            <Link href={`/product/${singleProduct.id}`}>
+                                <div className="gap-2 flex-1 flex-col ">
                                <button className="text-white text-sm font-medium bg-[#53a22c] px-3 py-1 mt-2 rounded-md">
-                                        {singleProduct?.category?.name ||
+                             {singleProduct?.category?.name || categoryName ||
                                             "Unknown Category"}
                                     </button>
 
@@ -264,6 +270,13 @@ const HomePageProductCard = ({
                                                 {discountedPrice} <span>TK</span>
                                             </h2>
                                         )}
+                                    
+
+                                    </div>
+                                    <div className="flex gap-2 items-center pb-2">
+                                        <span className="font-medium md:text-lg text-black">Shop Name:</span>
+                                         {singleProduct.vendor.shopName?(<h2 className="font-medium md:text-lg text-primary">{singleProduct.vendor.shopName}</h2>):""}
+
                                     </div>
                                 </div>
                             </Link>

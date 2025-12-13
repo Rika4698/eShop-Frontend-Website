@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { SetStateAction, useEffect } from "react";
 import { Button } from "../ui/button";
 import { DashboardNav } from "./DashboardNav";
-import { adminLinks, vendorLinks } from "@/routes/admin.vendor.route";
+import { adminLinks,  customerLinks,  vendorLinks } from "@/routes/admin.vendor.route";
 import { useAppDispatch } from "@/redux/hooks";
 import { logoutService } from "@/utils/loginService";
 import useUserDetails from "@/hooks/useUser";
@@ -126,7 +126,7 @@ router.push("/login");
             navLinks={
               userData
                 ? (userData?.userData?.role === "ADMIN"
-                  ? adminLinks: vendorLinks) : []
+                  ? adminLinks: (userData?.userData?.role === "VENDOR" ? vendorLinks: customerLinks)) : []
             }
           />
         </div>

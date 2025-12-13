@@ -362,7 +362,7 @@ const ProductDetails = () => {
 
           {/* Category */}
           <div className="pt-4">
-            <span className="inline-block bg-[#80b500] text-white px-4 py-2 rounded-lg font-bold mr-2">
+            <span className="inline-block bg-[#18b500] text-white px-4 py-2 rounded-lg font-bold mr-2">
               Category:
             </span>
             <span className="text-gray-600 font-medium">{data?.category?.name}</span>
@@ -390,7 +390,7 @@ const ProductDetails = () => {
               </div>
               
               <Link href={`/shop-page?${shopParams.toString()}`}>
-                <Button className="bg-[#7fad39] hover:bg-[#6a9330] text-white px-6 py-3 whitespace-nowrap">
+                <Button className="bg-[#48ad39] hover:bg-[#3a9330] text-white px-6 py-3 whitespace-nowrap">
                   View Shop Details
                 </Button>
               </Link>
@@ -418,7 +418,7 @@ const ProductDetails = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {data?.reviews?.map((singleReview: IReview, index: number) => (
-              <Card key={index} className="border-2 border-[#80b500]/30 hover:border-[#80b500] transition-colors">
+              <Card key={index} className="border-2 border-[#80b500]/30 hover:border-[#21b500] transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4 mb-4">
                     <div className="relative flex-shrink-0">

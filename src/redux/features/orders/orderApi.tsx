@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 
+import { TResponseRedux } from "@/types/global";
 import { baseApi } from "../../api/baseApi";
 
 const orderApi = baseApi.injectEndpoints({
@@ -9,7 +11,7 @@ const orderApi = baseApi.injectEndpoints({
       query: (queryObj) => {
         const { page, limit, customerId, vendorId } = queryObj || {};
 
-        let url = "/orders";
+        let url = "/orders/all-order";
         let params = new URLSearchParams();
 
         if (vendorId) {
@@ -36,12 +38,42 @@ const orderApi = baseApi.injectEndpoints({
       },
       providesTags: ["orders"],
     }),
+
+
+     placeOrder: builder.mutation({
+      query: (orderInfo) => {
+        return {
+          url: "/orders/create-order",
+          method: "POST",
+          body: orderInfo,
+        };
+      },
+      transformResponse: (response: TResponseRedux<any>) => {
+        return response.data;
+      },
+      invalidatesTags: ["orders"],
+    }),
+
+    getOrderByTransaction: builder.query({
+  query: (transactionId) => ({
+    url: `/orders/transaction/${transactionId}`,
+    method: "GET",
+  }),
+  transformResponse: (response: TResponseRedux<any>) => {
+    return response.data;
+  },
+  providesTags: ["orders"],
+}),
+
+
   }),
 });
 
 
 export const { 
 
-useGetAllOrdersQuery
+useGetAllOrdersQuery,
+usePlaceOrderMutation,
+useGetOrderByTransactionQuery,
 
  } = orderApi;

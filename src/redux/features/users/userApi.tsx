@@ -35,6 +35,15 @@ const userApi = baseApi.injectEndpoints({
     invalidatesTags: ["users"],
   }),
 
+    updateCustomer: builder.mutation({
+      query: (customerInfo) => ({
+        url: "/users/update-customer",
+        method: "PATCH",
+        body: customerInfo,
+      }),
+      invalidatesTags: ["users"],
+    }),
+
 
     updateVendor: builder.mutation({
       query: (vendorInfo) => ({
@@ -97,5 +106,6 @@ useSingleVendorStatusUpdatedMutation,
 useUpdateVendorMutation,
 useFollowUserMutation,
 useUnfollowUserMutation,
+useUpdateCustomerMutation,
 
 } = userApi;

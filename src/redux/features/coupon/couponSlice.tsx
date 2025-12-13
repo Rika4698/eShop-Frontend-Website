@@ -16,7 +16,7 @@ const initialState: TAuthState = {
 };
 
 const couponSlice = createSlice({
-  name: "coupon",
+  name: "coupons",
   initialState,
   reducers: {
     setCoupon: (state, action) => {

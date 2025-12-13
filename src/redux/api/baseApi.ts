@@ -22,7 +22,7 @@ export const baseApi = createApi({
     "category",
     "products",
     "recent-products",
-    "coupon",
+    "coupons",
     "orders",
     "productsCompare",
     "reviews"

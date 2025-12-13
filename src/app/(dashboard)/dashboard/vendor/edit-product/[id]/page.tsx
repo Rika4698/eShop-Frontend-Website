@@ -23,6 +23,7 @@ interface IFormInput {
   description: string;
   image: FileList | null;
   categoryId: string;
+
 }
 
 export default function EditProductPage() {
@@ -43,6 +44,7 @@ export default function EditProductPage() {
       description: "",
       image: null,
       categoryId: "",
+    
     },
   });
 
@@ -59,6 +61,7 @@ export default function EditProductPage() {
         description: product.description,
         image: null,
         categoryId: product.categoryId,
+       
       });
     }
   }, [product, reset]);
@@ -66,7 +69,7 @@ export default function EditProductPage() {
   const onSubmit = async (data: IFormInput) => {
     if (!product) return;
 
-    const { name, price, stockQuantity, discount, description, image, categoryId } = data;
+    const { name, price, stockQuantity, discount, description, image, categoryId} = data;
 
     if (!name || !price || !stockQuantity || !description || !categoryId) {
       toast.error("All fields except images are required!");
@@ -80,6 +83,7 @@ export default function EditProductPage() {
       discount: Number(discount),
       description,
       categoryId,
+     
     };
 
     const formDataToSubmit = new FormData();
@@ -101,7 +105,8 @@ export default function EditProductPage() {
   };
 
   if (isFetching) return <p>Loading...</p>;
-  if (!product) return <p>Product not found!</p>;
+  if (!product) return <p className="text-gray-200 text-base">Product not found!</p>;
+ console.log(product,"update");
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -148,6 +153,10 @@ export default function EditProductPage() {
             </Select>
             {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId.message}</p>}
           </div>
+
+              
+        
+
 
           {/* Discount */}
           <div>

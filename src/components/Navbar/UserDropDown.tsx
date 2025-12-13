@@ -65,7 +65,7 @@ export function UserDropDown({ user }: UserDropDownProps) {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    {users && users.role !== "CUSTOMER" ? (
+                    {users  ? (
                         <Link
                             href={`/dashboard/${user?.userData?.role?.toLowerCase()}`}
                             className="cursor-pointer"

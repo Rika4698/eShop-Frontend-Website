@@ -61,9 +61,9 @@ const CartViews = () => {
                                 Shipping and taxes calculated at checkout.
                             </p>
                         </div>
-                        <button
+                      <button
                             onClick={handleCheckout}
-                            className="w-full h-12 bg-green-700 text-white font-bold rounded-lg hover:bg-primary/90 transition uppercase"
+                      className="w-full h-12 bg-green-700 text-white font-bold rounded-lg hover:bg-green-800 transition uppercase"
                         >
                             Checkout
                         </button>
