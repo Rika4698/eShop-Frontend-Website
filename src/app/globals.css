@@ -103,6 +103,11 @@
   }
 }
 
+.gridResponsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(222px, 250px));
+}
+
  .slider-thumb::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
@@ -126,4 +131,50 @@ textarea:hover,
 button:hover,
 button:focus {
   box-shadow: none !important;
+}
+
+.canvasHeadGradient {
+  background: #a1ffd4;
+  background: linear-gradient(169deg, #3df1a0 5%, #3df1ca 50%, #aaff68 100%);
+}
+
+.avatarGradient {
+  background: linear-gradient(169deg, #12ff94 5%, #fecaff 50%, #f0bff1 100%);
+}
+
+.spin_center {
+  animation: spin 2s linear infinite;
+}
+
+.gridUser_responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(277px, 1fr));
+}
+.reset-all ul,
+.reset-all li,
+.reset-all h1,
+.reset-all ol,
+.reset-all p {
+  all: revert !important; /* This will unset all inherited styles */
+  margin: 0 !important; /* Reset margins */
+  padding: revert !important; /* Reset padding */
+}
+
+.PhoneInputInput {
+  outline: none;
+  width: 100%;
+  height: 100%;
+}
+
+.spin {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

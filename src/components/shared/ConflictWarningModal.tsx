@@ -32,7 +32,7 @@ const WarningModal = ({ isOpen, onConfirm, onCancel }: any) => {
         {/* Text */}
        {/* Text */}
        <p className="mt-4 text-gray-700 text-center font-medium">
-          You already have items in your cart from another shop. Adding these
+          You already have items in your cart from <span className="text-green-700 font-bold">another shop</span> . Adding these
           new items will replace your existing cart. Do you want to continue?
         </p>
 
@@ -48,7 +48,7 @@ const WarningModal = ({ isOpen, onConfirm, onCancel }: any) => {
             className="bg-gray-200 hover:bg-[#00b518] text-gray-700 font-semibold px-4 py-2 rounded-lg shadow-md transition-all"
             onClick={onCancel}
           >
-            No, Keep My Cart
+            No
           </button>
         </div>
       </div>

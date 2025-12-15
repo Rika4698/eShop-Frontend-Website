@@ -32,6 +32,9 @@ export default function CartProductCard({ product }: { product: CartItem }) {
         dispatch(removeProduct({ id: product.id }));
     };
 
+    // Calculate total price for this product
+    const totalPrice = product.price * product.quantity;
+
     return (
         <div
             key={product.id}
@@ -74,9 +77,14 @@ export default function CartProductCard({ product }: { product: CartItem }) {
                             +
                         </button>
                     </div>
-                    <p className="text-lg font-semibold text-black">
-                        ${product.price}
-                    </p>
+                    <div className="text-right">
+                        <p className="text-sm text-gray-600">
+                            {product.price.toFixed(2)} TK x {product.quantity}
+                        </p>
+                        <p className="text-lg font-semibold text-black">
+                            {totalPrice.toFixed(2)} TK
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

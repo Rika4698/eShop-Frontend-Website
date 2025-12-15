@@ -7,7 +7,7 @@ const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
 
  getAllTypeUsers: builder.query<{ data: IUser[]; meta: TMeta }, void>({
-      query: () => ({ url: "/users/all" }), // fixed URL
+      query: () => ({ url: "/users/all" }), 
       transformResponse: (response: TResponseRedux<IUser[]>) => ({
         data: response.data || [],
         meta: response.meta || { total: 0, page: 1, limit: 10, totalPage: 1 },
@@ -80,6 +80,14 @@ const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["users"],
     }),
 
+     getPublicVendors: builder.query({
+      query: (params) => ({
+        url: '/users/vendors/all',
+        method: 'GET',
+        params: params, 
+      }),
+    }),
+
 
     deleteUser: builder.mutation({
     query: (userId) => ({
@@ -107,5 +115,6 @@ useUpdateVendorMutation,
 useFollowUserMutation,
 useUnfollowUserMutation,
 useUpdateCustomerMutation,
+useGetPublicVendorsQuery,
 
 } = userApi;

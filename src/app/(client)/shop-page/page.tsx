@@ -106,6 +106,8 @@ const Views = () => {
     return <Loading />;
   }
 
+  console.log(singleVendor.shopName, paginatedProducts, email,"sa");
+
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {/* Shop Header Section */}
@@ -266,7 +268,7 @@ const Views = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {paginatedProducts.map((product: IProduct) => (
                 <div key={product.id}>
-                  <HomePageProductCard singleProduct={product} categoryName={
+                  <HomePageProductCard singleProduct={product} shopName={singleVendor.shopName} categoryName={
                     categoryMap[product.categoryId || ""] ||
                     "Unknown Category"
                   } />

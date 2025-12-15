@@ -175,6 +175,8 @@ const ProductDetails = () => {
     shopParams.set("shop", data.vendor.id);
   }
 
+  console.log(shopParams);
+
   if (!productId) {
     return (
       <div className="py-10 text-center">

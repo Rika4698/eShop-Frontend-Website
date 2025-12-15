@@ -34,7 +34,7 @@ const CartViews = () => {
                     {cart?.length > 0 ? (
                         <div className="overflow-y-auto max-h-[70vh] space-y-4">
                             {cart.map((singleProduct) => (
-                                <CartProductCard product={singleProduct} key={singleProduct.id} />
+                                <CartProductCard product={singleProduct} key={singleProduct.id}  />
                             ))}
                         </div>
                     ) : (

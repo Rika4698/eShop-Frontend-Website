@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/favicon.ico.png",
+    icon: "/favicon.ico",
   },
 };
 const judson = Judson({
@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <link rel="icon" href="/favicon.ico.png  " sizes="any" />
+      
       <body className={judson.className}>
         <ReduxProvider>{children}</ReduxProvider>
       </body>

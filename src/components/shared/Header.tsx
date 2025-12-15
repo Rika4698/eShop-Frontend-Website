@@ -37,6 +37,7 @@ const Header = () => {
     const [openWishlist, setOpenWishlist] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+      const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
     const productsForComparison = useAppSelector(selectCompareProducts);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -88,15 +89,17 @@ const Header = () => {
 
     }, []);
 
-
+   const handleMobileMenuClick = () => {
+        setIsDropdownOpen(false);
+    };
 
     return (
         <div className={path === "/dashboard" ? "hidden" : ""}>
             <div className="lg:px-2 md:px-0 overflow-hidden py-2 lg:py-0">
                 <div className="border-b-[1px] pb-2 lg:border-white">
-                    <div className="lg:container lg:mx-auto">
+                    <div className="lg:max-w-full lg:mx-auto lg:pr-2 xl:pl-2 xl:pr-6 ">
                         <div className="flex justify-between lg:items-center lg:justify-between gap-16 md:gap-0">
-                            <div className="flex items-center ">
+                            <div className=" flex items-center ">
                                 <div className="flex lg:gap-12  items-center ">
                                     <div className="flex items-center cursor-pointer ">
                                         <div className=" flex lg:hidden  ">
@@ -109,22 +112,22 @@ const Header = () => {
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent className="w-56 lg:hidden">
-                               <DropdownMenuSeparator />
-                          <DropdownMenuItem className="lg:hidden">
+                              
+                          <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
                 <Link href="/"  className={`text-[14px] uppercase ${path === "/"? "text-green-600 font-semibold" : "text-gray-700"}`}>
                               HOME
                         </Link>
                         </DropdownMenuItem>
 
                        
-                            <DropdownMenuItem className="lg:hidden">
+                            <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
                      <Link href="/all-product"   className={`text-[14px] uppercase ${path === "/all-product"
             ? "text-green-600 font-semibold"
             : "text-gray-700"
         }`}>  Products </Link>
               </DropdownMenuItem>
 
-                 <DropdownMenuItem className="lg:hidden">
+                 <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
                     <Link href="/flashSale" className={`text-[14px] uppercase ${
           path === "/flashSale"
             ? "text-green-600 font-semibold"
@@ -133,7 +136,7 @@ const Header = () => {
                                                             
           </DropdownMenuItem>
            
-            <DropdownMenuItem className="lg:hidden">
+            <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
                         <Link
                     href="/about-us" className={`text-[14px] uppercase ${path === "/about-us" ? "text-green-600 font-semibold" : "text-gray-700"}`}>
                                  About us
@@ -144,7 +147,7 @@ const Header = () => {
 
 
 
-           <DropdownMenuItem className="lg:hidden">
+           <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
                         <Link
                     href="/contact" className={`text-[14px] uppercase ${path === "/contact" ? "text-green-600 font-semibold" : "text-gray-700"}`}>
                                  Contact
@@ -152,7 +155,7 @@ const Header = () => {
                                  </Link>
                              </DropdownMenuItem>
 
-                 <DropdownMenuItem className="lg:hidden">
+                 <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
                     <Link href="/news" className={`text-[14px] uppercase ${
           path === "/news"
             ? "text-green-600 font-semibold"
@@ -160,7 +163,7 @@ const Header = () => {
         }`}>   News      </Link>
                                                             
           </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
          <Link  href="/blog"  className={`text-[14px] uppercase ${
           path === "/blog"
             ? "text-green-600 font-semibold"
@@ -169,7 +172,7 @@ const Header = () => {
                                                          
                  </DropdownMenuItem>
 
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
          <Link  href="/faq"  className={`text-[14px] uppercase ${
           path === "/faq"
             ? "text-green-600 font-semibold"
@@ -179,7 +182,7 @@ const Header = () => {
                  </DropdownMenuItem>
 
 
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
          <Link  href="/conditions"  className={`text-[14px] uppercase ${
           path === "/conditions"
             ? "text-green-600 font-semibold"
@@ -189,7 +192,7 @@ const Header = () => {
                  </DropdownMenuItem>
 
 
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
          <Link  href="/policy"  className={`text-[14px] uppercase ${
           path === "/policy"
             ? "text-green-600 font-semibold"
@@ -219,7 +222,7 @@ const Header = () => {
 
 
 
-              <div className="lg:flex items-center hidden ml-[100px] gap-6">
+              <div className="lg:flex items-center justify-center hidden ml-[150px] xl:ml-[190px] gap-6">
   <div className="relative ">
     <div className="relative search-container">
       <input
@@ -228,7 +231,7 @@ const Header = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         onFocus={() => setIsSearchOpen(true)}
         onClick={(e) => e.stopPropagation()}
-        className="bg-[#f3f4f7] outline-none px-8 py-3 rounded-sm md:w-[440px] xl:w-[600px]"
+        className="bg-[#f3f4f7] outline-none px-8 py-3 rounded-sm w-[40vw] min-w-[280px] max-w-[800px]"
         type="text"
         placeholder="Search for products name..."
       />
@@ -248,7 +251,7 @@ const Header = () => {
 
 
 
-{/* login */}
+   {/* login */}
 
                 <div className="-ml-5 md:ml-0">
               
@@ -306,7 +309,7 @@ const Header = () => {
                                 {isSearchOpen && searchTerm && (
                                     <div
                                         id="search-dropdown"
-                                        className="absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:ml-[280px] xl:ml-[300px] top-full mt-0 bg-white shadow-2xl rounded-lg border border-gray-200 md:w-[440px] xl:w-[600px] max-h-[500px] overflow-y-auto z-[150]"
+                                        className=" hidden lg:block absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:ml-[320px] xl:ml-[370px]  top-full mt-0 bg-white shadow-2xl rounded-lg border border-gray-200 w-[40vw] min-w-[280px] max-w-[600px] max-h-[500px] overflow-y-auto z-[150] "
                                         style={{
                                             boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
                                         }}

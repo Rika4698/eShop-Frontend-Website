@@ -1,9 +1,11 @@
+import Category from "@/components/Home/Category";
 import Banner from "@/components/shared/Banner";
 
 export default function Home() {
     return (
      <div className="w-full mt-[30px] z-10">
             <Banner />
+            <Category/>
 
      
         </div>
