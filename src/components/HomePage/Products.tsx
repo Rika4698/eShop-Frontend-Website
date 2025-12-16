@@ -97,7 +97,7 @@ const HomeProducts = () => {
   };
 
   return (
-    <section className="py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="py-8 sm:py-12 md:py-16 max-w-7xl mx-auto ">
       {/* Header Section */}
       <div className="mb-8 sm:mb-10 md:mb-12">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

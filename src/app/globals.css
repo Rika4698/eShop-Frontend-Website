@@ -179,7 +179,7 @@ button:focus {
   }
 }
 
-     @keyframes fadeInUp {
+@keyframes fadeInUp {
           from {
             opacity: 0;
             transform: translateY(30px);
@@ -188,4 +188,23 @@ button:focus {
             opacity: 1;
             transform: translateY(0);
           }
+}
+
+
+.custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
         }
+
+ .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+
+ .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #2cad42;
+          border-radius: 10px;
+        }
+
+ .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #309264;
+        }        

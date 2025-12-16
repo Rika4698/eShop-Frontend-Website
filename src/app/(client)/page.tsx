@@ -1,6 +1,8 @@
+import BestDeal from "@/components/Home/BestDeal";
 import Category from "@/components/Home/Category";
 import FlashSale from "@/components/Home/FlashSaleProduct";
 import HomeProducts from "@/components/HomePage/Products";
+import RecentProduct from "@/components/MostViewsProducts/RecentProduct";
 import Banner from "@/components/shared/Banner";
 
 export default function Home() {
@@ -10,6 +12,8 @@ export default function Home() {
             <Category/>
             <HomeProducts/>
             <FlashSale/>
+            <BestDeal/>
+            <RecentProduct/>
 
      
         </div>

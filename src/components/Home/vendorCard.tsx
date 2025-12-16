@@ -121,11 +121,16 @@ export const VendorCard = ({ vendor, userData, refetch, followUser, unfollowUser
         )}
 
         {/* Visit Shop */}
+        {userData?.userData? (
         <Link href={`/shop-page?${params.toString()}`} className="flex-1 w-full mt-3">
           <button className="w-full h-11 px-4 rounded-lg border-2 border-green-600 text-green-600 font-semibold hover:bg-green-600 hover:text-white transform hover:scale-105 transition-all duration-300">
             Visit Shop
           </button>
-        </Link>
+        </Link> ):( <Link href={`/login`} className="flex-1 w-full mt-3">
+          <button className="w-full h-11 px-4 rounded-lg border-2 border-green-600 text-green-600 font-semibold hover:bg-green-600 hover:text-white transform hover:scale-105 transition-all duration-300">
+            Visit Shop
+          </button>
+        </Link>)  }
       </div>
     </div>
   );

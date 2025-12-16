@@ -101,6 +101,21 @@ const productApi = baseApi.injectEndpoints({
     }),
 
 
+    getRecentViewProducts: builder.query({
+      query: () => {
+        return {
+          url: "/recent-products/all",
+          method: "GET",
+        };
+      },
+      transformResponse: (response: TResponseRedux<any>) => {
+        return response.data;
+      },
+      providesTags: ["recent-products"],
+    }),
+
+
+
 
       addRecentProduct: builder.mutation({
       query: (productInfo) => {
@@ -138,6 +153,22 @@ const productApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "products", id: "LIST" }],
     }),
 
+
+     deleteRecentProduct: builder.mutation({
+      query: (productInfo) => {
+        return {
+          url: "/recent-products",
+          method: "DELETE",
+          body: productInfo,
+        };
+      },
+      transformResponse: (response: TResponseRedux<any>) => {
+        return response.data;
+      },
+      invalidatesTags: ["recent-products"],
+    }),
+
+
     deleteProduct: builder.mutation<{ data: IProduct }, string>({
       query: (productId) => ({
         url: `/products/${productId}`,
@@ -148,6 +179,9 @@ const productApi = baseApi.injectEndpoints({
         { type: "products", id: "LIST" },
       ],
     }),
+
+
+
   }),
 });
 
@@ -159,4 +193,6 @@ export const {
   useDeleteProductMutation,
   useGetSingleProductQuery,
   useAddRecentProductMutation,
+  useGetRecentViewProductsQuery,
+  useDeleteRecentProductMutation,
 } = productApi;
