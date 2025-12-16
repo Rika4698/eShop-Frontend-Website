@@ -25,7 +25,7 @@ import NoTableDataFound from "@/components/uiElements/NoTableDataFound";
 const MyOrders = () => {
   const { userData } = useUserDetails();
   const [currentPage, setCurrentPage] = useState(1);
-  const dataPerPage = 5;
+  const dataPerPage = 8;
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -119,7 +119,7 @@ const MyOrders = () => {
                             {singleOrder?.vendor?.shopName}
                           </TableCell>
                           <TableCell>
-                            ${(singleOrder?.totalPrice).toFixed(2)}
+                            {(singleOrder?.totalPrice).toFixed(2)} TK
                           </TableCell>
                           <TableCell>
                             <Dialog>
@@ -132,8 +132,8 @@ const MyOrders = () => {
                                 </Button>
                               </DialogTrigger>
                               {selectedOrder && isModalOpen && (
-                                <DialogContent>
-                                  <DialogHeader>
+                                <DialogContent className="overflow-y-auto ">
+                                  <DialogHeader >
                                     <DialogTitle>Add Product Review</DialogTitle>
                                   </DialogHeader>
                                   <AddReview
@@ -171,7 +171,7 @@ const MyOrders = () => {
           disabled={currentPage === 1}
           className={`${
             currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-          } p-2 bg-gray-300 rounded-full hover:bg-[#80b500] text-white transition-colors duration-200`}
+          } p-2 bg-gray-300 rounded-full hover:bg-[#00b50f] text-white transition-colors duration-200`}
         >
           <span className="font-bold text-lg">{"<"}</span>
         </button>
@@ -183,9 +183,9 @@ const MyOrders = () => {
             onClick={() => handlePageChange(index + 1)}
             className={`${
               currentPage === index + 1
-                ? "bg-[#80b500] text-white"
+                ? "bg-[#429f04] text-white"
                 : "bg-white text-rose-600"
-            } px-4 py-2 rounded-full transition duration-200 hover:bg-[#80b500] hover:text-white`}
+            } px-4 py-2 rounded-full transition duration-200 hover:bg-[#00b50f] hover:text-white`}
           >
             {index + 1}
           </button>
@@ -197,7 +197,7 @@ const MyOrders = () => {
           disabled={currentPage === totalPages}
           className={`${
             currentPage === totalPages ? "cursor-not-allowed" : "cursor-pointer"
-          } p-2 bg-gray-300 rounded-full hover:bg-[#80b500] text-white transition-colors duration-200`}
+          } p-2 bg-gray-300 rounded-full hover:bg-[#00b50f] text-white transition-colors duration-200`}
         >
           <span className="font-bold text-lg">{">"}</span>
         </button>

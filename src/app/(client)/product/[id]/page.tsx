@@ -50,7 +50,7 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState<string | undefined>();
   const [quantity, setQuantity] = useState(0);
   const [inStock, setInStock] = useState(0);
-  const isDisabled = !(inStock && quantity);
+  const isDisabled = quantity === 0 || inStock === 0;
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingProduct, setPendingProduct] = useState<any>(null);
@@ -299,6 +299,14 @@ const ProductDetails = () => {
             )}
           </div>
 
+           {/* Category */}
+          <div className="pt-4">
+            <span className="inline-block bg-[#23a50f] text-white px-4 py-2 rounded-lg font-bold mr-2">
+              Category:
+            </span>
+            <span className="text-gray-600 font-medium">{data?.category?.name}</span>
+          </div>
+
           {/* Stock Status */}
           <div className="space-y-3">
             <p className="text-gray-700 text-base md:text-lg font-medium">
@@ -335,40 +343,35 @@ const ProductDetails = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4">
-            <button
-              type="button"
-              className="flex-1 px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded-lg transition-colors"
-            >
-              Buy Now
-            </button>
-            
-            {isDisabled ? (
-              <button
-                disabled
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed"
-              >
-                <BsCart3 />
-                <span>Add to Cart</span>
-              </button>
-            ) : (
-              <button
-                onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-lg transition-all"
-              >
-                <BsCart3 />
-                <span>Add to Cart</span>
-              </button>
-            )}
-          </div>
+         <div className="flex flex-col gap-3 pt-4">
+  {data?.stockQuantity === 0 ? (
+    <button
+      disabled
+      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed"
+    >
+      <FaCircleXmark />
+      <span>Out of Stock</span>
+    </button>
+  ) : quantity === 0 ? (
+    <button
+      disabled
+      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed"
+    >
+      <BsCart3 />
+      <span>Select Quantity First</span>
+    </button>
+  ) : (
+    <button
+      onClick={handleAddToCart}
+      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-800 border border-green-800 text-white font-bold rounded-lg transition-all"
+    >
+      <BsCart3 />
+      <span>Add to Cart</span>
+    </button>
+  )}
+</div>
 
-          {/* Category */}
-          <div className="pt-4">
-            <span className="inline-block bg-[#18b500] text-white px-4 py-2 rounded-lg font-bold mr-2">
-              Category:
-            </span>
-            <span className="text-gray-600 font-medium">{data?.category?.name}</span>
-          </div>
+         
         </div>
       </div>
 

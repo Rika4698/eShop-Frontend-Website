@@ -127,14 +127,46 @@ const FlashSale = () => {
       <div className="pt-7">
         {allProductsResponse?.data?.length > 0 && (
           <div className="flex justify-center items-center mt-4 ">
-            <Pagination
-              total={totalPages}
-              initialPage={1}
-              page={currentPage}
-              onChange={handlePageChange}
-              showControls
-              
-            />
+              <Pagination
+      total={totalPages}
+      page={currentPage}
+      onChange={setCurrentPage}
+      showControls
+      variant="light"
+      classNames={{
+        wrapper: "gap-1",
+        item: `
+          w-9 h-9
+          border border-green-500
+          text-green-600
+          font-semibold
+          rounded-lg
+          hover:bg-green-100
+          transition
+        `,
+        cursor: `
+          bg-green-600
+          text-white
+          font-bold
+          rounded-lg
+          shadow-none
+          after:hidden
+          before:hidden
+        `,
+        prev: `
+          border border-green-500
+          text-green-600
+          hover:bg-green-100
+          rounded-lg
+        `,
+        next: `
+          border border-green-500
+          text-green-600
+          hover:bg-green-100
+          rounded-lg
+        `,
+      }}
+    />
           </div>
         )}
       </div>

@@ -166,83 +166,114 @@ console.log(singleProduct,"sa");
       <ul className="flex gap-2 sm:gap-3 h-[40px] rounded-full bg-opacity-90 opacity-0 group-hover:opacity-100 transition-all duration-700 top-1/2 -translate-y-1/2 justify-center items-center absolute">
 
 
-         {userData?.userData ? (
-    singleProduct.stockQuantity > 0 && (
+         {userData?.userData?.role === "CUSTOMER" ? (
+    singleProduct.stockQuantity > 0 && (<>
       <li className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-green-500 flex justify-center items-center rounded-full hover:bg-green-700 hover:text-white hover:rotate-[360deg] transition-all">
-        <button
+        <button title="View Compare Product"
           onClick={handleCompareButton}
           className="w-full h-full flex justify-center items-center"
         >
           <GrCompare className="text-base sm:text-xl text-black" />
         </button>
       </li>
-    )
-  ) : (
-    <li className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#36931e] hover:text-white hover:rotate-[360deg] transition-all">
-      <button className="w-full h-full flex justify-center items-center">
-        <FaArrowRightArrowLeft className="text-sm sm:text-base" />
-      </button>
-    </li>
-  )}
-
-
-     <Link
+      <Link
       href={`/product/${singleProduct.id}`}
       className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all"
       >
+        <button title="View Details">
     <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+    </button>
         </Link>
+ </>
+      
+    )
+  ) : (<>
+        <Link
+      href={`/login`}>
+    <li  className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#36931e] hover:text-white hover:rotate-[360deg] transition-all">
+      <button title="Login as a customer" className="w-full h-full flex justify-center items-center">
+        <FaArrowRightArrowLeft className="text-sm sm:text-base" />
+      </button>
+    </li>
+    </Link>
+
+      <Link
+      href={`/login`}
+      className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all"
+      >
+        <button title="Login as a customer">
+    <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+    </button>
+        </Link> </>
+  )}
+
+
+   
+
+
       </ul>
 
-      <div
-                                                    onClick={() =>
-                                                        handleAddToCart()
-                                                    }
-                                                    className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-32 h-16 sm:w-40 sm:h-[75px] rounded-t-full bg-[#329003] text-white flex flex-col items-center justify-center text-xs sm:text-sm font-semibold opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300 cursor-pointer border border-white"
-                                                >
-                                                    <span>
-                                                        <ShoppingBasket className="text-base sm:text-[20px] text-white mb-1 sm:mb-2" />
-                                                    </span>
-                                                    <span className="text-sm sm:text-lg">
-                                                        Add to Cart
-                                                    </span>
-         </div>
+
+     {userData?.userData?.role === "CUSTOMER" ? (
+      <div  onClick={() =>handleAddToCart() }
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-32 h-16 sm:w-40 sm:h-[75px] rounded-t-full bg-[#329003] text-white flex flex-col items-center justify-center text-xs sm:text-sm font-semibold opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300 cursor-pointer border border-white">
+           <span>
+         <ShoppingBasket className="text-base sm:text-[20px] text-white mb-1 sm:mb-2" />
+         </span>
+      <span className="text-sm sm:text-lg">
+          Add to Cart
+      </span>
+         </div>) :  (<div title="Login as a customer"
+             className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-32 h-16 sm:w-40 sm:h-[75px] rounded-t-full bg-primary text-white flex flex-col items-center justify-center text-xs sm:text-sm font-semibold opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300 cursor-pointer border border-white"  >
+              <span>
+           <IoMdCart className="text-lg sm:text-xl" />
+             </span>
+          <span className="text-sm sm:text-lg">
+             Add to Cart
+              </span>
+         </div>   ) }
+
+
             </div>
           </div>
              )}
              </div>
-   ) : (
+   )   : (
    <div className="flex justify-center">
    <ul className="flex gap-2 sm:gap-3 h-[40px] rounded-full bg-opacity-90 opacity-0 group-hover:opacity-100 transition-all duration-700 top-1/2 -translate-y-1/2 justify-center items-center absolute">
+   <Link href={`/login`}>
    <li className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#36931e] hover:text-white hover:rotate-[360deg] transition-all">
-          <button>
+          <button title="View Compare Product">
       <FaArrowRightArrowLeft className="text-sm sm:text-base" />
           </button>
+
               </li>
+         </Link>
+         
+
             <Link
-         href={`/product/${singleProduct.id}`}
-       className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all"
-                              >
-            <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+         href={`/login`} 
+       className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all" >
+        <button title="View Details">
+            <Eye  className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
                   </Link>
                    </ul>
-                                    <span
-                                        onClick={handleAddToCart}
-                                        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-32 h-16 sm:w-40 sm:h-[75px] rounded-t-full bg-primary text-white flex flex-col items-center justify-center text-xs sm:text-sm font-semibold opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300 cursor-pointer border border-white"
-                                    >
-                                        <span>
-                                            <IoMdCart className="text-lg sm:text-xl" />
-                                        </span>
-                                        <span className="text-sm sm:text-lg">
-                                            Add to Cart
-                                        </span>
-                                    </span>
+            <span  onClick={handleAddToCart}
+             className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-32 h-16 sm:w-40 sm:h-[75px] rounded-t-full bg-primary text-white flex flex-col items-center justify-center text-xs sm:text-sm font-semibold opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300 cursor-pointer border border-white"  >
+              <span>
+           <IoMdCart className="text-lg sm:text-xl" />
+             </span>
+          <span className="text-sm sm:text-lg">
+             Add to Cart
+              </span>
+         </span>
   </div>
       )}
 </div>
                         {/* view details  */}
                         <div className="flex-1 flex flex-col">
-                            <Link href={`/product/${singleProduct.id}`} className="flex-1 flex flex-col">
+                            <div  className="flex-1 flex flex-col">
                                 <div className="gap-2 flex-1 flex flex-col">
                                <button className="text-white text-xs sm:text-sm font-medium bg-[#53a22c] px-2 sm:px-3 py-1 mt-2 rounded-md w-fit">
                              {singleProduct?.category?.name || categoryName ||
@@ -281,7 +312,7 @@ console.log(singleProduct,"sa");
 
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

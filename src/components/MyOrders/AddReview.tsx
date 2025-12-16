@@ -63,7 +63,7 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
   };
 
   return (
-    <div>
+    <div className="overflow-y-auto">
       <h1 className="text-center text-3xl font-bold text-black">
         Product Review
       </h1>
@@ -129,7 +129,7 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
 
               <button
                 type="submit"
-                className="relative h-12 w-30 origin-top transform rounded-lg border-2 border-primary text-primary before:absolute before:top-0 before:block before:h-0 before:w-full before:duration-500 hover:text-white hover:before:absolute hover:before:left-0 hover:before:-z-10 hover:before:h-full hover:before:bg-primary uppercase font-bold px-3"
+                className="relative h-12 w-30 origin-top transform rounded-lg border-2 border-green-700 text-green-700 before:absolute before:top-0 before:block before:h-0 before:w-full before:duration-500 hover:text-white hover:before:absolute hover:before:left-0 hover:before:-z-10 hover:before:h-full hover:before:bg-green-600 uppercase font-bold px-3"
               >
                 Submit Review
               </button>
