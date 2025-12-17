@@ -95,17 +95,17 @@ const BestDeal = () => {
       <div className="mb-8 sm:mb-10">
         <div className="flex flex-col  items-center  justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 text-center ">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 text-center ">
               Best Deal
             </h2>
-            <div className="h-1 w-20 sm:w-32 lg:w-48 bg-gradient-to-r from-[#18b500] to-[#48ad39] rounded-full mt-2 mx-auto md:mx-0"></div>
+            <div className="h-1 w-[200px] sm:w-40 lg:w-52 bg-gradient-to-r from-[#18b500] to-[#48ad39] rounded-full mt-2 mx-auto md:mx-0"></div>
           </div>
         </div>
       </div>
 
       {/* Banner Section */}
       <div
-        className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-[#18b500]/10 hover:border-[#18b500]/40 transition-all duration-300"
+        className="relative rounded-md overflow-hidden shadow-2xl border-4 border-[#18b500]/10 hover:border-[#18b500]/40 transition-all duration-300"
         style={{
           backgroundImage: `url("/banner.jsx.png")`,
           backgroundSize: 'cover',

@@ -126,7 +126,7 @@ const Category = () => {
                   href={`/shop?categoryId=${category.id}`}
                   className="block group py-2"
                 >
-                  <div className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-green-500 transform hover:-translate-y-2">
+                  <div className="bg-white rounded-md shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-green-500 transform hover:-translate-y-2">
                     {/* Image Container */}
                     <div className="relative h-36 sm:h-40 md:h-44 bg-gradient-to-br from-green-50 to-white overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-t from-green-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

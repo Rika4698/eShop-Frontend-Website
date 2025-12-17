@@ -51,7 +51,7 @@ export default function Faq() {
           {/* Left Side */}
           <div className="relative">
             <div className="sticky top-8">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
+              <div className="relative rounded-lg overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
                 <Image
                   src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80"
                   alt="FAQ Support"
@@ -63,7 +63,7 @@ export default function Faq() {
               </div>
               
               {/* Floating Stats */}
-              <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-6 border-4 border-green-100">
+              <div className="absolute -bottom-6 -right-6 bg-white rounded-lg shadow-xl p-6 border-4 border-green-100">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-green-600 rounded-xl flex items-center justify-center">
                     <CheckCircle className="w-6 h-6 text-white" />
@@ -75,7 +75,7 @@ export default function Faq() {
                 </div>
               </div>
 
-              <div className="absolute -top-6 -left-6 bg-white rounded-2xl shadow-xl p-6 border-4 border-emerald-100">
+              <div className="absolute -top-6 -left-6 bg-white rounded-lg shadow-xl p-6 border-4 border-emerald-100">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center">
                     <HelpCircle className="w-6 h-6 text-white" />
@@ -94,7 +94,7 @@ export default function Faq() {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className={`group rounded-2xl transition-all duration-300 ${
+                className={`group rounded-lg transition-all duration-300 ${
                   openIndex === index
                     ? "bg-gradient-to-r from-green-500 to-emerald-600 shadow-2xl"
                     : "bg-white hover:shadow-xl"
@@ -157,7 +157,7 @@ export default function Faq() {
 
         {/*  CTA Section */}
         <div className="mt-16 text-center">
-          <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl p-8 md:p-12 shadow-2xl">
+          <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-8 md:p-12 shadow-2xl">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
               Still have questions?
             </h3>

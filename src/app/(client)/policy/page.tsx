@@ -23,7 +23,7 @@ export default function Policy() {
             <div className="max-w-6xl mx-auto px-4 md:px-10 lg:px-20 py-16">
                 
                 {/* Introduction Card */}
-                <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
+                <div className="bg-white rounded-lg shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +40,7 @@ export default function Policy() {
                 </div>
 
                 {/* Information Collection */}
-                <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
+                <div className="bg-white rounded-lg shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@ export default function Policy() {
                 </div>
 
                 {/* How We Use Information */}
-                <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
+                <div className="bg-white rounded-lg shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,7 +126,7 @@ export default function Policy() {
                 </div>
 
                 {/* Data Security */}
-                <div className="bg-gradient-to-br from-emerald-600 to-green-700 rounded-2xl shadow-lg p-8 mb-8 text-white">
+                <div className="bg-gradient-to-br from-emerald-600 to-green-700 rounded-lg shadow-lg p-8 mb-8 text-white">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,7 +160,7 @@ export default function Policy() {
                 </div>
 
                 {/* Sharing Information */}
-                <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
+                <div className="bg-white rounded-lg shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +194,7 @@ export default function Policy() {
                 </div>
 
                 {/* Cookies */}
-                <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
+                <div className="bg-white rounded-lg shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,8 +217,9 @@ export default function Policy() {
                     </div>
                 </div>
 
+
                 {/* Your Rights */}
-                <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
+                <div className="bg-white rounded-lg shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,7 +232,7 @@ export default function Policy() {
                                 You have the following rights regarding your personal information:
                             </p>
                             <div className="grid gap-4">
-                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-200">
+                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
                                     <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
                                         <span className="text-white font-bold">1</span>
                                     </div>
@@ -240,7 +241,7 @@ export default function Policy() {
                                         <p className="text-sm text-gray-600">Request a copy of the personal information we hold about you</p>
                                     </div>
                                 </div>
-                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-200">
+                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
                                     <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
                                         <span className="text-white font-bold">2</span>
                                     </div>
@@ -249,7 +250,7 @@ export default function Policy() {
                                         <p className="text-sm text-gray-600">Request corrections to any inaccurate or incomplete data</p>
                                     </div>
                                 </div>
-                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-200">
+                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
                                     <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
                                         <span className="text-white font-bold">3</span>
                                     </div>
@@ -258,7 +259,7 @@ export default function Policy() {
                                         <p className="text-sm text-gray-600">Request the deletion of your personal data, subject to legal exceptions</p>
                                     </div>
                                 </div>
-                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-200">
+                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
                                     <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
                                         <span className="text-white font-bold">4</span>
                                     </div>
@@ -267,7 +268,7 @@ export default function Policy() {
                                         <p className="text-sm text-gray-600">Object to the processing of your data under certain conditions</p>
                                     </div>
                                 </div>
-                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-200">
+                                <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
                                     <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
                                         <span className="text-white font-bold">5</span>
                                     </div>
@@ -282,7 +283,7 @@ export default function Policy() {
                 </div>
 
                 {/* Third Party Links */}
-                <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
+                <div className="bg-white rounded-lg shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,7 +300,7 @@ export default function Policy() {
                 </div>
 
                 {/* Changes to Policy */}
-                <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
+                <div className="bg-white rounded-lg shadow-lg border border-emerald-100 p-8 mb-8 hover:shadow-xl transition-shadow">
                     <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -316,7 +317,7 @@ export default function Policy() {
                 </div>
 
                 {/* Contact Section */}
-                <div className="bg-gradient-to-br from-emerald-600 to-green-700 rounded-2xl shadow-xl p-8 text-white">
+                <div className="bg-gradient-to-br from-emerald-600 to-green-700 rounded-lg shadow-xl p-8 text-white">
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                         <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center flex-shrink-0">
                             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

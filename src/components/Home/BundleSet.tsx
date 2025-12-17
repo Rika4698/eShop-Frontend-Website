@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { ShoppingBag, Sparkles, Leaf, Award } from "lucide-react";
+import { ShoppingBag,  Leaf, Award } from "lucide-react";
 import Image from "next/image";
 
 const BundleSet = () => {
@@ -63,10 +63,10 @@ const BundleSet = () => {
             <div className="h-1 w-12 bg-gradient-to-l from-green-400 to-green-600 rounded-full"></div>
             <Sparkles className="w-6 h-6 text-green-600" />
           </div> */}
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3">
             Combo <span className="text-green-600">Set</span>
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-base text-gray-600">
             Handpicked bundles for your healthy lifestyle
           </p>
         </div>
@@ -76,7 +76,7 @@ const BundleSet = () => {
           {bundles.slice(0, 2).map((bundle, index) => (
             <div
               key={bundle.id}
-              className="group relative overflow-hidden rounded-2xl shadow-2xl bg-white hover:shadow-3xl transition-all duration-500 -translate-y-2"
+              className="group relative overflow-hidden rounded-sm shadow-2xl bg-white hover:shadow-3xl transition-all duration-500 -translate-y-2"
             >
               {/* Image */}
               <div className="relative h-[400px] md:h-[450px] overflow-hidden ">
@@ -130,7 +130,7 @@ const BundleSet = () => {
           {bundles.slice(2, 4).map((bundle) => (
             <div
               key={bundle.id}
-              className="group relative overflow-hidden rounded-2xl shadow-xl bg-white hover:shadow-2xl transition-all duration-500 -translate-y-2"
+              className="group relative overflow-hidden rounded-sm shadow-xl bg-white hover:shadow-2xl transition-all duration-500 -translate-y-2"
             >
               {/* Image */}
               <div className="relative h-[350px] overflow-hidden">

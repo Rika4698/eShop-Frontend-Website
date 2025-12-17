@@ -286,7 +286,7 @@ const Header = () => {
                          </div>
 
                    <div  onClick={() =>  setOpenCart(true) }  >
-                     <div title="My Cart" className="bg-white w-[40px] relative h-[40px] flex justify-center items-center rounded-full">
+                     <div title="My Cart" className="bg-white w-[40px] relative h-[40px] flex justify-center items-center rounded-full  mr-1">
                         <Image  src="https://i.ibb.co.com/HfVwqKXh/images-1.jpg"  width={30} height={20} alt=""
                             className="text-red-200 rounded-full"/>
                      {cartProduct.length >0 && (<span className="bg-[#35ab39] top-[-2px] right-[-3px] absolute w-[18px] h-[18px] flex justify-center items-center rounded-full text-white">

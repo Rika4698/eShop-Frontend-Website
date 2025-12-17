@@ -61,14 +61,14 @@ const FlashSale = () => {
                 <Flame className="w-8 h-8 sm:w-10 sm:h-10 text-[#18b500] animate-pulse" />
                 <div className="absolute inset-0 bg-[#18b500] blur-xl opacity-50 animate-pulse"></div>
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl  font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#18b500] via-[#48ad39] to-[#80b500]">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl  font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#18b500] via-[#48ad39] to-[#80b500]">
                 Flash Sale
               </h2>
               <Zap className="w-8 h-8 sm:w-10 sm:h-10 text-[#80b500] animate-bounce" />
             </div>
             
             <div className="flex items-center justify-center lg:justify-start gap-2 text-sm sm:text-base">
-              <span className="px-3 sm:px-4 py-1 sm:py-1.5 bg-[#18b500]/10 text-[#18b500] rounded-full font-bold animate-pulse">
+           <span className="px-3 sm:px-4 py-1 sm:py-1.5 bg-[#18b500]/10 text-[#18b500] rounded-full font-bold animate-pulse">
                 🔥 Limited Time Offer
               </span>
               {allProductsResponse?.meta?.total && (

@@ -100,12 +100,12 @@ const HomeProducts = () => {
     <section className="py-8 sm:py-12 md:py-16 max-w-7xl mx-auto ">
       {/* Header Section */}
       <div className="mb-8 sm:mb-10 md:mb-12">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center sm:items-center gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
               Latest Products
             </h2>
-            <div className="h-1 w-20 sm:w-24 bg-gradient-to-r from-[#18b500] to-[#48ad39] rounded-full"></div>
+            <div className="h-1 w-[210px] sm:w-24 bg-gradient-to-r from-[#18b500] to-[#48ad39] rounded-full"></div>
           </div>
           
           {/* Product Count */}

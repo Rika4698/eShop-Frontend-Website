@@ -1,4 +1,4 @@
-import { MoveRight, ShoppingBag, Tag, Sparkles } from "lucide-react";
+import { MoveRight, ShoppingBag,  Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -55,8 +55,8 @@ const Banner = () => {
         </div>
 
         {/* Side Banner - Pet Care */}
-        <div className="col-span-2 group">
-          <div className="relative w-full xl:h-[450px] lg:h-[355px] md:h-[290px] h-[280px] rounded-sm overflow-hidden shadow-lg">
+        <div className="col-span-4 md:col-span-2 group">
+          <div className=" relative w-full xl:h-[450px] lg:h-[355px] md:h-[290px] h-[280px] rounded-sm overflow-hidden shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1415369629372-26f2fe60c467?w=800&q=80"
               alt="Pet Care Products"

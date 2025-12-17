@@ -64,10 +64,10 @@ const RecentProduct = () => {
             <Eye className="w-6 h-6 text-green-600" />
             <div className="h-1 w-12 bg-gradient-to-l from-green-400 to-green-600 rounded-full"></div>
           </div> */}
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-3">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3">
             Recently Viewed Products
           </h2>
-          <p className="text-lg text-gray-600">Pick up where you left off</p>
+          <p className="text-base text-gray-600">Pick up where you left off</p>
         </div>
 
         {isLoading ? (
@@ -88,10 +88,10 @@ const RecentProduct = () => {
           <div>
             <div className="grid lg:grid-cols-2 gap-8">
               {/* Featured Product Display */}
-              <div className="relative group order-2 lg:order-1">
+              <div className="relative group order-1 lg:order-1">
 
               {pImg && pImg.image ? (  
-                <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white">
+                <div className="relative overflow-hidden rounded-md shadow-2xl bg-white">
                   <Image
                   
                     className="w-full h-[400px] lg:h-[600px] object-cover transition-transform duration-700 group-hover:scale-110"
@@ -135,8 +135,8 @@ const RecentProduct = () => {
 
 
               {/* Products List */}
-              <div className="order-1 lg:order-2">
-                <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 border-2 border-green-100">
+              <div className="order-2 lg:order-2">
+                <div className="bg-white rounded-md shadow-xl p-4 md:p-6 border-2 border-green-100">
                   <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center">
                     <ShoppingCart className="w-6 h-6 text-green-600 mr-3" />
                     Your Recent Views

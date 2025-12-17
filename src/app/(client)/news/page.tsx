@@ -198,13 +198,13 @@ export default function NewsFeed() {
             {/* Right Image */}
             <div className="flex-1 relative">
               <div className="relative animate-min-float">
-                <div className="absolute -inset-4 bg-white/20 rounded-3xl blur-2xl"></div>
+                <div className="absolute -inset-4 bg-white/20 rounded-lg blur-2xl"></div>
                 <Image
                   src="https://images.unsplash.com/photo-1556740758-90de374c12ad?w=800"
                   alt="Shopping News"
                   width={600} 
                   height={500}
-                  className="relative w-full h-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                  className="relative w-full h-auto rounded-lg shadow-2xl transform hover:scale-105 transition-transform duration-500"
                 />
                 
                 {/* Floating Badge */}
@@ -235,7 +235,7 @@ export default function NewsFeed() {
             <button
               key={category}
               onClick={() => setActiveTab(category)}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:-translate-y-1 ${
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 ${
                 activeTab === category
                   ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg'
                   : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
@@ -253,7 +253,7 @@ export default function NewsFeed() {
           {filteredNews.map((news, index) => (
             <div
               key={news.id}
-              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden"
+              className="group bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Image */}
@@ -321,7 +321,7 @@ export default function NewsFeed() {
 
       {/* Newsletter Section */}
       <div className="max-w-7xl mx-auto px-4 md:px-10 lg:px-20 pb-20">
-        <div className="bg-gradient-to-r from-green-500 via-emerald-600 to-teal-600 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        <div className="bg-gradient-to-r from-green-500 via-emerald-600 to-teal-600 rounded-lg p-8 md:p-12 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0YzAtMi4yMS0xLjc5LTQtNC00cy00IDEuNzktNCA0IDEuNzkgNCA0IDQgNC0xLjc5IDQtNHptMC0xMGMwLTIuMjEtMS43OS00LTQtNHMtNCAxLjc5LTQgNCAxLjc5IDQgNCA0IDQtMS43OSA0LTR6bTAtMTBjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-50"></div>
           
           <div className="relative z-10 text-center text-white max-w-2xl mx-auto space-y-6">
