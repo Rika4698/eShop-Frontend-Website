@@ -59,11 +59,11 @@ const RecentProduct = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center space-x-2 mb-4">
+          {/* <div className="inline-flex items-center justify-center space-x-2 mb-4">
             <div className="h-1 w-12 bg-gradient-to-r from-green-400 to-green-600 rounded-full"></div>
             <Eye className="w-6 h-6 text-green-600" />
             <div className="h-1 w-12 bg-gradient-to-l from-green-400 to-green-600 rounded-full"></div>
-          </div>
+          </div> */}
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-3">
             Recently Viewed Products
           </h2>

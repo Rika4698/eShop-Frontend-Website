@@ -93,12 +93,12 @@ const BestDeal = () => {
     <section className="py-8 sm:py-12 md:py-16  max-w-7xl mx-auto">
      
       <div className="mb-8 sm:mb-10">
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-4">
+        <div className="flex flex-col  items-center  justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 text-center md:text-left">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 text-center ">
               Best Deal
             </h2>
-            <div className="h-1 w-20 sm:w-24 bg-gradient-to-r from-[#18b500] to-[#48ad39] rounded-full mt-2 mx-auto md:mx-0"></div>
+            <div className="h-1 w-20 sm:w-32 lg:w-48 bg-gradient-to-r from-[#18b500] to-[#48ad39] rounded-full mt-2 mx-auto md:mx-0"></div>
           </div>
         </div>
       </div>

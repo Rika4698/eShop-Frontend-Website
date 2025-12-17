@@ -1,4 +1,5 @@
 import BestDeal from "@/components/Home/BestDeal";
+import BundleSet from "@/components/Home/BundleSet";
 import Category from "@/components/Home/Category";
 import FlashSale from "@/components/Home/FlashSaleProduct";
 import HomeProducts from "@/components/HomePage/Products";
@@ -14,6 +15,7 @@ export default function Home() {
             <FlashSale/>
             <BestDeal/>
             <RecentProduct/>
+            <BundleSet/>
 
      
         </div>

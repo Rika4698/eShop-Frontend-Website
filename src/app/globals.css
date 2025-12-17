@@ -207,4 +207,15 @@ button:focus {
 
  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: #309264;
-        }        
+        }
+        
+ .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+.line-clamp-none {
+          display: block;
+          -webkit-line-clamp: unset;
+        }         
