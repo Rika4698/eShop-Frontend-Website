@@ -8,7 +8,7 @@ const WhyChooseUs = () => {
       icon: <Truck className="w-12 h-12" />,
       title: "Fast Delivery",
       description: "We ensure speedy delivery of all your orders to your doorstep.",
-      color: "from-green-400 to-emerald-500"
+      color: "from-green-300 to-emerald-400"
     },
     {
       icon: <RefreshCcw className="w-12 h-12" />,
@@ -37,15 +37,22 @@ const WhyChooseUs = () => {
     { icon: <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8" />, value: "78+", label: "Awards Winning" }
   ];
 
+
+
   return (
-    <section  className="py-12 sm:py-16 bg-gradient-to-br from-gray-50 via-green-50 to-gray-50 overflow-hidden relative rounded-md">
+
+
+
+    <section  className="py-12  overflow-hidden relative rounded-md">
+
+
       {/* Decorative Background Elements */}
 
-      <div className="absolute top-0 left-0 w-40 h-40 sm:w-72 sm:h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob border border-black"></div>
+      {/* <div className="absolute top-0 left-0 w-40 h-40 sm:w-72 sm:h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob border border-black"></div>
       <div className="absolute top-0 right-0 w-40 h-40 sm:w-72 sm:h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 border border-black"></div>
-      <div className="absolute bottom-0 left-1/2 w-40 h-40 sm:w-72 sm:h-72 bg-lime-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 border border-black"></div>
+      <div className="absolute bottom-0 left-1/2 w-40 h-40 sm:w-72 sm:h-72 bg-lime-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 border border-black"></div> */}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto  relative z-10">
 
 
         {/* Header */}
@@ -90,7 +97,7 @@ const WhyChooseUs = () => {
 
 
         {/* Statistics Section */}
-        <div className="relative rounded-md sm:rounded-lg overflow-hidden shadow-2xl">
+        <div className="relative rounded-md sm:rounded-lg overflow-hidden shadow-xl">
           
           <div className="relative h-[600px] sm:h-[650px] md:h-[700px] lg:h-[450px]">
             <Image

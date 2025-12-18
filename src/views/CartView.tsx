@@ -2,8 +2,6 @@
 
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
-
-import { FaCircleXmark } from "react-icons/fa6";
 import CartProductCard from "./CartProductCard";
 
 const CartViews = () => {
@@ -22,13 +20,13 @@ const CartViews = () => {
         <div className="flex flex-col min-h-screen bg-base-100 text-base-content p-6">
             {/* Header Section */}
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-4xl font-semibold text-black">Your Cart</h1>
+             <h1 className="text-4xl font-semibold text-black">Cart Item</h1>
                
             </div>
             <div className="divider" />
 
             {/* Main Content */}
-            <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex flex-col lg:flex-row gap-8">
                 {/* Left: Cart Items */}
                 <div className="flex-1">
                     {cart?.length > 0 ? (
@@ -46,7 +44,7 @@ const CartViews = () => {
 
                 {/* Right: Subtotal & Checkout */}
                 {cart.length > 0 && (
-                    <div className="w-full md:w-1/3 p-6 bg-gray-50 rounded-lg shadow-md">
+                    <div className="w-full lg:w-1/3 p-6 bg-gray-50 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold text-black mb-4">
                             Order Summary
                         </h2>

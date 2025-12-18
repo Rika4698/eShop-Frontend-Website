@@ -3,6 +3,7 @@ import BestDeal from "@/components/Home/BestDeal";
 import BundleSet from "@/components/Home/BundleSet";
 import Category from "@/components/Home/Category";
 import FlashSale from "@/components/Home/FlashSaleProduct";
+import Support from "@/components/Home/Support";
 import WhyChooseUs from "@/components/Home/WhyChoseUs";
 import HomeProducts from "@/components/HomePage/Products";
 import RecentProduct from "@/components/MostViewsProducts/RecentProduct";
@@ -22,8 +23,9 @@ export default function HomeClient() {
             {/* <RecentProduct/> */}
             <BundleSet/>
             <WhyChooseUs/>
+            <Support/>
 
      
         </div>
     );
-}
+};
