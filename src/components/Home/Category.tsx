@@ -32,14 +32,14 @@ const CustomNextArrow = ({ onClick }: any) => (
 
 const Category = () => {
   const { data: allCategories, isLoading } = useGetAllCategoriesQuery(undefined);
-
+const categoryCount = allCategories?.length || 0;
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: categoryCount > 1,      
+    autoplay: categoryCount > 1,  
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
-    autoplay: true,
     autoplaySpeed: 3000,
     pauseOnHover: true,
     responsive: [
@@ -99,7 +99,7 @@ const Category = () => {
       </div>
     );
   }
-  console.log(allCategories);
+  console.log(allCategories,"cat");
 
   return (
     <div className="py-12 lg:py-16 bg-gradient-to-b from-white to-gray-50">

@@ -61,14 +61,17 @@ console.log(singleProduct,"sa");
         toast.success("Product added to cart successfully!");
     };
 
+    // ((existingVendorId !== singleProduct?.vendor?.id) || (existingVendorId !== singleProduct?.vendorId))
+
     const handleAddToCart = () => {
         const existingVendorId = cart[0]?.vendorId;
 
-        console.log(existingVendorId, singleProduct?.vendor?.id);
+        console.log(existingVendorId,  singleProduct );
 
         if (
             existingVendorId &&
-            existingVendorId !== singleProduct?.vendor?.id
+            existingVendorId !== (singleProduct?.vendor?.id || singleProduct?.vendorId) 
+            
         ) {
             setPendingProduct({
                 id: singleProduct.id,
@@ -77,7 +80,7 @@ console.log(singleProduct,"sa");
                 quantity: 1,
                 image: singleProduct?.image[0],
                 inStock: singleProduct.stockQuantity - 1,
-                vendorId: singleProduct?.vendor?.id,
+                vendorId: singleProduct?.vendor?.id || singleProduct?.vendorId,
             });
             setIsModalOpen(true);
         } else {

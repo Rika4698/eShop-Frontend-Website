@@ -11,12 +11,14 @@ import EditCategory from "./EditCategory";
 import { ICategory } from "@/types/modal";
 import Image from "next/image";
 import CategoryDelete from "./CategoryDelete";
+import NoTableDataFound from "../uiElements/NoTableDataFound";
 
 interface IProps {
   categories: ICategory[];
+  isLoading: boolean;
 }
 
-const CategoryTable: React.FC<IProps> = ({ categories }) => {
+const CategoryTable: React.FC<IProps> = ({ categories, isLoading }) => {
 
   const activeCategories = categories.filter((category) => !category.isDeleted);
 
@@ -48,6 +50,7 @@ const CategoryTable: React.FC<IProps> = ({ categories }) => {
             </TableCell>
           </TableRow>
         ))}
+        {!isLoading && activeCategories.length === 0 && <NoTableDataFound span={7} />}
       </TableBody>
     </Table>
   );

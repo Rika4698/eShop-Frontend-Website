@@ -31,6 +31,8 @@ const Views = () => {
     skip: !vendorId,
   });
 
+  // console.log(singleVendor);
+
   const { data: singleCustomer, refetch: refetchCustomer } = useGetSingleCustomerQuery(email, {
     skip: !email,
   });

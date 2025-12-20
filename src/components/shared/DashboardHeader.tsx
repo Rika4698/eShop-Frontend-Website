@@ -21,7 +21,7 @@ const DashboardHeader: React.FC<ISideBarState> = ({ setIsOpen }) => {
   
 //   console.log(userData?.userData?.role,"userData");
   return (
-  <div className="w-full h-[77px] flex items-center justify-between px-4 md:px-6 border-b shrink-0">
+  <div className="w-full h-[60px] flex items-center justify-between px-4 md:px-6 border-b shrink-0">
    
       <div className="flex items-center gap-2 md:gap-4">
  

@@ -79,7 +79,7 @@ if (isLoading) return <p>Loading...</p>;
             ))}
 
             {!isLoading && products.length === 0 && (
-              <NoTableDataFound span={5} />
+              <NoTableDataFound span={6} />
             )}
           </TableBody>
         </Table>

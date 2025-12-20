@@ -46,6 +46,7 @@ const CheckOut = () => {
     const [togglePayment, setTogglePayment] = useState(false);
     const [inputCoupon, setInputCoupon] = useState<string>("");
     const { data: allCoupons, isLoading } = useGetAllCouponsQuery(undefined);
+    // console.log(allCoupons);
     const [copiedCouponCode, setCopiedCouponCode] = useState<string | null>(
         null
     );
@@ -132,7 +133,12 @@ const CheckOut = () => {
     // Function to toggle the visibility of coupon section
     const handleShowCoupon = () => {
         setShowCoupon((prev) => !prev);
+         if (!showCoupon) {
+            setInputCoupon("");
+            setIsCouponVerified(false);
+        }
     };
+
     const handleInput = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // toast.loading("Applying Coupon...");
@@ -156,6 +162,8 @@ const CheckOut = () => {
 
             dispatch(setCoupon({ couponInfo }));
             setIsCouponVerified(true);
+             setShowCoupon(false); 
+            setInputCoupon(""); 
             toast.success("Coupon applied successfully", { duration: 3000 });
         } else {
             setIsCouponVerified(false);
@@ -164,6 +172,7 @@ const CheckOut = () => {
             });
         }
     };
+
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputCoupon(event.target.value);
@@ -181,7 +190,7 @@ const CheckOut = () => {
         }
     };
 
-    console.log(userData?.userData?.customerCoupons);
+    // console.log(userData?.userData?.customerCoupons);
     const [placeOrder] = usePlaceOrderMutation();
 
     const {
@@ -195,11 +204,12 @@ const CheckOut = () => {
         dispatch(clearCoupon());
         toast.success("Product removed successfully!");
     };
+
     const subtotal = cart.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
   );
-    const shipping = subtotal * 0.05;
+    const shipping = togglePayment ? subtotal * 0.05 : 0;
     const taxes = subtotal * 0.02;
     const primaryTotal = subtotal + shipping + taxes;
     const discount =
@@ -208,200 +218,152 @@ const CheckOut = () => {
             : appliedCoupon?.discountValue ?? 0;
     const total = primaryTotal - discount;
 
-      const handleGoBack = () => {
+    
+    const handleGoBack = () => {
     router.back();
   };
+
+  const handleRemoveCoupon = () => {
+        dispatch(clearCoupon());
+        setIsCouponVerified(false);
+        setInputCoupon("");
+        setShowCoupon(false);
+        toast.success("Coupon removed successfully!", { duration: 2000 });
+    };
+
+console.log( !userData?.userData?.customerCoupons);
 
     return (
         <div>
             <main className="max-w-7xl mx-auto pt-10 lg:pt-5 pb-24 px-4 sm:px-6 lg:px-8">
                 <button
-        className="flex items-center justify-start gap-[10px]"
-        onClick={handleGoBack}
-      >
-        <FaArrowLeft /> Go Back
-      </button>
+                    className="flex items-center justify-start gap-[10px] mb-4"
+                    onClick={handleGoBack}
+                >
+                    <FaArrowLeft /> Go Back
+                </button>
                 <form
                     onSubmit={handleSubmit(handlePlaceOrder)}
                     className="max-w-2xl mx-auto lg:max-w-none"
                 >
                     <div className="mb-8 flex justify-between items-center">
                         <div className="w-[40%] flex justify-start font-bold items-center gap-2 uppercase">
-                            
-                            
-                            Checkout  Complete Your Purchase
-                        
+                            Checkout Complete Your Purchase
                         </div>
                         <div className="w-[60%] border-gray-200">
-                                <fieldset>
-                                    <div className="flex gap-3 flex-col md:flex-row">
-                                        <legend className="text-lg font-medium text-black">
-                                            Delivery method
-                                        </legend>
-                                        {!togglePayment && (
-                                            <div className="flex gap-2 items-center">
-                                                <RiErrorWarningFill className="text-primary" />
-                                                <h1 className="text-sm text-primary">
-                                                    Please select delivery
-                                                    method
-                                                </h1>
-                                            </div>
-                                        )}
-                                    </div>
+                            <fieldset>
+                                <div className="flex gap-3 flex-col md:flex-row">
+                                    <legend className="text-lg font-medium text-black">
+                                        Delivery method
+                                    </legend>
+                                    {!togglePayment && (
+                                        <div className="flex gap-2 items-center">
+                                            <RiErrorWarningFill className="text-primary" />
+                                            <h1 className="text-sm text-primary">
+                                                Please select delivery method
+                                            </h1>
+                                        </div>
+                                    )}
+                                </div>
 
-                                    <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                                        <label
-                                            className={`relative rounded-lg shadow-sm p-4 flex focus:outline-none cursor-not-allowed border border-[#f5840c]`}
-                                        >
-                                            <div className="flex-1 flex">
-                                                <div className="flex flex-col">
-                                                    <span
-                                                        id="delivery-method-0-label"
-                                                        className="block text-sm font-medium text-black"
-                                                    >
-                                                        {" "}
-                                                        Cash on Delivery{" "}
+                                <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                                    <label className="relative rounded-lg shadow-sm p-4 flex focus:outline-none cursor-not-allowed border border-[#f5840c]">
+                                        <div className="flex-1 flex">
+                                            <div className="flex flex-col">
+                                                <span className="block text-sm font-medium text-black">
+                                                    Cash on Delivery
+                                                </span>
+                                                <span className="mt-1 flex items-center text-sm text-gray-400">
+                                                    Currently Unavailable
+                                                </span>
+                                                <span className="mt-6 text-sm font-medium text-black">
+                                                    <span className="line-through">
+                                                        <span>250.00</span> <span>TK</span>
                                                     </span>
-                                                    <span
-                                                        id="delivery-method-1-description-0"
-                                                        className="mt-1 flex items-center text-sm text-gray-400"
-                                                    >
-                                                        {" "}
-                                                        Currently Unavailable{" "}
-                                                    </span>
-                                                    <span
-                                                        id="delivery-method-0-description-1"
-                                                        className="mt-6 text-sm font-medium text-black"
-                                                    >
-                                                        <span className="line-through">
-                                                            
-                                                            <span>250.00</span> <span>TK</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <FaCircleXmark className="text-lg text-red-500" />
+                                    </label>
+
+                                    <label
+                                        onClick={() => setTogglePayment(!togglePayment)}
+                                        className={`relative rounded-lg shadow-sm p-4 flex cursor-pointer  ${
+                                            togglePayment ? "bg-[#00b521] text-white" : "border border-green-600"
+                                        }`}
+                                    >
+                                        <div className="flex-1 flex">
+                                            <div className="flex flex-col ">
+                                                <span className="block text-base font-bold">
+                                                    AamarPay Payment
+                                                </span>
+                                                <span className="mt-1 flex items-center text-xs">
+                                                    {togglePayment ? "✓ Selected" : "Fast & Secure"}
+                                                </span>
+                                                <span className="mt-6 text-sm font-medium">
+                                                    {togglePayment ? (
+                                                        <span>Shipping: {shipping.toFixed(2)} <span>TK</span></span>
+                                                    ) : (
+                                                        <span className={togglePayment ? "" : "text-gray-500"}>
+                                                            + Shipping calculated
                                                         </span>
-                                                    </span>
-                                                </div>
+                                                    )}
+                                                </span>
                                             </div>
-
-                                            <FaCircleXmark className="text-lg text-red-500" />
-
-                                            <div
-                                                className="absolute -inset-px rounded-lg border-2 border-primary pointer-events-none"
-                                                aria-hidden="true"
-                                            />
-                                        </label>
-
-                                        <label
-                                            onClick={() =>
-                                                setTogglePayment(!togglePayment)
-                                            }
-                                            className={`relative rounded-lg shadow-sm p-4 flex  cursor-pointer ${
-                                                togglePayment
-                                                    ? "bg-[#00b521] text-white"
-                                                    : ""
+                                        </div>
+                                        <svg
+                                            className={`h-5 w-5  ${
+                                         togglePayment ? "text-white  ":"text-[#adb8ae]"
                                             }`}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
                                         >
-                                            <div className="flex-1 flex">
-                                                <div className="flex flex-col">
-                                                    <span
-                                                        id="delivery-method-1-label"
-                                                        className="block text-sm font-medium "
-                                                    >
-                                                        {" "}
-                                                        AamarPay Payment{" "}
-                                                    </span>
-                                                   
-                                                    <span
-                                                        id="delivery-method-1-description-1"
-                                                        className="mt-6 text-sm font-medium "
-                                                    >
-                                                        {" "}
-                                                        <span>
-                                                            
-                                                            <span>
-                                                                {shipping.toFixed(
-                                                                    2
-                                                                )}
-                                                            </span> <span>TK</span>
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <svg
-                                                className={`h-5 w-5 text-[#04a30c] ${
-                                                    togglePayment &&
-                                                    "text-white"
-                                                }`}
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                                aria-hidden="true"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
-
-                                            <div
-                                                className="absolute -inset-px rounded-lg border-2 border-primary pointer-events-none"
-                                                aria-hidden="true"
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                clipRule="evenodd"
                                             />
-                                        </label>
-                                    </div>
-                                </fieldset>
-                            
-                            </div>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </div>
                     </div>
 
                     <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-                        <div className="border-2 border-[#0fb004] p-2 rounded-lg">
+                        <div className="border-2 border-[#30b304] p-4 rounded-lg py-5">
                             <div>
                                 <h2 className="text-lg font-bold text-black text-center">
                                     Contact information
                                 </h2>
-
                                 <div className="mt-4">
-                                    <label
-                                        htmlFor="email-address"
-                                        className="block text-sm font-medium text-black"
-                                    >
+                                    <label className="block text-sm font-medium text-black">
                                         Email address
                                     </label>
                                     <div className="mt-1">
                                         <input
                                             type="email"
                                             {...register("email", {
-                                                required: {
-                                                    value: true,
-                                                    message:
-                                                        "User Email is required",
-                                                },
+                                                required: { value: true, message: "User Email is required" },
                                             })}
                                             readOnly
-                                            className="block w-full bg-transparent p-2 border border-primary outline-none invalid:border-orange-500 transition placeholder-slate-400 focus:ring-2 focus:border-orange-500 rounded-lg focus:ring-primary text-black"
+                                            className="block w-full bg-transparent p-2 border border-primary outline-none rounded-lg text-black"
                                         />
-                                        <p className="text-sm text-red-600 font-medium  mt-2">
-                                            {
-                                                errors?.email
-                                                    ?.message as ReactNode
-                                            }
+                                        <p className="text-sm text-red-600 font-medium mt-2">
+                                            {errors?.email?.message as ReactNode}
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className=" border-primary pt-5">
+                            <div className="pt-8">
                                 <h2 className="text-lg font-bold text-black">
                                     Shipping information
                                 </h2>
-
                                 <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                                    <div className="sm:col-span-2">
-                                        <label
-                                            htmlFor="first-name"
-                                            className="block text-sm font-medium text-black"
-                                        >
+                                    <div className="sm:col-span-2 lg:row-span-5">
+                                        <label className="block text-sm font-medium text-black">
                                             Full Name
                                         </label>
                                         <div className="mt-1">
@@ -410,64 +372,34 @@ const CheckOut = () => {
                                                 required
                                                 placeholder="Full Name"
                                                 {...register("name", {
-                                                    required: {
-                                                        value: true,
-                                                        message:
-                                                            "Name is required",
-                                                    },
+                                                    required: { value: true, message: "Name is required" },
                                                 })}
                                                 readOnly
-                                                className="block w-full bg-transparent p-2 border border-primary outline-none invalid:border-orange-500 transition placeholder-slate-400 focus:ring-2 focus:border-orange-500 rounded-lg focus:ring-primary text-black"
+                                                className="block w-full bg-transparent p-2 border border-primary outline-none rounded-lg text-black"
                                             />
-                                            <p className="text-sm text-red-600 font-medium  mt-2">
-                                                {
-                                                    errors?.name
-                                                        ?.message as ReactNode
-                                                }
-                                            </p>
                                         </div>
                                     </div>
 
-                                    <div className="sm:col-span-2">
-                                        <label
-                                            htmlFor="deliveryAddress"
-                                            className="block text-sm font-medium text-black"
-                                        >
-                                            deliveryAddress
+                                    <div className="sm:col-span-2 lg:row-span-5">
+                                        <label className="block text-sm font-medium text-black">
+                                            Delivery Address
                                         </label>
                                         <div className="mt-1">
                                             <input
-                                                id="deliveryAddress"
                                                 type="text"
                                                 required
                                                 placeholder="Enter Address"
-                                                {...register(
-                                                    "deliveryAddress",
-                                                    {
-                                                        required: {
-                                                            value: true,
-                                                            message:
-                                                                " deliveryAddress is required",
-                                                        },
-                                                    }
-                                                )}
-                                                className="block w-full bg-transparent p-2 border border-primary outline-none invalid:border-orange-500 transition placeholder-slate-400 focus:ring-2 focus:border-orange-500 rounded-lg focus:ring-primary text-black"
+                                                {...register("deliveryAddress", {
+                                                    required: { value: true, message: "Delivery address is required" },
+                                                })}
+                                                className="block w-full bg-transparent p-2 border border-primary outline-none rounded-lg text-black"
                                             />
-                                            <p className="text-sm text-red-600 font-medium  mt-2">
-                                                {
-                                                    errors?.address
-                                                        ?.message as ReactNode
-                                                }
-                                            </p>
                                         </div>
                                     </div>
 
-                                    <div className="sm:col-span-2">
-                                        <label
-                                            htmlFor="phone"
-                                            className="block text-sm font-medium text-black"
-                                        >
-                                            Phone
+                                    <div className="sm:col-span-2 lg:row-span-5">
+                                        <label className="block text-sm font-medium text-black">
+                                            Phone Number
                                         </label>
                                         <div className="mt-1">
                                             <input
@@ -475,23 +407,17 @@ const CheckOut = () => {
                                                 required
                                                 placeholder="Enter Phone Number"
                                                 {...register("phone", {
-                                                    required: {
-                                                        value: true,
-                                                        message:
-                                                            "Phone Number is required",
-                                                    },
+                                                    required: { value: true, message: "Phone Number is required" },
                                                 })}
-                                                className="block w-full bg-transparent p-2 border border-primary outline-none invalid:border-orange-500 transition placeholder-slate-400 focus:ring-2 focus:border-orange-500 rounded-lg focus:ring-primary text-black"
+                                                className="block w-full bg-transparent p-2 border border-primary outline-none rounded-lg text-black"
                                             />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                          
                         </div>
-                     
-                            <div className="mt-10 lg:mt-0 border-2 border-[#30b304] rounded-lg">
+
+                        <div className="mt-10 lg:mt-0 py-5 border-2 border-[#30b304] rounded-lg">
                             <h2 className="text-lg font-bold text-center rounded-lg text-black">
                                 Order summary
                             </h2>
@@ -501,10 +427,7 @@ const CheckOut = () => {
                                     {cart.length > 0 &&
                                         cart.map((singleProduct) => (
                                             <div key={singleProduct.id}>
-                                                <ul
-                                                    role="list"
-                                                    className="divide-y divide-gray-200"
-                                                >
+                                                <ul role="list" className="divide-y divide-gray-200">
                                                     <li className="flex py-6 px-4 sm:px-6">
                                                         <div className="flex-shrink-0">
                                                             <Image
@@ -515,46 +438,28 @@ const CheckOut = () => {
                                                                 className="w-20 rounded-md object-contain"
                                                             />
                                                         </div>
-
                                                         <div className="ml-6 flex-1 flex flex-col">
                                                             <div className="flex">
                                                                 <div className="min-w-0 flex-1">
                                                                     <h4 className="text-sm">
-                                                                        <a
-                                                                            href="#"
-                                                                            className="text-black text-lg font-semibold"
-                                                                        >
-                                                                            {
-                                                                                singleProduct.name
-                                                                            }{" "}
+                                                                        <a href="#" className="text-black text-lg font-semibold">
+                                                                            {singleProduct.name}
                                                                         </a>
                                                                     </h4>
                                                                     <p className="mt-1 text-sm text-black">
-                                                                        x
-                                                                        {singleProduct.quantity}
+                                                                        x{" "}{singleProduct.quantity}
                                                                     </p>
                                                                 </div>
-
                                                                 <div className="ml-4 flex-shrink-0 flow-root">
                                                                     <FaCircleXmark
-                                                                        onClick={() =>
-                                                                            handleRemoveFromCart(
-                                                                                singleProduct.id
-                                                                            )
-                                                                        }
-                                                                        className="text-[#f5840c] cursor-pointer text-lg"
+                                                                        onClick={() => handleRemoveFromCart(singleProduct.id)}
+                                                                        className="text-[#f50c0c] cursor-pointer text-lg"
                                                                     />
                                                                 </div>
                                                             </div>
-
                                                             <div className="flex-1 pt-2 flex items-end justify-between">
                                                                 <p className="mt-1 text-sm font-medium text-black">
-                                                                    
-                                                                    {
-                                                                        singleProduct.price
-                                                                    }.00 <span>TK
-                                                                    </span>
-                                                                        
+                                                                    {singleProduct.price}.00 <span>TK</span>
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -562,67 +467,81 @@ const CheckOut = () => {
                                                 </ul>
                                             </div>
                                         ))}
+
+                                    {/* Coupon Section */}
                                     <div>
-                                        {cart?.length > 0 &&
-                                            !appliedCoupon && (
-                                                <div
-                                                    className={`flex gap-2 items-center text-primary font-bold ${
-                                                        cart?.length >
-                                                            0 &&
-                                                        "border-t border-[#f5840c]"
-                                                    } px-4 sm:px-6 pt-4 cursor-pointer hover:underline`}
-                                                >
-                                                    <span>
-                                                        <RiCoupon2Fill className="text-primary" />
+                                      
+                                        {cart?.length > 0 && !appliedCoupon && (
+                                            <div className="flex flex-col gap-3 border-t-2 border-[#06a80e] px-4 sm:px-6 pt-4">
+                                                <div className="flex gap-2 items-center text-primary font-bold">
+                                                    <RiCoupon2Fill className="text-green-800 text-xl" />
+                                                    <span className="text-sm">
+                                                        Want to get Coupon discount? Apply a coupon.
                                                     </span>
-                                                    <span>
-                                                        Want to get Coupon
-                                                        discount save? Apply a
-                                                        coupon.
-                                                    </span>
-                                                    <button
-                                                        onClick={
-                                                            handleShowCoupon
-                                                        }
-                                                        className="ml-2 text-blue-500 hover:underline"
-                                                    >
-                                                        See Coupon
-                                                    </button>
                                                 </div>
-                                            )}
+                                                <button
+                                                    type="button"
+                                                    onClick={handleShowCoupon}
+                                                    className="w-full bg-green-600 hover:bg-green-800 border border-green-800 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm flex items-center justify-center gap-2"
+                                                >
+                                                    <RiCoupon2Fill className="text-lg" />
+                                                    See Available Coupons
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {/* Applied Coupon Display */}
+                                        {appliedCoupon && (
+                                            <div className="px-4 sm:px-6 pt-4 border-t border-green-500">
+                                                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="bg-green-500 p-2 rounded-lg">
+                                                                <RiCoupon2Fill className="text-white text-xl" />
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-sm font-semibold text-green-800">
+                                                                    Coupon Applied Successfully!
+                                                                </p>
+                                                                <p className="text-xs text-green-600 font-medium">
+                                                                    Code: {appliedCoupon.code}
+                                                                </p>
+                                                                <p className="text-xs text-gray-600 mt-1">
+                                                                    You saved {discount.toFixed(2)} TK
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleRemoveCoupon}
+                                                            className="flex items-center gap-1 px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors text-sm font-semibold"
+                                                        >
+                                                            <FaCircleXmark className="text-base" />
+                                                            <span>Remove</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <div
-                                        className={`${
-                                            cart?.length > 0 &&
-                                            appliedCoupon &&
-                                            "text-black"
-                                        }  py-6 px-4 space-y-6 sm:px-6 `}
-                                    >
+                                    {/* Price Summary */}
+                                    <div className="py-6 px-4 space-y-6 sm:px-6">
                                         <div className="flex items-center justify-between">
-                                            <dt className="text-sm text-black">
-                                                Subtotal
-                                            </dt>
+                                            <dt className="text-sm text-black">Subtotal</dt>
                                             <dd className="text-sm font-medium text-black">
-                                                
                                                 {subtotal.toFixed(2)} <span>TK</span>
                                             </dd>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <dt className="text-sm text-black">
-                                                Shipping
-                                            </dt>
+                                            <dt className="text-sm text-black">Shipping</dt>
                                             <dd className="text-sm font-medium text-black">
-                                                
                                                 {shipping.toFixed(2)} <span>TK</span>
                                             </dd>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <dt className="text-sm text-black">
-                                                Taxes
-                                            </dt>
+                                            <dt className="text-sm text-black">Taxes</dt>
                                             <dd className="text-sm font-medium text-black">
-                                                
                                                 {taxes.toFixed(2)} <span>TK</span>
                                             </dd>
                                         </div>
@@ -631,32 +550,27 @@ const CheckOut = () => {
                                                 <dt className="text-sm text-black">
                                                     Coupon Discount{" "}
                                                     <span className="text-primary ml-3 font-semibold">
-                                                        {`(${appliedCoupon?.code})`}
+                                                        ({appliedCoupon?.code})
                                                     </span>
-                                                </dt>{" "}
+                                                </dt>
                                                 <dd className="text-sm font-medium text-black">
-                                                    
-                                                    {discount.toFixed(2)} <span>TK</span>
+                                                    -{discount.toFixed(2)} <span>TK</span>
                                                 </dd>
                                             </div>
                                         )}
-
                                         <div className="flex items-center justify-between border-t border-[#0fb500] pt-6">
-                                            <dt className="text-base font-medium  text-black">
-                                                Total
-                                            </dt>
+                                            <dt className="text-base font-medium text-black">Total</dt>
                                             <dd className="text-base font-medium text-black">
-                                                
                                                 {total.toFixed(2)} <span>TK</span>
                                             </dd>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className=" py-6 px-4 sm:px-6">
+                                <div className="py-6 px-4 sm:px-6">
                                     <button
                                         type="submit"
-                                        className="relative h-12 w-full origin-top bg-[#21b500] rounded-lg border-2 border-[#12b500] text-white   uppercase font-bold px-3"
+                                        className="relative h-12 w-full origin-top bg-[#269b0c] rounded-lg border-2 border-[#12530b] text-white uppercase font-bold px-3"
                                     >
                                         Pay Now
                                     </button>
@@ -666,15 +580,11 @@ const CheckOut = () => {
                     </div>
                 </form>
 
-                {/* Display the coupon section if showCoupon is true */}
+                {/*  Show all active coupons */}
                 {showCoupon && (
                     <div>
-                        <div
-                            className={`mt-12 flex gap-2 items-center justify-center text-primary font-bold text-3xl`}
-                        >
-                            <span>
-                                <RiCoupon2Fill className="text-primary text-3xl" />
-                            </span>
+                        <div className="mt-12 flex gap-2 items-center justify-center text-green-700 font-bold text-3xl">
+                            <RiCoupon2Fill className="text-green-700 text-3xl" />
                             <span>Apply Coupon</span>
                         </div>
 
@@ -682,143 +592,102 @@ const CheckOut = () => {
                             <div className="p-6">
                                 <form onSubmit={handleInput}>
                                     <div className="mb-4">
-                                        <label
-                                            htmlFor="coupon"
-                                            className="block text-black font-semibold mb-2"
-                                        >
+                                        <label className="block text-black font-semibold mb-2">
                                             Coupon Code:
                                         </label>
                                         <input
                                             type="text"
-                                            id="coupon"
-                                            name="coupon"
-                                            className="w-full px-4 py-2 border border-primary rounded-lg focus:ring focus:ring-primary outline-none text-black"
+                                            className="w-full px-4 py-2 border border-green-700 rounded-lg focus:ring focus:ring-green-800 outline-none text-black"
                                             placeholder="Enter your coupon code"
                                             value={inputCoupon}
                                             onChange={handleChange}
                                         />
                                     </div>
-
                                     <div className="text-center">
                                         <button
                                             type="submit"
-                                            className="relative h-10 w-30 origin-top transform rounded-lg border-2 border-primary text-primary before:absolute before:top-0 before:block before:h-0 before:w-full before:duration-500 hover:text-black hover:before:absolute hover:before:left-0 hover:before:-z-10 hover:before:h-full hover:before:bg-primary uppercase font-bold px-3"
+                                            className="relative h-10 w-30 origin-top transform rounded-lg border-2 border-green-700 text-green-700 before:absolute before:top-0 before:block before:h-0 before:w-full before:duration-500 hover:text-white hover:before:absolute hover:before:left-0 hover:before:-z-10 hover:before:h-full hover:before:bg-green-700 uppercase font-bold px-3"
                                         >
                                             Apply Coupon
                                         </button>
                                     </div>
                                 </form>
-
-                                {isCouponVerified && (
-                                    <div className="mt-4 text-green-500 text-center font-semibold">
-                                        Coupon code applied successfully!
-                                    </div>
-                                )}
                             </div>
                         </div>
 
                         <div>
                             {isLoading ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    {Array.from({ length: 2 }).map(
-                                        (_, index) => (
-                                            <div key={index}>
-                                                <Loading />
-                                            </div>
-                                        )
-                                    )}
+                                    {Array.from({ length: 2 }).map((_, index) => (
+                                        <div key={index}>
+                                            <Loading />
+                                        </div>
+                                    ))}
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    {allCoupons
-                                        ?.filter(
-                                            (singleCoupon: ICoupon) =>
-                                                !userData?.userData?.customerCoupons?.some(
-                                                    (customerCoupon: any) =>
-                                                        customerCoupon.couponId ===
-                                                        singleCoupon.id
-                                                )
-                                        )
-                                        .map((singleCoupon: ICoupon) => {
-                                            return (
-                                                <div
-                                                    key={singleCoupon?.id}
-                                                    className="container border border-primary text-black p-5 rounded-lg shadow-lg max-w-md mx-auto"
-                                                >
-                                                    <div className="text-lg mb-4">
-                                                        {singleCoupon?.discountStatus ===
-                                                        "PERCENTAGE" ? (
-                                                            <p>
-                                                                Get{" "}
-                                                                <span className="text-primary font-bold">
-                                                                    <span>
-                                                                        {
-                                                                   singleCoupon.discountValue
-                                                                        }
-                                                                    </span>
-                                                                    % OFF
-                                                                </span>{" "}
-                                                                your next
-                                                                purchase!
-                                                            </p>
-                                                        ) : (
-                                                            <p>
-                                                                Get{" "}
-                                                                <span className="text-primary font-bold">
-                                                                    
-                                                                    {
-                                                                        singleCoupon.discountValue
-                                                                    } <span>
-                                                                        TK
-                                                                    </span>{" "}
-                                                                    OFF
-                                                                </span>{" "}
-                                                                your next
-                                                                purchase!
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                    <div className="text-base mb-4">
-                                                        Use coupon code:
-                                                    </div>
-                                                    <div className="bg-white text-gray-800 rounded-lg px-4 py-2">
-                                                        <span className="text-2xl font-semibold">
-                                                            {singleCoupon.code}
-                                                        </span>
-                                                    </div>
-                                                    <button
-                                                        onClick={() =>
-                                                            handleCopy(
-                                                                singleCoupon.code
-                                                            )
-                                                        }
-                                                        className="bg-primary text-black px-3 py-1 rounded hover:bg-[#c4650a] focus:outline-none focus:ring-2 focus:ring-orange-600 mt-3"
-                                                    >
-                                                        {copiedCouponCode ===
-                                                        singleCoupon.code
-                                                            ? "Copied!"
-                                                            : "Copy"}
-                                                    </button>
-                                                    <div className="text-sm mt-3">
+
+                                    {/* customers can use them multiple times */}
+                                    {allCoupons && allCoupons.length > 0 ? (
+                                        allCoupons.map((singleCoupon: ICoupon) => (
+                                            <div
+                                                key={singleCoupon?.id}
+                                                className="container border border-green-700 text-black p-5 rounded-lg shadow-lg max-w-md mx-auto"
+                                            >
+                                                <div className="text-lg mb-4">
+                                                    {singleCoupon?.discountStatus === "PERCENTAGE" ? (
                                                         <p>
-                                                            Valid until{" "}
-                                                            <span className="font-semibold">
-                                                                {formatDate(
-                                                                    new Date(
-                                                                        singleCoupon.endDate
-                                                                    ),
-                                                                    "MMMM dd, yyyy"
-                                                                )}
-                                                            </span>
+                                                            Get{" "}
+                                                            <span className="text-primary font-bold">
+                                                                {singleCoupon.discountValue}% OFF
+                                                            </span>{" "}
+                                                            your current purchase!
                                                         </p>
+                                                    ) : (
                                                         <p>
-                                                            *Terms and
-                                                            conditions apply.
+                                                            Get{" "}
+                                                            <span className="text-primary font-bold">
+                                                                {singleCoupon.discountValue} <span>TK</span> OFF
+                                                            </span>{" "}
+                                                            your next purchase!
                                                         </p>
-                                                    </div>
+                                                    )}
                                                 </div>
-                                            );
-                                        })}
+                                                <div className="text-base mb-4">Use coupon code:</div>
+                                                <div className="bg-white text-gray-800 rounded-lg px-4 py-2">
+                                                    <span className="text-2xl font-semibold">{singleCoupon.code}</span>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleCopy(singleCoupon.code)}
+                                                    className="bg-white border border-green-800 text-green-700 px-3 py-1 rounded hover:bg-green-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-orange-600 mt-3"
+                                                >
+                                                    {copiedCouponCode === singleCoupon.code ? "Copied!" : "Copy"}
+                                                </button>
+                                                <div className="text-sm mt-3">
+                                                    <p>
+                                                        Valid until{" "}
+                                                        <span className="font-semibold">
+                                                            {formatDate(new Date(singleCoupon.endDate), "MMMM dd, yyyy")}
+                                                        </span>
+                                                    </p>
+                                                    <p>*Terms and conditions apply.</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="col-span-full text-center py-12">
+                                            <div className="bg-gray-100 rounded-lg p-8">
+                                                <RiCoupon2Fill className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                                                <h3 className="text-xl font-bold text-gray-700 mb-2">
+                                                    No Available Coupons
+                                                </h3>
+                                                <p className="text-gray-600">
+                                                    No active coupons available at the moment. Check back later for new offers!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

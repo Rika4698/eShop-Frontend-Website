@@ -49,7 +49,7 @@ const Coupon = () => {
       setDeleteModalOpen(false);
     } catch (error: any) {
       toast.dismiss();
-      toast.error(error.message);
+      toast.error(error.message || "This is used in customerCoupon.");
     }
   };
 

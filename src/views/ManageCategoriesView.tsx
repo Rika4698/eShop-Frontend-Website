@@ -11,7 +11,7 @@ const ManageCategoriesView = () => {
     page: 1,
     searchTerm: "",
   });
-  const { data } = useGetAllCategoriesQuery(query);
+  const { data, isFetching } = useGetAllCategoriesQuery(query);
   console.log(data);
 
   return (
@@ -24,7 +24,7 @@ const ManageCategoriesView = () => {
         
           <CreateCategory />
         </div>
-        <CategoryTable categories={data || []} />
+        <CategoryTable categories={data || []} isLoading={isFetching} />
       </CardContent>
     </Card>
   );

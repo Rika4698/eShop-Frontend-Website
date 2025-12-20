@@ -47,20 +47,20 @@ const PaymentSuccessPage = () => {
         
         {orderDetails.transactionId && (
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <p className="text-sm text-gray-500 mb-2">Transaction ID</p>
-            <p className="font-mono text-sm font-semibold text-gray-900">
+            <p className="text-sm text-gray-600 mb-2">Transaction ID</p>
+            <p className="font-mono text-sm font-semibold text-green-900">
               {orderDetails.transactionId}
             </p>
           </div>
         )}
         
-        <p className="text-sm text-gray-500 mb-8">
+        {/* <p className="text-sm text-gray-500 mb-8">
           You will receive an email confirmation shortly with your order details.
-        </p>
+        </p> */}
         
         <div className="space-y-3">
           <Link
-            href="/dashboard/my-orders"
+            href="/dashboard/customer/my-orders"
             className="block w-full bg-green-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-300"
           >
             View My Orders
@@ -68,7 +68,7 @@ const PaymentSuccessPage = () => {
           
           <Link
             href="/all-products"
-            className="block w-full bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors duration-300"
+            className="block w-full bg-lime-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-lime-800 transition-colors duration-300"
           >
             Continue Shopping
           </Link>
