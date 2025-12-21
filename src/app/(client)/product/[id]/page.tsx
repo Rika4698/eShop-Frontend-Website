@@ -24,7 +24,7 @@ import {
 import { addProduct, clearCart } from "@/redux/features/products/productSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { IProduct, IReview } from "@/types/modal";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Reply } from "lucide-react";
 import Link from "next/link";
 import ReactStars from "react-stars";
 import { toast } from "sonner";
@@ -175,7 +175,30 @@ const ProductDetails = () => {
     shopParams.set("shop", data.vendor.id);
   }
 
-  console.log(shopParams);
+  // Format date helper
+  const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
+
+const formatTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
+
+const formatDateTime = (dateString: string) => {
+  return `${formatDate(dateString)} at ${formatTime(dateString)}`;
+};
+
+
 
   if (!productId) {
     return (
@@ -219,8 +242,9 @@ const ProductDetails = () => {
       </div>
     );
   }
+console.log(data,"rev");
 
-  console.log(data);
+
 
   return (
     <div className="py-6 md:py-10 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -337,41 +361,38 @@ const ProductDetails = () => {
                 increment={increment}
                 decrement={decrement}
                 inStock={inStock}
-                
               />
             </div>
           </div>
 
           {/* Action Buttons */}
-         <div className="flex flex-col gap-3 pt-4">
-  {data?.stockQuantity === 0 ? (
-    <button
-      disabled
-      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed"
-    >
-      <FaCircleXmark />
-      <span>Out of Stock</span>
-    </button>
-  ) : quantity === 0 ? (
-    <button
-      disabled
-      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed"
-    >
-      <BsCart3 />
-      <span>Select Quantity First</span>
-    </button>
-  ) : (
-    <button
-      onClick={handleAddToCart}
-      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-800 border border-green-800 text-white font-bold rounded-lg transition-all"
-    >
-      <BsCart3 />
-      <span>Add to Cart</span>
-    </button>
-  )}
-</div>
-
-         
+          <div className="flex flex-col gap-3 pt-4">
+            {data?.stockQuantity === 0 ? (
+              <button
+                disabled
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed"
+              >
+                <FaCircleXmark />
+                <span>Out of Stock</span>
+              </button>
+            ) : quantity === 0 ? (
+              <button
+                disabled
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed"
+              >
+                <BsCart3 />
+                <span>Select Quantity First</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-800 border border-green-800 text-white font-bold rounded-lg transition-all"
+              >
+                <BsCart3 />
+                <span>Add to Cart</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -406,73 +427,125 @@ const ProductDetails = () => {
 
       {/* Reviews Section */}
       <section className="mb-12">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 pb-4 border-b-2">
-          Customer Reviews
-        </h2>
+  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 pb-4 border-b-2">
+    Customer Reviews
+  </h2>
 
-        {data?.reviews?.length === 0 ? (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center py-12">
-              <MessageSquare className="h-16 w-16 text-gray-400 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">No Reviews Yet</h3>
-              <p className="text-gray-600 text-center">
-                Be the first to share your thoughts about this product!
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {data?.reviews?.map((singleReview: IReview, index: number) => (
-              <Card key={index} className="border-2 border-[#80b500]/30 hover:border-[#21b500] transition-colors">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="relative flex-shrink-0">
-                      <Image
-                        src={singleReview?.customer?.image ?? "/default-avatar.png"}
-                        alt={singleReview?.customer?.name}
-                        width={60}
-                        height={60}
-                        className="rounded-full object-cover"
-                      />
-                      <svg
-                        viewBox="-1 0 19 19"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="absolute -bottom-1 -right-1 w-8 h-8"
-                      >
-                        <path
-                          d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917z"
-                          fill="#f5840c"
-                        />
-                        <path
-                          d="M7.659 9.733a3.333 3.333 0 0 0-.362-2.507 2.543 2.543 0 0 0-.908-.851 2.504 2.504 0 0 0-1.364-.278 2.259 2.259 0 0 0-1.297 3.99 2.23 2.23 0 0 0 2.515.211 3.335 3.335 0 0 1-1.655 1.403 3.942 3.942 0 0 1-.485.164 1.84 1.84 0 0 0-.445.128.567.567 0 0 0 .32 1.059 2.496 2.496 0 0 0 .5-.113 5.2 5.2 0 0 0 .475-.161A4.37 4.37 0 0 0 7.57 10.07q.053-.167.09-.337zm6.34 0a3.331 3.331 0 0 0-.362-2.507 2.54 2.54 0 0 0-.908-.851 2.502 2.502 0 0 0-1.364-.278 2.259 2.259 0 0 0-1.297 3.99 2.229 2.229 0 0 0 2.515.211 3.334 3.334 0 0 1-1.654 1.403 3.96 3.96 0 0 1-.486.164 1.847 1.847 0 0 0-.445.128.568.568 0 0 0 .32 1.059 2.496 2.496 0 0 0 .5-.113q.241-.07.475-.161a4.37 4.37 0 0 0 2.617-2.708q.052-.167.089-.337z"
-                          fill="#ffffff"
-                        />
-                      </svg>
-                    </div>
-                    
-                    <div className="flex-1">
-                      <h4 className="text-lg md:text-xl font-semibold text-primary mb-1">
-                        {singleReview?.customer?.name}
-                      </h4>
-                      <ReactStars
-                        count={5}
-                        value={singleReview?.rating}
-                        size={20}
-                        color2="#f5840c"
-                        edit={false}
-                      />
+  {data?.reviews?.length === 0 ? (
+    <Card>
+      <CardContent className="flex flex-col items-center justify-center py-12">
+        <MessageSquare className="h-16 w-16 text-gray-400 mb-4" />
+        <h3 className="text-xl font-semibold mb-2">No Reviews Yet</h3>
+        <p className="text-gray-600 text-center">
+          Be the first to share your thoughts about this product!
+        </p>
+      </CardContent>
+    </Card>
+  ) : (
+    <div className="space-y-6">
+      {data?.reviews?.map((singleReview: IReview, index: number) => (
+        <Card key={index} className="border-2 border-[#80b500]/30 hover:border-[#21b500] transition-colors">
+          <CardContent className="p-6">
+            {/* Customer Review */}
+            <div className="flex items-start gap-4 mb-4">
+              <div className="relative flex-shrink-0">
+                <Image
+                  src={singleReview?.customer?.image ?? "/default-avatar.png"}
+                  alt={singleReview?.customer?.name}
+                  width={60}
+                  height={60}
+                  className="rounded-full object-cover"
+                />
+                <svg
+                  viewBox="-1 0 19 19"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute -bottom-1 -right-1 w-8 h-8"
+                >
+                  <path
+                    d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917z"
+                    fill="#f5840c"
+                  />
+                  <path
+                    d="M7.659 9.733a3.333 3.333 0 0 0-.362-2.507 2.543 2.543 0 0 0-.908-.851 2.504 2.504 0 0 0-1.364-.278 2.259 2.259 0 0 0-1.297 3.99 2.23 2.23 0 0 0 2.515.211 3.335 3.335 0 0 1-1.655 1.403 3.942 3.942 0 0 1-.485.164 1.84 1.84 0 0 0-.445.128.567.567 0 0 0 .32 1.059 2.496 2.496 0 0 0 .5-.113 5.2 5.2 0 0 0 .475-.161A4.37 4.37 0 0 0 7.57 10.07q.053-.167.09-.337zm6.34 0a3.331 3.331 0 0 0-.362-2.507 2.54 2.54 0 0 0-.908-.851 2.502 2.502 0 0 0-1.364-.278 2.259 2.259 0 0 0-1.297 3.99 2.229 2.229 0 0 0 2.515.211 3.334 3.334 0 0 1-1.654 1.403 3.96 3.96 0 0 1-.486.164 1.847 1.847 0 0 0-.445.128.568.568 0 0 0 .32 1.059 2.496 2.496 0 0 0 .5-.113q.241-.07.475-.161a4.37 4.37 0 0 0 2.617-2.708q.052-.167.089-.337z"
+                    fill="#ffffff"
+                  />
+                </svg>
+              </div>
+              
+              <div className="flex-1">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 className="text-lg md:text-xl font-semibold text-primary">
+                      {singleReview?.customer?.name}
+                    </h4>
+
+                    {/* Date and Time Display */}
+                    <div className="flex flex-row gap-0.5 mt-1 whitespace-nowrap">
+                      <p className="text-xs text-gray-600 font-medium">
+                        {formatDate(singleReview?.createdAt)},{" "}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {formatTime(singleReview?.createdAt)}
+                      </p>
                     </div>
                   </div>
-                  
-                  <p className="text-gray-700 text-sm md:text-base italic">
-                    &quot;{singleReview?.comment}&quot;
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </section>
+                  <ReactStars
+                    count={5}
+                    value={singleReview?.rating}
+                    size={20}
+                    color2="#f5840c"
+                    edit={false}
+                  />
+                </div>
+                
+                <p className="text-gray-800 font-bold text-sm md:text-base  mb-4">
+                  {singleReview?.comment}
+                </p>
+
+                {/* Vendor Replies */}
+                {singleReview?.ReviewReply && singleReview.ReviewReply.length > 0 && (
+                  <div className="mt-4 space-y-3 border-l-4 border-green-500 pl-4 ml-8">
+                    <div className="flex items-center gap-2 text-green-700 font-semibold text-sm">
+                      <Reply className="w-4 h-4" />
+                      <span>Vendor Response{singleReview.ReviewReply.length > 1 ? 's' : ''} ({singleReview.ReviewReply.length}):</span>
+                    </div>
+                    
+                    {singleReview.ReviewReply.map((reply: any, replyIndex: number) => (
+                      <div key={replyIndex} className="bg-green-50 p-4 rounded-lg">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-sm text-green-800">
+                              {reply?.user?.name || data?.vendor?.shopName}
+                            </p>
+                            <span className="px-2 py-0.5 bg-green-200 text-green-800 text-xs rounded-full">
+                              Vendor
+                            </span>
+                          </div>
+                          {/* ✅ Reply Date and Time */}
+                          <div className="flex flex-row sm:items-end gap-0.5 whitespace-nowrap">
+                            <p className="text-xs text-gray-600 font-medium">
+                              {formatDate(reply?.createdAt)},{" "}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {formatTime(reply?.createdAt)}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-gray-800 font-bold text-sm md:text-base">
+                          {reply?.comment}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )}
+</section>
 
       {/* Related Products */}
       <section>

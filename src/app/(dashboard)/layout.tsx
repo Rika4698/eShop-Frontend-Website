@@ -23,7 +23,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <DashboardHeader isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="w-full h-[calc(100%-70px)] flex items-start justify-start">
         <Sidebar isOpen={isOpen} setIsopen={setIsOpen} />
-        <div className="h-full w-full overflow-auto smoothBar p-[16px] lg:p-[35px]  bg-[#f3f3f3]">
+        <div className="h-full w-full overflow-auto smoothBar p-[16px] lg:p-[43px]  bg-[#f3f3f3]">
           {children}
         </div>
       </div>

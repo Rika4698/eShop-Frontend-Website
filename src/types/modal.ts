@@ -142,6 +142,8 @@ export interface IOrder {
     orderDetails: IOrderDetail[];
     customer: ICustomer;
     vendor: IVendor;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface IOrderDetail {
@@ -154,6 +156,23 @@ export interface IOrderDetail {
     product: IProduct;
 }
 
+export interface IReviewReply {
+    id: string;
+    reviewId: string;
+    userId: string;
+    comment: string;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        role: UserRole;
+    };
+    review?: IReview;
+}
+
 // Review interface
 export interface IReview {
     vendorId: string;
@@ -164,6 +183,9 @@ export interface IReview {
     comment?: string;
     product: IProduct;
     customer: ICustomer;
+    createdAt: string;
+    updatedAt: string;
+    ReviewReply?: IReviewReply[];
 }
 
 // Follow interface

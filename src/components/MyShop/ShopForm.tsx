@@ -24,10 +24,10 @@ interface IProps {
 const validationSchema = Yup.object({
   shopName: Yup.string()
     .required("Shop name is required")
-    .min(3, "Shop name must be at least 3 characters"),
+    .min(3, "Shop name must be at least 3 characters").optional(),
   description: Yup.string()
     .required("Description is required")
-    .min(10, "Description must be at least 10 characters"),
+    .min(10, "Description must be at least 10 characters").optional(),
 });
 
 const ShopForm: React.FC<IProps> = ({ initialValues }) => {

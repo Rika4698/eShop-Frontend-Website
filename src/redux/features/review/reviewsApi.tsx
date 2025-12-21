@@ -63,7 +63,19 @@ const reviewApi = baseApi.injectEndpoints({
             providesTags: ["reviews"],
         }),
 
-        
+        createReply: builder.mutation({
+            query: (replyInfo) => {
+                return {
+                    url: "/reviews/create-reply",
+                    method: "POST",
+                    body: replyInfo,
+                };
+            },
+            transformResponse: (response: TResponseRedux<any>) => {
+                return response.data;
+            },
+            invalidatesTags: ["reviews"], 
+        }),
 
 
 
@@ -78,4 +90,5 @@ export const {
     useGetAllReviewsQuery,
     useCreateReviewMutation,
     useGetReviewsByIdQuery,
+    useCreateReplyMutation,
 } = reviewApi;

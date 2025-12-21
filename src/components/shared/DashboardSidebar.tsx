@@ -93,7 +93,7 @@ router.push("/login");
         `fixed top-0 left-0 h-full border-r bg-white transition-[width] duration-500
         flex flex-col gap-[20px] justify-between pb-[20px] 
         sidebar z-[30] shrink-0
-        lg:relative lg:w-72 lg:block`,
+        lg:relative lg:w-72 lg:block `,
         className
       )}
     >
