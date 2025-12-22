@@ -61,7 +61,7 @@ const StarDisplay = ({ rating }: { rating: number }) => {
           key={star}
           className={`w-4 h-4 ${
             star <= rating
-              ? "fill-orange-500 text-orange-500"
+              ? "fill-yellow-500 text-yellow-500"
               : "fill-gray-300 text-gray-300"
           }`}
         />
@@ -161,7 +161,7 @@ const Myreviews = () => {
             <TableRow>
               <TableHead>No.</TableHead>
               <TableHead>Product</TableHead>
-              <TableHead>Customer</TableHead>
+              <TableHead className="pl-9">Customer</TableHead>
               <TableHead>Rating</TableHead>
               <TableHead>Review</TableHead>
               <TableHead>Date</TableHead>
@@ -173,13 +173,13 @@ const Myreviews = () => {
             {paginatedReviews && paginatedReviews.length > 0 ? (
               paginatedReviews.map((review: IReview, index: number) => (
                 <TableRow key={review.id}>
-                  {/* Serial Number */}
+                 
                   <TableCell className="font-medium">
                     {startIndex + index + 1}
                   </TableCell>
 
                   {/* Product Info */}
-                  <TableCell>
+                  <TableCell className="whitespace-nowrap ">
                     <div className="flex items-center gap-3">
                       <Image
                         src={review.product.image[0]}
@@ -193,8 +193,8 @@ const Myreviews = () => {
                   </TableCell>
 
                   {/* Customer Info */}
-                  <TableCell>
-                    <div className="flex items-center gap-2">
+                  <TableCell className="whitespace-nowrap pl-9">
+                    <div className="flex items-center gap-2 text-right ">
                       <Image
                         src={review.customer.image || "/default-avatar.png"}
                         alt={review.customer.name}
@@ -208,7 +208,7 @@ const Myreviews = () => {
 
                   {/* Rating */}
                   <TableCell>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 whitespace-nowrap">
                       <StarDisplay rating={review.rating} />
                       <span className="text-sm font-semibold">
                         {review.rating}/5
@@ -218,18 +218,18 @@ const Myreviews = () => {
 
                   {/* Review Comment */}
                   <TableCell>
-                    <p className="max-w-xs truncate text-gray-700">
+                    <p className="max-w-xs truncate text-gray-700 whitespace-nowrap">
                       {review.comment || "No comment"}
                     </p>
                   </TableCell>
 
                   {/* Date */}
-                  <TableCell className="text-sm text-gray-600">
+                  <TableCell className="text-sm text-gray-600 whitespace-nowrap">
                     {formatDate(review.createdAt)}
                   </TableCell>
 
                   {/* Reply Status */}
-                  <TableCell>
+                  <TableCell className="whitespace-nowrap">
                     {review.ReviewReply && review.ReviewReply.length > 0 ? (
                       <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
                         ✓ Replied
@@ -364,9 +364,9 @@ const Myreviews = () => {
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              
                 <NoTableDataFound span={8} />
-              </TableRow>
+             
             )}
           </TableBody>
         </Table>
