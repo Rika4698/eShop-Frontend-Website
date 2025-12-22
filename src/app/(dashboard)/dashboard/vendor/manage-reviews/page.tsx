@@ -143,6 +143,15 @@ const Myreviews = () => {
     });
   };
 
+  const formatTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+};
+
+
   if (isLoading || !userData) {
     return <p className="text-center py-20">Loading...</p>;
   }
@@ -224,9 +233,17 @@ const Myreviews = () => {
                   </TableCell>
 
                   {/* Date */}
-                  <TableCell className="text-sm text-gray-600 whitespace-nowrap">
-                    {formatDate(review.createdAt)}
-                  </TableCell>
+
+                    <TableCell>
+                     <div className="flex flex-col whitespace-nowrap">
+                   <span className="font-medium text-sm">
+                     {formatDate(review.createdAt)}
+                     </span>
+                  <span className="text-xs text-gray-500">
+                   {formatTime(review.createdAt)}
+                     </span>
+                       </div>
+                   </TableCell>
 
                   {/* Reply Status */}
                   <TableCell className="whitespace-nowrap">
@@ -256,75 +273,77 @@ const Myreviews = () => {
                             : "Reply"}
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
                         <DialogHeader>
-                          <DialogTitle>Review Details & Reply</DialogTitle>
+                          <DialogTitle className="text-base sm:text-lg break-words">Review Details & Reply</DialogTitle>
                         </DialogHeader>
                         
 
                         {/* Review Details */}
-                        <div className="space-y-4">
+                        <div className="space-y-4 overflow-x-hidden">
                           
-                          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
                             <Image
                               src={review.product.image[0]}
                               alt={review.product.name}
                               width={80}
                               height={80}
-                              className="w-20 h-20 rounded-lg object-cover"
+                              className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover flex-shrink-0"
                             />
-                            <div>
-                              <h3 className="font-bold text-lg">{review.product.name}</h3>
+                            <div className="min-w-0 flex-1">
+                              <h3 className="font-bold text-base sm:text-lg break-words">{review.product.name}</h3>
                               <div className="flex items-center gap-2 mt-1">
                                 <StarDisplay rating={review.rating} />
-                                <span className="font-semibold">{review.rating}/5</span>
+                                <span className="font-semibold text-sm">{review.rating}/5</span>
                               </div>
                             </div>
                           </div>
 
                           {/* Customer Review */}
-                          <div className="p-4 bg-blue-50 rounded-lg">
-                            <div className="flex items-center gap-3 mb-3">
+                          <div className="p-3 sm:p-4 bg-blue-50 rounded-lg overflow-x-hidden">
+                            <div className="flex items-center gap-2 sm:gap-3 mb-3">
                               <Image
                                 src={review.customer.image || "/default-avatar.png"}
                                 alt={review.customer.name}
                                 width={40}
                                 height={40}
-                                className="w-10 h-10 rounded-full object-cover"
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover flex-shrink-0"
                               />
-                              <div>
-                                <p className="font-semibold">{review.customer.name}</p>
+                              <div  className="min-w-0 flex-1">
+                                <p className="font-semibold text-sm sm:text-base truncate">{review.customer.name}</p>
                                 <p className="text-xs text-gray-600">
-                                  {formatDate(review.createdAt)}
+                                  {formatDate(review.createdAt)} ,  {formatTime(review.createdAt)} 
                                 </p>
+
+                             
                               </div>
                             </div>
-                            <p className="text-gray-700 italic">
-                              &quot;{review.comment || "No comment provided"}&quot;
+                            <p className="text-gray-900 text-sm break-words">
+                              {review.comment || "No comment provided"}
                             </p>
                           </div>
 
                           {/* Existing Replies */}
                           {review.ReviewReply && review.ReviewReply.length > 0 && (
-                            <div className="space-y-2">
-                              <h4 className="font-semibold">Your Replies:</h4>
+                            <div className="space-y-2 overflow-hidden">
+                              <h4 className="font-semibold text-sm sm:text-base">Your Replies:</h4>
                               {review.ReviewReply.map((reply) => (
-                                <div key={reply.id} className="p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
-                                  <div className="flex justify-between items-start mb-2">
-                                    <p className="font-semibold text-sm">{reply.user.name}</p>
-                                    <p className="text-xs text-gray-600">
-                                      {formatDate(reply.createdAt)}
+                                <div key={reply.id} className="p-3 bg-green-50 rounded-lg border-l-4 border-green-500 overflow-hidden">
+                                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-2 mb-2">
+                                    <p className="font-semibold text-sm truncate">{reply.user.name}</p>
+                                    <p className="text-xs text-gray-600 flex-shrink-0">
+                                      {formatDate(reply.createdAt)} , {formatTime(review.createdAt)}
                                     </p>
                                   </div>
-                                  <p className="text-gray-700">{reply.comment}</p>
+                                  <p className="text-gray-900 text-sm break-words">{reply.comment}</p>
                                 </div>
                               ))}
                             </div>
                           )}
 
                           {/* Reply Form */}
-                          <div className="space-y-3">
-                            <h4 className="font-semibold">
+                          <div className="space-y-3 overflow-hidden">
+                            <h4 className="font-semibold text-sm sm:text-base">
                               {review.ReviewReply && review.ReviewReply.length > 0
                                 ? "Add Another Reply:"
                                 : "Write Your Reply:"}
@@ -334,12 +353,12 @@ const Myreviews = () => {
                               value={replyText}
                               onChange={(e) => setReplyText(e.target.value)}
                               rows={4}
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+                              className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-sm resize-none"
                             />
                           </div>
                         </div>
 
-                        <DialogFooter>
+                        <DialogFooter className="flex-col sm:flex-row gap-2">
                           <Button
                             variant="secondary"
                             onClick={() => {
@@ -347,13 +366,14 @@ const Myreviews = () => {
                               setReplyText("");
                               setSelectedReview(null);
                             }}
+                            className="w-full sm:w-auto"
                           >
                             Cancel
                           </Button>
                           <Button
                             onClick={handleReplySubmit}
                             disabled={isReplying || !replyText.trim()}
-                            className="bg-green-600 hover:bg-green-700"
+                            className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
                           >
                             {isReplying ? "Sending..." : "Send Reply"}
                           </Button>

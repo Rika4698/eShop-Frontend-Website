@@ -2,16 +2,44 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import useUserDetails from "@/hooks/useUser";
-import { useGetAllOrdersQuery } from "@/redux/features/orders/orderApi";
 import { IOrder } from "@/types/modal";
+import { useGetAllOrdersQuery } from "@/redux/features/orders/orderApi";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import Image from "next/image";
+import NoTableDataFound from "@/components/uiElements/NoTableDataFound";
+
+// Date and Time formatting functions
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  };
+  return date.toLocaleDateString('en-US', options);
+};
+
+const formatTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+};
 
 const OrderList = () => {
   const { userData } = useUserDetails();
   const [currentPage, setCurrentPage] = useState(1);
-  const dataPerPage = 5;
+  const dataPerPage = 8;
+
   const [queryObj, setQueryObj] = useState({
     page: currentPage,
     limit: dataPerPage,
@@ -22,12 +50,12 @@ const OrderList = () => {
     skip: !userData?.userData,
   });
 
-  const totalPages = Math.ceil((vendorOrders?.meta?.total || 0) / dataPerPage);
+  const totalPages = Math.ceil(
+    (vendorOrders?.meta?.total || 0) / dataPerPage
+  );
 
   const handlePageChange = (page: number) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
-    }
+    setCurrentPage(page);
   };
 
   useEffect(() => {
@@ -39,109 +67,209 @@ const OrderList = () => {
     }));
   }, [currentPage, userData?.userData]);
 
+  // Get payment status badge color
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case "PAID":
+        return "bg-green-100 text-green-800";
+      case "PENDING":
+        return "bg-yellow-100 text-yellow-800";
+      case "UNPAID":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+console.log(vendorOrders?.data);
   return (
-    <div className="p-4 bg-gray-50 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-700 mb-6">Order History</h2>
+    <div>
+      <h1 className="text-xl font-semibold mb-4">Order History</h1>
+
       <div>
         {isLoading ? (
-          <div className="text-center text-gray-500">Loading...</div>
+          <div className="text-center py-8">Loading...</div>
         ) : (
           <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-              className="overflow-x-auto"
-            >
-              <table className="w-full text-sm bg-white rounded-lg shadow-md">
-                <thead>
-                  <tr className="text-left text-gray-700 border-b bg-gray-100">
-                    <th className="py-3 px-4">No.</th>
-                    <th className="py-3 px-4">Product Image</th>
-                    <th className="py-3 px-4">Product</th>
-                    <th className="py-3 px-4">Quantity</th>
-                    <th className="py-3 px-4">Customer Name</th>
-                    <th className="py-3 px-4">Total Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {vendorOrders?.data?.map(
-                    (singleOrder: IOrder, index: number) => (
-                      <tr
-                        key={index}
-                        className="border-b transition hover:bg-gray-100"
-                      >
-                        <td className="py-4 px-4 text-gray-700 font-medium">
-                          {index + 1 + (currentPage - 1) * dataPerPage}
-                        </td>
-                        <td className="py-4 px-4">
-                          <Image
-                            src={
-                              singleOrder?.orderDetails[0]?.product?.image[0]
-                            }
-                            width={20} height={20}
-                            alt="product"
-                            className="w-12 h-12 rounded-md object-cover border"
-                          />
-                        </td>
-                        <td className="py-4 px-4 text-gray-600 font-medium">
-                          {singleOrder?.orderDetails[0]?.product?.name}
-                        </td>
-                        <td className="py-4 px-4 text-center text-gray-700">
-                          {singleOrder?.orderDetails[0]?.quantity}
-                        </td>
-                        <td className="py-4 px-4 text-gray-600">
-                          {singleOrder?.customer?.name}
-                        </td>
-                        <td className="py-4 px-4 font-semibold text-green-600">
-                          ${singleOrder?.totalPrice.toFixed(2)}
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </table>
-            </motion.div>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>No.</TableHead>
+                    <TableHead>Order Date & Time</TableHead>
+                    <TableHead>Product Images</TableHead>
+                    <TableHead>Product Names</TableHead>
+                    <TableHead>Trans ID</TableHead>
+                    <TableHead>Payment Status</TableHead>
+                    <TableHead>Quantity</TableHead>
+                    <TableHead>Customer Name</TableHead>
+                    <TableHead>Customer Email</TableHead>
+                    <TableHead>Total Price</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {vendorOrders?.data?.length > 0 &&
+                    vendorOrders?.data?.map((singleOrder: IOrder, index: number) => {
+                      return (
+                        <TableRow key={singleOrder.id}>
+                          {/* Serial Number */}
+                          <TableCell className="font-medium">
+                            {index + 1 + (currentPage - 1) * dataPerPage}
+                          </TableCell>
 
-            {/* Custom Pagination */}
-            <div className="flex justify-center items-center mt-6 space-x-2">
-              <button
-                className={`px-4 py-2 text-sm rounded-md ${
-                  currentPage === 1
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-gray-700 text-white hover:bg-gray-800"
-                }`}
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                Previous
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    className={`px-3 py-1 rounded-md text-sm ${
-                      currentPage === page
-                        ? "bg-green-700 text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-                    onClick={() => handlePageChange(page)}
-                  >
-                    {page}
-                  </button>
-                )
+                          {/* Order Date & Time */}
+                          <TableCell>
+                            <div className="flex flex-col">
+                              <span className="font-medium text-sm">
+                                {formatDate(singleOrder.createdAt)}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {formatTime(singleOrder.createdAt)}
+                              </span>
+                            </div>
+                          </TableCell>
+
+                          {/* Product Images - All products in this order */}
+                          <TableCell>
+                            <div className="flex flex-wrap gap-2">
+                              {singleOrder?.orderDetails?.map((detail, idx) => (
+                                <div key={idx} className="relative">
+                                  <Image
+                                    width={50}
+                                    height={50}
+                                    src={detail?.product?.image[0]}
+                                    alt={detail?.product?.name || "product"}
+                                    className="w-12 h-12 rounded-lg object-cover border border-gray-200"
+                                  />
+                                  {/* Quantity badge on image */}
+                                  <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                    {detail.quantity}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </TableCell>
+
+                          {/* Product Names - All products in this order */}
+                          <TableCell>
+                            <div className="flex flex-col gap-1 whitespace-nowrap">
+                              {singleOrder?.orderDetails?.map((detail, idx) => (
+                                <div key={idx} className="flex items-center gap-2">
+                                  <span className="text-sm font-bold text-green-700">{idx+1}.</span>
+                                  <span className="text-sm">
+                                    {detail?.product?.name}
+                                  </span>
+                                  <span className="text-xs text-gray-500">
+                                    (x{detail.quantity})
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </TableCell>
+
+                          {/* Transaction ID */}
+                          <TableCell>
+                            <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded whitespace-nowrap">
+                              {singleOrder?.transactionId}
+                            </span>
+                          </TableCell>
+
+                          {/* Payment Status */}
+                          <TableCell>
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold ${getPaymentStatusColor(
+                                singleOrder?.paymentStatus
+                              )}`}
+                            >
+                              {singleOrder?.paymentStatus}
+                            </span>
+                          </TableCell>
+
+                          {/* Total Quantity */}
+                          <TableCell className="text-center">
+                            <span className="font-semibold">
+                              {singleOrder?.orderDetails?.reduce(
+                                (sum, detail) => sum + detail.quantity,
+                                0
+                              )}
+                            </span>
+                          </TableCell>
+
+                          {/* Customer Name */}
+                          <TableCell className="text-center">
+                            <span className="font-medium whitespace-nowrap ">
+                              {singleOrder?.customer?.name || "No Customer Name"}
+                            </span>
+                          </TableCell>
+
+                           <TableCell>
+                            <span className="font-medium whitespace-nowrap">
+                              {singleOrder?.customer?.email || "No Customer email"}
+                            </span>
+                          </TableCell>
+
+                          {/* Total Price */}
+                          <TableCell>
+                            <span className="font-bold text-green-600">
+                              {singleOrder?.totalPrice.toFixed(2)} TK
+                            </span>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+
+                  {!isLoading && vendorOrders?.data?.length === 0 && (
+                    <NoTableDataFound span={9} />
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Pagination */}
+            <div className="pt-7">
+              {vendorOrders?.data?.length > 0 && (
+                <div className="flex justify-center items-center mt-4">
+                  <div className="flex items-center space-x-2">
+                    {/* Left Arrow Button */}
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className={`${
+                        currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+                      } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
+                    >
+                      <span className="font-bold text-lg">{"<"}</span>
+                    </button>
+
+                    {/* Page Numbers */}
+                    {Array.from({ length: totalPages }).map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handlePageChange(index + 1)}
+                        className={`${
+                          currentPage === index + 1
+                            ? "bg-[#1d6e0f] text-white"
+                            : "bg-white text-rose-600"
+                        } px-4 py-2 rounded-full transition duration-200 hover:bg-[#04c41a] hover:text-white`}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+
+                    {/* Right Arrow Button */}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`${
+                        currentPage === totalPages
+                          ? "cursor-not-allowed opacity-50"
+                          : "cursor-pointer"
+                      } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
+                    >
+                      <span className="font-bold text-lg">{">"}</span>
+                    </button>
+                  </div>
+                </div>
               )}
-              <button
-                className={`px-4 py-2 text-sm rounded-md ${
-                  currentPage === totalPages
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-gray-700 text-white hover:bg-gray-800"
-                }`}
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                Next
-              </button>
             </div>
           </div>
         )}
