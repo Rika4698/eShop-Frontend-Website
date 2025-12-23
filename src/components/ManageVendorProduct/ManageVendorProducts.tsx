@@ -79,7 +79,7 @@ const ManageVendorProducts = () => {
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className={`p-2 rounded-full transition-all duration-300 text-white 
-              ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-gray-500 hover:bg-[#80b500]"}`}
+              ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-gray-500 hover:bg-[#00b509]"}`}
             >
               {"<"}
             </button>
@@ -89,7 +89,7 @@ const ManageVendorProducts = () => {
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
                 className={`px-4 py-2 rounded-full transition-all duration-300 
-                ${currentPage === index + 1 ? "bg-[#00b515] text-white" : "bg-gray-200 text-rose-600 hover:bg-[#80b500] hover:text-white"}`}
+                ${currentPage === index + 1 ? "bg-[#0d6b18] text-white" : "bg-gray-200 text-rose-600 hover:bg-[#00b509] hover:text-white"}`}
               >
                 {index + 1}
               </button>
@@ -99,7 +99,7 @@ const ManageVendorProducts = () => {
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               className={`p-2 rounded-full transition-all duration-300 text-white 
-              ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-gray-500 hover:bg-[#80b500]"}`}
+              ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-gray-500 hover:bg-[#00b509]"}`}
             >
               {">"}
             </button>

@@ -49,13 +49,13 @@ if (isLoading) return <p>Loading...</p>;
           <TableBody>
             {products.map((product) => (
               <TableRow key={product.id}>
-                <TableCell className="font-medium">
+                <TableCell className="font-medium whitespace-nowrap">
                   <p className="line-clamp-2">{trimText(product.name, 70)}</p>
                 </TableCell>
-                <TableCell>{product.price.toFixed(2)} TK</TableCell>
-                <TableCell>{product.discount}%</TableCell>
-                <TableCell>{product.stockQuantity}</TableCell>
-                <TableCell>{getCategoryName(product.categoryId)}</TableCell>
+                <TableCell className="whitespace-nowrap text-green-800 font-bold">{product.price.toFixed(2)} TK</TableCell>
+                <TableCell className="whitespace-nowrap text-center">{product.discount}%</TableCell>
+                <TableCell className="whitespace-nowrap text-center">{product.stockQuantity}</TableCell>
+                <TableCell className="whitespace-nowrap">{getCategoryName(product.categoryId)}</TableCell>
                
 
                 <TableCell className="text-center">
