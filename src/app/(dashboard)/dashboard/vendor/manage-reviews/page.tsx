@@ -312,7 +312,7 @@ const Myreviews = () => {
                               <div  className="min-w-0 flex-1">
                                 <p className="font-semibold text-sm sm:text-base truncate">{review.customer.name}</p>
                                 <p className="text-xs text-gray-600">
-                                  {formatDate(review.createdAt)} ,  {formatTime(review.createdAt)} 
+                                  {formatDate(review.createdAt)} at{" "}  {formatTime(review.createdAt)} 
                                 </p>
 
                              
@@ -332,7 +332,7 @@ const Myreviews = () => {
                                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-2 mb-2">
                                     <p className="font-semibold text-sm truncate">{reply.user.name}</p>
                                     <p className="text-xs text-gray-600 flex-shrink-0">
-                                      {formatDate(reply.createdAt)} , {formatTime(review.createdAt)}
+                                      {formatDate(reply.createdAt)} at{" "} {formatTime(review.createdAt)}
                                     </p>
                                   </div>
                                   <p className="text-gray-900 text-sm break-words">{reply.comment}</p>
