@@ -45,6 +45,17 @@ const userApi = baseApi.injectEndpoints({
     }),
 
 
+     updateAdmin: builder.mutation({
+      query: (customerInfo) => ({
+        url: "/users/update-admin",
+        method: "PATCH",
+        body: customerInfo,
+      }),
+      invalidatesTags: ["users"],
+    }),
+
+
+
     updateVendor: builder.mutation({
       query: (vendorInfo) => ({
         url: "/users/update-vendor",
@@ -116,5 +127,6 @@ useFollowUserMutation,
 useUnfollowUserMutation,
 useUpdateCustomerMutation,
 useGetPublicVendorsQuery,
+useUpdateAdminMutation,
 
 } = userApi;

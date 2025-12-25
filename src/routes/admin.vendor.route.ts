@@ -45,6 +45,11 @@ export const adminLinks: NavItem[] = [
     Icon: BiDollar,
     title: "Coupon",
   },
+  {
+    href: "/dashboard/admin/admin-profile",
+    title: "Admin Profile",
+    Icon: CiUser,
+  }
   
   
 ];

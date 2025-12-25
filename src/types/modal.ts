@@ -88,6 +88,8 @@ export interface ICustomer {
     id: string;
     name: string;
     email: string;
+    address?:string;
+    phone?: string;
     image?: string;
     isDeleted: boolean;
     createdAt: Date;
@@ -133,13 +135,16 @@ export interface ICategory {
 export interface IOrder {
     coupon: string;
     deliveryAddress: string;
+    phone?:string;
     id: string;
     customerId: string;
     vendorId: string;
     totalPrice: number;
     paymentStatus: PaymentStatus;
     transactionId: string;
+    couponCode?:   string;
     orderDetails: IOrderDetail[];
+    couponUsages: ICustomerCoupon[];
     customer: ICustomer;
     vendor: IVendor;
     createdAt: string;
@@ -217,7 +222,24 @@ export interface ICoupon {
     endDate: string;
     usedCount: number;
     isActive: boolean;
+    customerCoupons?:ICustomerCoupon[];
 }
+
+export interface ICustomerCoupon {
+  id: string;
+  customerId: string;
+  couponId: string;
+  orderId?: string;
+  redeemedAt?: string;
+  isRedeemed: boolean;
+  createdAt: string;
+  updatedAt: string;
+  coupon?: ICoupon;
+  customer?: ICustomer;
+  order?: IOrder;
+}
+
+
 export interface ErrorSource {
     path: string;
     message: string;

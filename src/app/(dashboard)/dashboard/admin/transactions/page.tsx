@@ -1,93 +1,604 @@
-"use client"
-import React, { useState } from "react";
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
 
+import { useEffect, useState } from "react";
 import { IOrder } from "@/types/modal";
 import { useGetAllOrdersQuery } from "@/redux/features/orders/orderApi";
-export type TOrderFilterRequest = {
-  vendorId?: string; 
-  customerId?: string; 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Image from "next/image";
+import NoTableDataFound from "@/components/uiElements/NoTableDataFound";
+import { Eye, MapPin, Tag, Percent } from "lucide-react";
+
+// Date and Time formatting functions
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  };
+  return date.toLocaleDateString('en-US', options);
 };
 
-const TransactionHistory = () => {
-  const [filters, setFilters] = useState<TOrderFilterRequest>({});
-  const [page, setPage] = useState(1);
-  const [limit] = useState(10);
-
-  const { data: orders, isLoading, isError } = useGetAllOrdersQuery({
-    page,
-    limit,
-    ...filters,
+const formatTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
   });
-console.log(orders, "ss");
+};
 
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
+
+const AdminOrdersPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const dataPerPage = 10;
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [queryObj, setQueryObj] = useState({
+    page: currentPage,
+    limit: dataPerPage,
+  });
+
+  const { data: allOrders, isLoading } = useGetAllOrdersQuery(queryObj);
+
+  const totalPages = Math.ceil(
+    (allOrders?.meta?.total || 0) / dataPerPage
+  );
+// console.log(allOrders);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
-  if (isLoading) return <p>Loading transaction history...</p>;
-  if (isError) return <p>Failed to fetch transaction history.</p>;
+  const openDetailsDialog = (order: IOrder) => {
+    setSelectedOrder(order);
+    setIsDialogOpen(true);
+  };
+
+  useEffect(() => {
+    setQueryObj((prev) => ({
+      ...prev,
+      page: currentPage,
+      limit: dataPerPage,
+    }));
+  }, [currentPage]);
+
+  // Get payment status badge color
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case "PAID":
+        return "bg-green-100 text-green-800";
+      case "PENDING":
+        return "bg-yellow-100 text-yellow-800";
+      case "UNPAID":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+
+
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Transaction History</h1>
+    <div>
+      <h1 className="text-xl font-semibold mb-4">All Orders Management</h1>
 
-      {/* Transaction Table */}
-      {orders?.data?.length > 0 ? (
-        <table className="w-full border-collapse border border-gray-200">
-          <thead>
-            <tr>
-              <th className="border px-4 py-2">Transaction ID</th>
-              <th className="border px-4 py-2">Vendor ID</th>
-              <th className="border px-4 py-2">Total Price</th>
-              <th className="border px-4 py-2">Delivery Address</th>
-              <th className="border px-4 py-2">Coupon</th>
-              <th className="border px-4 py-2">Order Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders?.data?.map((order: IOrder) => (
-              <tr key={order.transactionId}>
-                <td className="border px-4 py-2">{order.transactionId}</td>
-                <td className="border px-4 py-2">{order.vendorId}</td>
-                <td className="border px-4 py-2">${order.totalPrice.toFixed(2)}</td>
-                <td className="border px-4 py-2">{order.deliveryAddress || "N/A"}</td>
-                <td className="border px-4 py-2">{order.coupon || "N/A"}</td>
-                <td className="border px-4 py-2">
-                  <ul>
-                    {order.orderDetails.map((detail, idx) => (
-                      <li key={idx}>
-                        Product ID: {detail.productId}, Quantity: {detail.quantity}, Price: ${detail.pricePerUnit.toFixed(2)}
-                      </li>
+      <div>
+        {isLoading ? (
+          <div className="text-center py-8">Loading...</div>
+        ) : (
+          <div>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>No.</TableHead>
+                    <TableHead>Order Date & Time</TableHead>
+                    <TableHead>Products</TableHead>
+                    <TableHead>Trans ID</TableHead>
+                    <TableHead>Payment Status</TableHead>
+                    <TableHead>Quantity</TableHead>
+                    <TableHead>Coupon Use</TableHead>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Shop Name/Vendor Email</TableHead>
+                    <TableHead>Total Price</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {allOrders?.data?.length > 0 &&
+                    allOrders?.data?.map((singleOrder: IOrder, index: number) => {
+                      return (
+                        <TableRow key={singleOrder.id}>
+
+                          {/* Serial Number */}
+                          <TableCell className="font-medium">
+                            {index + 1 + (currentPage - 1) * dataPerPage}
+                          </TableCell>
+
+
+                          {/* Order Date & Time */}
+                          <TableCell>
+                            <div className="flex flex-col whitespace-nowrap">
+                              <span className="font-medium text-sm">
+                                {formatDate(singleOrder.createdAt)}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {formatTime(singleOrder.createdAt)}
+                              </span>
+                            </div>
+                          </TableCell>
+
+
+
+                          {/* Product Images */}
+                          <TableCell>
+                            <div className="flex flex-wrap gap-2">
+                              {singleOrder?.orderDetails?.slice(0, 3).map((detail, idx) => (
+                                <div key={idx} className="relative">
+                                  <Image
+                                    width={40}
+                                    height={40}
+                                    src={detail?.product?.image[0]}
+                                    alt={detail?.product?.name || "product"}
+                                    className="w-10 h-10 rounded-lg object-cover border border-gray-200"
+                                  />
+                                </div>
+                              ))}
+                              {singleOrder?.orderDetails?.length > 3 && (
+                                <div className="w-10 h-10 rounded-lg bg-gray-200 flex items-center justify-center text-xs font-semibold">
+                                  +{singleOrder?.orderDetails?.length - 3}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+
+
+
+                          {/* Transaction ID */}
+                          <TableCell>
+                            <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded whitespace-nowrap">
+                              {singleOrder?.transactionId}
+                            </span>
+                          </TableCell>
+
+
+
+
+                          {/* Payment Status */}
+                          <TableCell>
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getPaymentStatusColor(
+                                singleOrder?.paymentStatus
+                              )}`}
+                            >
+                              {singleOrder?.paymentStatus}
+                            </span>
+                          </TableCell>
+
+
+
+                          {/* Total Quantity */}
+                          <TableCell className="text-center">
+                            <span className="font-semibold">
+                              {singleOrder?.orderDetails?.reduce(
+                                (sum, detail) => sum + detail.quantity,
+                                0
+                              )}
+                            </span>
+                          </TableCell>
+
+                          {/* Coupon Use */}
+                           <TableCell className="text-center">
+                            <span className="font-semibold">
+                            {singleOrder?.couponUsages?.[0]?"Yes":"N/A"}
+                               </span>
+                               </TableCell>
+
+
+
+                          {/* Customer Info */}
+                          <TableCell>
+                            <div className="flex flex-col whitespace-nowrap">
+                              <span className="font-medium text-sm">
+                                {singleOrder?.customer?.name || "No Name"}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {singleOrder?.customer?.email || "N/A"}
+                              </span>
+                            </div>
+                          </TableCell>
+
+
+
+                          {/* Vendor/Shop Info */}
+                          <TableCell>
+                            <div className="flex flex-col whitespace-nowrap">
+                              <span className="font-medium text-sm">
+                                {singleOrder?.vendor?.shopName || "No Shop Name"}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {singleOrder?.vendor?.email || "N/A"}
+                              </span>
+                            </div>
+                          </TableCell>
+
+                          {/* Total Price */}
+                          <TableCell>
+                            <span className="font-bold text-green-600 whitespace-nowrap">
+                              {singleOrder?.totalPrice.toFixed(2)} TK
+                            </span>
+                          </TableCell>
+
+                          {/* Action Button */}
+                          <TableCell>
+                            <Dialog
+                              open={isDialogOpen && selectedOrder?.id === singleOrder.id}
+                              onOpenChange={setIsDialogOpen}
+                            >
+                              <DialogTrigger asChild>
+                                <Button
+                                  onClick={() => openDetailsDialog(singleOrder)}
+                                  className="bg-blue-600 hover:bg-blue-700 "
+                                  size="sm"
+                                >
+                                  <Eye className="w-4 h-4 mr-1" />
+                                  Details
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="w-[95vw] max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+                                <DialogHeader>
+                                  <DialogTitle className="text-base sm:text-lg">
+                                    Order Details - {singleOrder.transactionId}
+                                  </DialogTitle>
+                                </DialogHeader>
+
+                                <div className="space-y-4 overflow-x-hidden">
+                                  {/* Order Summary */}
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {/* Customer Info Card */}
+                                    <div className="p-4 bg-blue-50 rounded-lg border">
+                                      <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                                        <span className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs">
+                                          C
+                                        </span>
+                                        Customer Information
+                                      </h3>
+                                      <div className="space-y-2 text-sm">
+                                        <p><span className="font-semibold">Name:</span> {singleOrder?.customer?.name}</p>
+                                        <p><span className="font-semibold">Email:</span> {singleOrder?.customer?.email}</p>
+
+                                        <p><span className="font-semibold">Phone:</span> {singleOrder?.phone || singleOrder?.customer?.phone || "N/A"}</p>
+                                        <div className="flex items-start gap-2 mt-2 ">
+                                          <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                          <div className="flex gap-2">
+                                         <p className="font-semibold">Delivery Address:</p>
+                                            <p className="text-gray-700 break-words">
+                                              {singleOrder?.deliveryAddress || singleOrder?.customer?.address || "No address provided"}
+                                            </p>
+
+                                            
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {/* Vendor Info Card */}
+                                    <div className="p-4 bg-green-50 rounded-lg border">
+                                      <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                                        <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs">
+                                          V
+                                        </span>
+                                        Vendor Information
+                                      </h3>
+                                      <div className="space-y-2 text-sm">
+                                        <p><span className="font-semibold">Shop Name:</span> {singleOrder?.vendor?.shopName}</p>
+                                        <p><span className="font-semibold">Owner:</span> {singleOrder?.vendor?.name}</p>
+                                        <p><span className="font-semibold">Email:</span> {singleOrder?.vendor?.email}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Order Details */}
+                                  <div className="p-4 bg-gray-50 rounded-lg border">
+                                    <h3 className="font-semibold text-sm mb-3">Order Information</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                                      <div>
+                                        <p className="text-gray-600">Transaction ID</p>
+                                        <p className="font-mono font-semibold text-xs">{singleOrder?.transactionId}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-gray-600">Payment Status</p>
+                                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${getPaymentStatusColor(singleOrder?.paymentStatus)}`}>
+                                          {singleOrder?.paymentStatus}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <p className="text-gray-600">Order Date</p>
+                                        <p className="font-semibold">{formatDate(singleOrder?.createdAt)}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-gray-600">Order Time</p>
+                                        <p className="font-semibold">{formatTime(singleOrder?.createdAt)}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Coupon & Discount Info - FIXED */}
+                                  {singleOrder?.couponCode && singleOrder?.couponUsages?.[0]?.coupon && (
+                                    <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                      <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                                        <Tag className="w-4 h-4 text-yellow-600" />
+                                        Coupon Applied
+                                      </h3>
+                                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                                        <div>
+                                          <p className="text-gray-600">Coupon Code</p>
+                                          <p className="font-mono font-bold text-yellow-700">
+                                            {Array.isArray(singleOrder?.couponUsages?.[0]?.coupon) 
+                                              ? singleOrder?.couponUsages?.[0]?.coupon?.[0]?.code 
+                                              : singleOrder?.couponUsages?.[0]?.coupon?.code || singleOrder?.couponCode || "N/A"}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <p className="text-gray-600">Discount Type</p>
+                                          <p className="font-semibold">
+                                            {Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                              ? singleOrder?.couponUsages?.[0]?.coupon?.[0]?.discountStatus
+                                              : singleOrder?.couponUsages?.[0]?.coupon?.discountStatus || "N/A"}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <p className="text-gray-600 flex items-center gap-1">
+                                            <Percent className="w-3 h-3" />
+                                            Discount Amount
+                                          </p>
+                                          <p className="font-bold text-yellow-700">
+                                            {(() => {
+                                              const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
+                                                : singleOrder?.couponUsages?.[0]?.coupon;
+                                              const discountValue = coupon?.discountValue || 0;
+                                              const discountStatus = coupon?.discountStatus;
+                                              return `${discountValue}${discountStatus === "PERCENTAGE" ? "%" : " TK"}`;
+                                            })()}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div className="mt-3 pt-3 border-t border-yellow-200">
+                                        <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
+                                          <div>
+                                            <p>Redeemed: {singleOrder?.couponUsages?.[0]?.isRedeemed ? "✓ Yes" : "✗ No"}</p>
+                                          </div>
+                                          <div>
+                                            <p>Used Count: {(() => {
+                                              const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
+                                                : singleOrder?.couponUsages?.[0]?.coupon;
+                                              return coupon?.usedCount || 0;
+                                            })()}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Products List */}
+                                  <div className="p-4 bg-white rounded-lg border">
+                                    <h3 className="font-semibold text-sm mb-3">Ordered Products</h3>
+                                    <div className="space-y-3">
+                                      {singleOrder?.orderDetails?.map((detail, idx) => (
+                                        <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                          <div className="relative flex-shrink-0">
+                                            <Image
+                                              width={60}
+                                              height={60}
+                                              src={detail?.product?.image[0]}
+                                              alt={detail?.product?.name || "product"}
+                                              className="w-16 h-16 rounded-lg object-cover border"
+                                            />
+                                            <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-semibold">
+                                              {detail.quantity}
+                                            </span>
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                            <p className="font-semibold text-sm break-words">
+                                              {detail?.product?.name}
+                                            </p>
+                                            <p className="text-xs text-gray-600">
+                                              Price: {detail?.pricePerUnit?.toFixed(2)} TK × {detail.quantity}
+                                            </p>
+                                            <p className="text-sm font-bold text-green-600 mt-1">
+                                              Subtotal: {(detail?.pricePerUnit * detail.quantity)?.toFixed(2)} TK
+                                            </p>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Price Summary - FIXED */}
+                                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                                    <h3 className="font-semibold text-sm mb-3">Price Summary</h3>
+                                    <div className="space-y-2 text-sm">
+                                      {/* Subtotal Calculation */}
+                                      <div className="flex justify-between">
+                                        <span>Subtotal:</span>
+                                        <span className="font-semibold">
+                                          {(() => {
+                                            const subtotal = singleOrder?.orderDetails?.reduce(
+                                              (sum, detail) => sum + (detail.pricePerUnit * detail.quantity),
+                                              0
+                                            ) || 0;
+                                            return subtotal.toFixed(2);
+                                          })()} TK
+                                        </span>
+                                      </div>
+
+                                      {/* Shipping Charge (5% of subtotal) */}
+                                      <div className="flex justify-between">
+                                        <span>Shipping Charge (5%):</span>
+                                        <span className="font-semibold">
+                                          {(() => {
+                                            const subtotal = singleOrder?.orderDetails?.reduce(
+                                              (sum, detail) => sum + (detail.pricePerUnit * detail.quantity),
+                                              0
+                                            ) || 0;
+                                            const shipping = subtotal * 0.05;
+                                            return shipping.toFixed(2);
+                                          })()} TK
+                                        </span>
+                                      </div>
+
+                                      {/* Taxes (2% of subtotal) */}
+                                      <div className="flex justify-between">
+                                        <span>Taxes (2%):</span>
+                                        <span className="font-semibold">
+                                          {(() => {
+                                            const subtotal = singleOrder?.orderDetails?.reduce(
+                                              (sum, detail) => sum + (detail.pricePerUnit * detail.quantity),
+                                              0
+                                            ) || 0;
+                                            const taxes = subtotal * 0.02;
+                                            return taxes.toFixed(2);
+                                          })()} TK
+                                        </span>
+                                      </div>
+
+                                      {/* Coupon Discount - FIXED */}
+                                      {singleOrder?.couponCode && singleOrder?.couponUsages?.[0]?.coupon && (
+                                        <div className="flex justify-between text-yellow-700">
+                                          <span>Discount ({(() => {
+                                            const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                              ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
+                                              : singleOrder?.couponUsages?.[0]?.coupon;
+                                            return coupon?.code || singleOrder?.couponCode;
+                                          })()}):</span>
+                                          <span className="font-semibold">
+                                            {(() => {
+                                              const subtotal = singleOrder?.orderDetails?.reduce(
+                                                (sum, detail) => sum + (detail.pricePerUnit * detail.quantity),
+                                                0
+                                              ) || 0;
+                                              const shipping = subtotal * 0.05;
+                                              const taxes = subtotal * 0.02;
+                                              const primaryTotal = subtotal + shipping + taxes;
+                                              
+                                              const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
+                                                : singleOrder?.couponUsages?.[0]?.coupon;
+                                              
+                                              const discount = coupon?.discountStatus === "PERCENTAGE"
+                                                ? primaryTotal * ((coupon?.discountValue || 0) / 100)
+                                                : coupon?.discountValue || 0;
+                                              
+                                              return `- ${discount.toFixed(2)}`;
+                                            })()} TK
+                                          </span>
+                                        </div>
+                                      )}
+
+                                      <div className="h-px bg-gray-300 my-2"></div>
+
+                                      {/* Total Paid */}
+                                      <div className="flex justify-between text-lg font-bold text-green-700">
+                                        <span>Total Paid:</span>
+                                        <span>{singleOrder?.totalPrice?.toFixed(2)} TK</span>
+                                      </div>
+
+                                      {/* Calculation Breakdown Info */}
+                                      <div className="mt-3 pt-3 border-t border-green-200">
+                                        <p className="text-xs text-gray-600 italic">
+                                          * Shipping: 5% of subtotal, Taxes: 2% of subtotal
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+
+                  {!isLoading && allOrders?.data?.length === 0 && (
+                    <NoTableDataFound span={11} />
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+
+
+            {/* Pagination */}
+            <div className="pt-7">
+              {allOrders?.data?.length > 0 && (
+                <div className="flex justify-center items-center mt-4">
+                  <div className="flex items-center space-x-2">
+                    {/* Left Arrow Button */}
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className={`${
+                        currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+                      } p-2 bg-gray-300 rounded-full hover:bg-green-600 text-white transition-colors duration-200`}
+                    >
+                      <span className="font-bold text-lg">{"<"}</span>
+                    </button>
+
+                    {/* Page Numbers */}
+                    {Array.from({ length: totalPages }).map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handlePageChange(index + 1)}
+                        className={`${
+                          currentPage === index + 1
+                            ? "bg-green-600 text-white"
+                            : "bg-white text-green-600 border border-green-800"
+                        } px-4 py-2 rounded-full transition duration-200 hover:bg-green-600 hover:text-white`}
+                      >
+                        {index + 1}
+                      </button>
                     ))}
-                  </ul>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No transaction history found.</p>
-      )}
 
-      {/* Pagination */}
-      <div className="mt-4 flex justify-between">
-        <button
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-          className="bg-[#80b500] px-4 py-2 disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span>Page {page}</span>
-        <button
-          onClick={() => handlePageChange(page + 1)}
-          className="bg-[#80b500] px-4 py-2 text-white"
-        >
-          Next
-        </button>
+                    {/* Right Arrow Button */}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`${
+                        currentPage === totalPages
+                          ? "cursor-not-allowed opacity-50"
+                          : "cursor-pointer"
+                      } p-2 bg-gray-300 rounded-full hover:bg-green-600 text-white transition-colors duration-200`}
+                    >
+                      <span className="font-bold text-lg">{">"}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default TransactionHistory;
+export default AdminOrdersPage;

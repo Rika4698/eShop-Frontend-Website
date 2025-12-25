@@ -80,14 +80,14 @@ const EditCategory: React.FC<IProps> = ({ category }) => {
           <Pen className="w-[15px]" /> Edit
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent >
         <DialogHeader>
           <DialogTitle>Edit Category</DialogTitle>
           <DialogDescription>Update the category details below.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="category" className="text-right">
+            <Label htmlFor="category" className="text-right w-32 -ml-12 md:-ml-6">
               Category Name
             </Label>
             <Input
@@ -128,7 +128,7 @@ const EditCategory: React.FC<IProps> = ({ category }) => {
           </Button>
           <Button
             onClick={handleUpdateCategory}
-            className="center gap-[5px]"
+            className="center gap-[5px] bg-green-600 hover:bg-green-800"
             disabled={isLoading} 
           >
             Save Changes

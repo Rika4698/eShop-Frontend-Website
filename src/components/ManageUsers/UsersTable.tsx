@@ -56,10 +56,10 @@ const UsersTable: React.FC<IProps> = ({ users, isLoading, onDelete }) => {
           {users.map((user) => (
             <TableRow key={user.id}>
 
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.role}</TableCell>
+              <TableCell className="whitespace-nowrap">{user.email}</TableCell>
+              <TableCell className="whitespace-nowrap">{user.role}</TableCell>
 
-              <TableCell>
+              <TableCell className="whitespace-nowrap">
                 {user.status === "ACTIVE"
                   ? "Active"
                   : user.status === "DELETED"
@@ -67,7 +67,7 @@ const UsersTable: React.FC<IProps> = ({ users, isLoading, onDelete }) => {
                   : "Suspended"}
               </TableCell>
 
-              <TableCell>
+              <TableCell className="whitespace-nowrap">
                 {new Date(user.createdAt).toLocaleDateString()}
               </TableCell>
 

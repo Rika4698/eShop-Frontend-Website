@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -52,7 +53,7 @@ const Coupon = () => {
       toast.error(error.message || "This is used in customerCoupon.");
     }
   };
-
+console.log(paginatedCoupons);
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Coupon Management</h1>
@@ -75,7 +76,7 @@ const Coupon = () => {
         <table className="min-w-[700px] w-full border text-sm">
           <thead className="bg-gray-100">
             <tr>
-              <th className="p-2 border">#</th>
+              <th className="p-2 border">No</th>
               <th className="p-2 border">Code</th>
               <th className="p-2 border">Discount</th>
               <th className="p-2 border">Expiry</th>
@@ -91,8 +92,8 @@ const Coupon = () => {
               <NoTableDataFound span={5} />
             ) : (
               paginatedCoupons.map((coupon: ICoupon, index: number) => (
-                <tr key={coupon.id} className="hover:bg-gray-50">
-                  <td className="p-2 border">{startIndex + index + 1}</td>
+                <tr key={coupon.id} className="hover:bg-gray-50 text-center">
+                  <td className="p-2 border ">{startIndex + index + 1}</td>
                   <td className="p-2 border">{coupon.code}</td>
                   <td className="p-2 border">
                     {coupon.discountStatus === "PERCENTAGE"
@@ -102,9 +103,9 @@ const Coupon = () => {
                   <td className="p-2 border">
                     {format(new Date(coupon.endDate), "MMM dd, yyyy")}
                   </td>
-                   <td className=" p-2 border ">
-                <Dropdown closeOnSelect={true} className="bg-white">
-                  <DropdownTrigger>
+                   <td className=" p-2 flex items-center justify-center ">
+                <Dropdown closeOnSelect={true} className="bg-white ">
+                  <DropdownTrigger >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -115,7 +116,7 @@ const Coupon = () => {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="lucide lucide-ellipsis cursor-pointer"
+                      className="lucide lucide-ellipsis cursor-pointer  "
                     >
                       <circle cx="12" cy="12" r="1" />
                       <circle cx="19" cy="12" r="1" />
@@ -123,15 +124,19 @@ const Coupon = () => {
                     </svg>
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Actions">
-                    <DropdownItem className="bg-white hover:bg-gray-100" key="edit">
-                      <span  onClick={() => {
-                        setSelectedEditCoupon(coupon);
-                        setEditModalOpen(true);
-                      }} className="flex items-center gap-2  ">
-                        <Pen className="w-[15px] " />
-                        Edit
-                      </span>
-                    </DropdownItem>
+                      {[
+    coupon.usedCount === 0 ? (
+      <DropdownItem className="bg-white hover:bg-gray-100" key="edit">
+        <span onClick={() => {
+          setSelectedEditCoupon(coupon);
+          setEditModalOpen(true);
+        }} className="flex items-center gap-2">
+          <Pen className="w-[15px]" />
+          Edit
+        </span>
+      </DropdownItem>
+    ) : null,
+                 
                     <DropdownItem className="bg-white hover:bg-gray-100" key="delete">
                       <span
                         onClick={() => {
@@ -143,7 +148,7 @@ const Coupon = () => {
                         <Trash2 className="h-4 w-4" />
                         Delete
                       </span>
-                    </DropdownItem>
+                    </DropdownItem>].filter(Boolean)}
                   </DropdownMenu>
                 </Dropdown>
               </td>

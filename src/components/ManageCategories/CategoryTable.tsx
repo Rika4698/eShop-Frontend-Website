@@ -35,12 +35,12 @@ const CategoryTable: React.FC<IProps> = ({ categories, isLoading }) => {
       <TableBody>
         {activeCategories.map((category) => (
           <TableRow key={category.id}>
-            <TableCell className="font-medium">{category.name}</TableCell>
-            <TableCell>
+            <TableCell className="font-medium whitespace-nowrap">{category.name}</TableCell>
+            <TableCell className="whitespace-nowrap">
               <Image width={80} height={20} src={category.image} alt={category.name} />
             </TableCell>
-             <TableCell className="font-medium">{category.label || "No label"}</TableCell>
-            <TableCell className="flex gap-5">
+             <TableCell className="font-medium whitespace-nowrap">{category.label || "No label"}</TableCell>
+            <TableCell className="flex gap-5 whitespace-nowrap">
               <div className="flex space-x-2">
                 <EditCategory category={category} />
               </div>

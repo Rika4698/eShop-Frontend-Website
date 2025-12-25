@@ -19,22 +19,30 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, Dialo
 import AddReview from "@/components/MyOrders/AddReview";
 import Image from "next/image";
 import NoTableDataFound from "@/components/uiElements/NoTableDataFound";
+
+import { Eye, MapPin, Tag, Percent } from "lucide-react";
+
+
+
+
+
+
 // If date-fns is not installed, use this simple function instead:
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
-  const options: Intl.DateTimeFormatOptions = { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
   };
   return date.toLocaleDateString('en-US', options);
 };
 
 const formatTime = (dateString: string) => {
   const date = new Date(dateString);
-  return date.toLocaleTimeString('en-US', { 
-    hour: '2-digit', 
-    minute: '2-digit' 
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit'
   });
 };
 
@@ -44,6 +52,8 @@ const MyOrders = () => {
   const dataPerPage = 8;
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
 
   const [queryObj, setQueryObj] = useState({
     page: currentPage,
@@ -66,6 +76,11 @@ const MyOrders = () => {
   const handleAddReviewClick = (order: IOrder) => {
     setSelectedOrder(order);
     setIsModalOpen(true);
+  };
+
+  const openDetailsDialog = (order: IOrder) => {
+    setSelectedOrder(order);
+    setIsDialogOpen(true);
   };
 
   const closeModal = () => {
@@ -116,6 +131,7 @@ const MyOrders = () => {
                     <TableHead>Trans ID</TableHead>
                     <TableHead>Payment Status</TableHead>
                     <TableHead>Quantity</TableHead>
+                    <TableHead>Coupon Use</TableHead>
                     <TableHead>Shop Name</TableHead>
                     <TableHead>Total Price</TableHead>
                     <TableHead>Action</TableHead>
@@ -169,7 +185,7 @@ const MyOrders = () => {
                             <div className="flex flex-col gap-1 whitespace-nowrap">
                               {singleOrder?.orderDetails?.map((detail, idx) => (
                                 <div key={idx} className="flex items-center gap-2 ">
-                                  <span className="text-sm font-bold text-green-700">{idx+1}.</span>
+                                  <span className="text-sm font-bold text-green-700">{idx + 1}.</span>
                                   <span className="text-sm">
                                     {detail?.product?.name}
                                   </span>
@@ -209,12 +225,23 @@ const MyOrders = () => {
                             </span>
                           </TableCell>
 
+
+                          {/* Coupon Use */}
+                           <TableCell className="text-center">
+                             <span className="font-semibold">
+                              {singleOrder?.couponUsages?.[0]?"Yes":"N/A"}
+                               </span>
+                                </TableCell>
+
+
                           {/* Shop Name */}
                           <TableCell>
                             <span className="font-medium whitespace-nowrap">
                               {singleOrder?.vendor?.shopName || "No Shop Name"}
                             </span>
                           </TableCell>
+
+
 
                           {/* Total Price */}
                           <TableCell>
@@ -223,45 +250,339 @@ const MyOrders = () => {
                             </span>
                           </TableCell>
 
-                          {/* Action - Add Review */}
+
+
+                        {/* Action - Add Review */}
+
                           <TableCell>
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button
-                                  onClick={() => handleAddReviewClick(singleOrder)}
-                                  className="bg-green-600 hover:bg-green-700"
-                                  size="sm"
-                                >
-                                  Add Review
-                                </Button>
-                              </DialogTrigger>
-                              {selectedOrder && isModalOpen && (
-                                <DialogContent className="overflow-y-auto max-h-[90vh]">
+                            <div className="flex flex-col sm:flex-row gap-2 py-2">
+                              <Dialog
+                                open={isDialogOpen && selectedOrder?.id === singleOrder.id}
+                                onOpenChange={setIsDialogOpen}>
+                                <DialogTrigger asChild>
+                                  <Button
+                                    onClick={() => openDetailsDialog(singleOrder)}
+                                    className="bg-blue-600 hover:bg-blue-700"
+                                    size="sm" >
+                                    <Eye className="w-4 h-4 mr-1" />
+                                    Details
+                                  </Button>
+                                </DialogTrigger>
+                                <DialogContent className="w-[95vw] max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
                                   <DialogHeader>
-                                    <DialogTitle>Add Product Review</DialogTitle>
+                                    <DialogTitle className="text-base sm:text-lg">
+                                      Order Details - {singleOrder.transactionId}
+                                    </DialogTitle>
                                   </DialogHeader>
-                                  <AddReview
-                                    singleOrder={selectedOrder}
-                                    onClose={closeModal}
-                                  />
-                                  <DialogFooter>
-                                    <Button
-                                      variant="secondary"
-                                      onClick={closeModal}
-                                    >
-                                      Close
-                                    </Button>
-                                  </DialogFooter>
+
+                                  <div className="space-y-4 overflow-x-hidden">
+                                    {/* Order Summary */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                      {/* Customer Info Card */}
+                                      <div className="p-4 bg-blue-50 rounded-lg border">
+                                        <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                                          <span className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs">
+                                            C
+                                          </span>
+                                          Customer Information
+                                        </h3>
+                                        <div className="space-y-2 text-sm">
+                                          <p><span className="font-semibold">Name:</span> {singleOrder?.customer?.name}</p>
+                                          <p><span className="font-semibold">Email:</span> {singleOrder?.customer?.email}</p>
+
+                                          <p><span className="font-semibold">Phone:</span> {singleOrder?.phone || singleOrder?.customer?.phone || "N/A"}</p>
+                                          <div className="flex items-start gap-2 mt-2 ">
+                                            <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                            <div className="flex gap-2">
+                                              <p className="font-semibold">Delivery Address:</p>
+                                              <p className="text-gray-700 break-words">
+                                                {singleOrder?.deliveryAddress || singleOrder?.customer?.address || "No address provided"}
+                                              </p>
+
+
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Vendor Info Card */}
+                                      <div className="p-4 bg-green-50 rounded-lg border">
+                                        <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                                          <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs">
+                                            V
+                                          </span>
+                                          Vendor Information
+                                        </h3>
+                                        <div className="space-y-2 text-sm">
+                                          <p><span className="font-semibold">Shop Name:</span> {singleOrder?.vendor?.shopName}</p>
+                                          <p><span className="font-semibold">Owner:</span> {singleOrder?.vendor?.name}</p>
+                                          <p><span className="font-semibold">Email:</span> {singleOrder?.vendor?.email}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {/* Order Details */}
+                                    <div className="p-4 bg-gray-50 rounded-lg border">
+                                      <h3 className="font-semibold text-sm mb-3">Order Information</h3>
+                                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                                        <div>
+                                          <p className="text-gray-600">Transaction ID</p>
+                                          <p className="font-mono font-semibold text-xs">{singleOrder?.transactionId}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-gray-600">Payment Status</p>
+                                          <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${getPaymentStatusColor(singleOrder?.paymentStatus)}`}>
+                                            {singleOrder?.paymentStatus}
+                                          </span>
+                                        </div>
+                                        <div>
+                                          <p className="text-gray-600">Order Date</p>
+                                          <p className="font-semibold">{formatDate(singleOrder?.createdAt)}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-gray-600">Order Time</p>
+                                          <p className="font-semibold">{formatTime(singleOrder?.createdAt)}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {/* Coupon & Discount Info - FIXED */}
+                                    {singleOrder?.couponCode && singleOrder?.couponUsages?.[0]?.coupon && (
+                                      <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                        <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                                          <Tag className="w-4 h-4 text-yellow-600" />
+                                          Coupon Applied
+                                        </h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                                          <div>
+                                            <p className="text-gray-600">Coupon Code</p>
+                                            <p className="font-mono font-bold text-yellow-700">
+                                              {Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                ? singleOrder?.couponUsages?.[0]?.coupon?.[0]?.code
+                                                : singleOrder?.couponUsages?.[0]?.coupon?.code || singleOrder?.couponCode || "N/A"}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <p className="text-gray-600">Discount Type</p>
+                                            <p className="font-semibold">
+                                              {Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                ? singleOrder?.couponUsages?.[0]?.coupon?.[0]?.discountStatus
+                                                : singleOrder?.couponUsages?.[0]?.coupon?.discountStatus || "N/A"}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <p className="text-gray-600 flex items-center gap-1">
+                                              <Percent className="w-3 h-3" />
+                                              Discount Amount
+                                            </p>
+                                            <p className="font-bold text-yellow-700">
+                                              {(() => {
+                                                const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                  ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
+                                                  : singleOrder?.couponUsages?.[0]?.coupon;
+                                                const discountValue = coupon?.discountValue || 0;
+                                                const discountStatus = coupon?.discountStatus;
+                                                return `${discountValue}${discountStatus === "PERCENTAGE" ? "%" : " TK"}`;
+                                              })()}
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="mt-3 pt-3 border-t border-yellow-200">
+                                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
+                                            <div>
+                                              <p>Redeemed: {singleOrder?.couponUsages?.[0]?.isRedeemed ? "✓ Yes" : "✗ No"}</p>
+                                            </div>
+                                            <div>
+                                              <p>Used Count: {(() => {
+                                                const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                  ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
+                                                  : singleOrder?.couponUsages?.[0]?.coupon;
+                                                return coupon?.usedCount || 0;
+                                              })()}</p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {/* Products List */}
+                                    <div className="p-4 bg-white rounded-lg border">
+                                      <h3 className="font-semibold text-sm mb-3">Ordered Products</h3>
+                                      <div className="space-y-3">
+                                        {singleOrder?.orderDetails?.map((detail, idx) => (
+                                          <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                            <div className="relative flex-shrink-0">
+                                              <Image
+                                                width={60}
+                                                height={60}
+                                                src={detail?.product?.image[0]}
+                                                alt={detail?.product?.name || "product"}
+                                                className="w-16 h-16 rounded-lg object-cover border"
+                                              />
+                                              <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-semibold">
+                                                {detail.quantity}
+                                              </span>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                              <p className="font-semibold text-sm break-words">
+                                                {detail?.product?.name}
+                                              </p>
+                                              <p className="text-xs text-gray-600">
+                                                Price: {detail?.pricePerUnit?.toFixed(2)} TK × {detail.quantity}
+                                              </p>
+                                              <p className="text-sm font-bold text-green-600 mt-1">
+                                                Subtotal: {(detail?.pricePerUnit * detail.quantity)?.toFixed(2)} TK
+                                              </p>
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+
+                                    {/* Price Summary - FIXED */}
+                                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                                      <h3 className="font-semibold text-sm mb-3">Price Summary</h3>
+                                      <div className="space-y-2 text-sm">
+                                        {/* Subtotal Calculation */}
+                                        <div className="flex justify-between">
+                                          <span>Subtotal:</span>
+                                          <span className="font-semibold">
+                                            {(() => {
+                                              const subtotal = singleOrder?.orderDetails?.reduce(
+                                                (sum, detail) => sum + (detail.pricePerUnit * detail.quantity),
+                                                0
+                                              ) || 0;
+                                              return subtotal.toFixed(2);
+                                            })()} TK
+                                          </span>
+                                        </div>
+
+                                        {/* Shipping Charge (5% of subtotal) */}
+                                        <div className="flex justify-between">
+                                          <span>Shipping Charge (5%):</span>
+                                          <span className="font-semibold">
+                                            {(() => {
+                                              const subtotal = singleOrder?.orderDetails?.reduce(
+                                                (sum, detail) => sum + (detail.pricePerUnit * detail.quantity),
+                                                0
+                                              ) || 0;
+                                              const shipping = subtotal * 0.05;
+                                              return shipping.toFixed(2);
+                                            })()} TK
+                                          </span>
+                                        </div>
+
+                                        {/* Taxes (2% of subtotal) */}
+                                        <div className="flex justify-between">
+                                          <span>Taxes (2%):</span>
+                                          <span className="font-semibold">
+                                            {(() => {
+                                              const subtotal = singleOrder?.orderDetails?.reduce(
+                                                (sum, detail) => sum + (detail.pricePerUnit * detail.quantity),
+                                                0
+                                              ) || 0;
+                                              const taxes = subtotal * 0.02;
+                                              return taxes.toFixed(2);
+                                            })()} TK
+                                          </span>
+                                        </div>
+
+                                        {/* Coupon Discount - FIXED */}
+                                        {singleOrder?.couponCode && singleOrder?.couponUsages?.[0]?.coupon && (
+                                          <div className="flex justify-between text-yellow-700">
+                                            <span>Discount ({(() => {
+                                              const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
+                                                : singleOrder?.couponUsages?.[0]?.coupon;
+                                              return coupon?.code || singleOrder?.couponCode;
+                                            })()}):</span>
+                                            <span className="font-semibold">
+                                              {(() => {
+                                                const subtotal = singleOrder?.orderDetails?.reduce(
+                                                  (sum, detail) => sum + (detail.pricePerUnit * detail.quantity),
+                                                  0
+                                                ) || 0;
+                                                const shipping = subtotal * 0.05;
+                                                const taxes = subtotal * 0.02;
+                                                const primaryTotal = subtotal + shipping + taxes;
+
+                                                const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
+                                                  ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
+                                                  : singleOrder?.couponUsages?.[0]?.coupon;
+
+                                                const discount = coupon?.discountStatus === "PERCENTAGE"
+                                                  ? primaryTotal * ((coupon?.discountValue || 0) / 100)
+                                                  : coupon?.discountValue || 0;
+
+                                                return `- ${discount.toFixed(2)}`;
+                                              })()} TK
+                                            </span>
+                                          </div>
+                                        )}
+
+                                        <div className="h-px bg-gray-300 my-2"></div>
+
+                                        {/* Total Paid */}
+                                        <div className="flex justify-between text-lg font-bold text-green-700">
+                                          <span>Total Paid:</span>
+                                          <span>{singleOrder?.totalPrice?.toFixed(2)} TK</span>
+                                        </div>
+
+                                        {/* Calculation Breakdown Info */}
+                                        <div className="mt-3 pt-3 border-t border-green-200">
+                                          <p className="text-xs text-gray-600 italic">
+                                            * Shipping: 5% of subtotal, Taxes: 2% of subtotal
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </DialogContent>
-                              )}
-                            </Dialog>
+                              </Dialog>
+                            
+
+
+                            
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button
+                                    onClick={() => handleAddReviewClick(singleOrder)}
+                                    className="bg-green-600 hover:bg-green-700"
+                                    size="sm"
+                                  >
+                                    Add Review
+                                  </Button>
+                                </DialogTrigger>
+                                {selectedOrder && isModalOpen && (
+                                  <DialogContent className="overflow-y-auto max-h-[90vh]">
+                                    <DialogHeader>
+                                      <DialogTitle>Add Product Review</DialogTitle>
+                                    </DialogHeader>
+                                    <AddReview
+                                      singleOrder={selectedOrder}
+                                      onClose={closeModal}
+                                    />
+                                    <DialogFooter>
+                                      <Button
+                                        variant="secondary"
+                                        onClick={closeModal}
+                                      >
+                                        Close
+                                      </Button>
+                                    </DialogFooter>
+                                  </DialogContent>
+                                )}
+                              </Dialog>
+
+                            </div>
+
                           </TableCell>
                         </TableRow>
                       );
                     })}
 
                   {!isLoading && customerOrders?.data.length === 0 && (
-                    <NoTableDataFound span={10} />
+                    <NoTableDataFound span={11} />
                   )}
                 </TableBody>
               </Table>
@@ -276,9 +597,8 @@ const MyOrders = () => {
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`${
-                        currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-                      } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
+                      className={`${currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+                        } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
                     >
                       <span className="font-bold text-lg">{"<"}</span>
                     </button>
@@ -288,11 +608,10 @@ const MyOrders = () => {
                       <button
                         key={index}
                         onClick={() => handlePageChange(index + 1)}
-                        className={`${
-                          currentPage === index + 1
+                        className={`${currentPage === index + 1
                             ? "bg-[#1d6e0f] text-white"
                             : "bg-white text-rose-600"
-                        } px-4 py-2 rounded-full transition duration-200 hover:bg-[#04c41a] hover:text-white`}
+                          } px-4 py-2 rounded-full transition duration-200 hover:bg-[#04c41a] hover:text-white`}
                       >
                         {index + 1}
                       </button>
@@ -302,11 +621,10 @@ const MyOrders = () => {
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className={`${
-                        currentPage === totalPages
+                      className={`${currentPage === totalPages
                           ? "cursor-not-allowed opacity-50"
                           : "cursor-pointer"
-                      } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
+                        } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
                     >
                       <span className="font-bold text-lg">{">"}</span>
                     </button>

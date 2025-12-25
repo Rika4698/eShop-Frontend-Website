@@ -59,9 +59,14 @@ const CheckOut = () => {
         }
         // Access the deliveryAddress from form values
         const deliveryAddress = getValues("deliveryAddress");
+        const phone = getValues("phone");
 
         if (!deliveryAddress) {
             return toast.error("Please provide a delivery address");
+        }
+
+        if (!phone) {
+            return toast.error("Please provide phone number");
         }
         // toast.loading("Placing order...");
 
@@ -74,6 +79,7 @@ const CheckOut = () => {
             transactionId,
             totalPrice: total,
             deliveryAddress,
+            phone,
             orderDetails: cart?.map((singleProduct) => ({
                 productId: singleProduct.id,
                 quantity: singleProduct.quantity,
