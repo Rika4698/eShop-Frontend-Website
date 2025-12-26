@@ -123,7 +123,7 @@ export default function Login() {
           </div>
 
           <div className="flex justify-end mb-2">
-            <Link href={"/forgot-password"} className="text-sm text-white/80 hover:text-white">
+            <Link href={"/forgot-password"} className="text-sm text-white/80 hover:text-blue-700 hover:underline">
               Forgot password?
             </Link>
           </div>
