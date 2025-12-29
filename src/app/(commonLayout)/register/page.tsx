@@ -30,21 +30,27 @@ export default function Registration() {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("CUSTOMER");
-  const [isLogInSuccess, setIsLogInSuccess] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<TSignUp>();
 
-  useEffect(() => {
-    if (isLogInSuccess) {
-      const target = redirect || "/";
-      router.push(target);
-    }
-  }, [isLogInSuccess, redirect, router]);
+  // useEffect(() => {
+  //   if (isLogInSuccess) {
+  //     const target = redirect || "/";
+  //     router.push(target);
+  //   }
+  // }, [isLogInSuccess, redirect, router]);
+
+
+
 
   const handleSignUp: SubmitHandler<TSignUp> = async (data) => {
+    setIsRegistering(true);
     console.log(data);
 
     const signUpData = {
@@ -64,10 +70,20 @@ export default function Registration() {
         const user = verifyToken(res.token) as TUser; 
         dispatch(setUser({ user: user, token: res.token }));
 
-        setIsLogInSuccess(true);
+        // setIsLogInSuccess(true);
         toast.success("Account created successfully!", { duration: 3000 });
+        const redirect = searchParams.get("redirect");
+  
+        let targetRoute = "/";
+        if (redirect && redirect !== "/login") {
+          targetRoute = redirect;
+        }
+  
+        router.replace(targetRoute);
+
       } else {
         toast.error("Failed to create account. Invalid token.");
+        setIsRegistering(false);
       }
     } catch (error: unknown) {
       console.log(error);
@@ -77,12 +93,55 @@ export default function Registration() {
       } else {
         toast.error("An unknown error occurred");
       }
+      setIsRegistering(false);
     }
   };
 
 
+   
+
 
   return (
+    <>
+    {isRegistering && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-md">
+          <div className="flex flex-col items-center gap-6 bg-white p-10 rounded-2xl shadow-2xl animate-fadeIn">
+            
+            {/* Animated Spinner */}
+            <div className="relative w-20 h-20">
+              {/* Outer ring */}
+              <div className="absolute inset-0 border-[6px] border-green-200 rounded-full"></div>
+              
+              {/* Spinning ring */}
+              <div className="absolute inset-0 border-[6px] border-green-600 rounded-full border-t-transparent animate-spin"></div>
+              
+              {/* Center pulse dot */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-4 h-4 bg-green-600 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            
+            {/* Loading Text */}
+            <div className="text-center space-y-2">
+              <h3 className="text-2xl font-bold text-gray-800">
+                Creating your account...
+              </h3>
+              <p className="text-sm text-gray-600">
+                Setting up your profile and preferences
+              </p>
+            </div>
+
+            {/* Animated Dots */}
+            <div className="flex gap-2">
+              <div className="w-2.5 h-2.5 bg-green-600 rounded-full animate-bounce"></div>
+              <div className="w-2.5 h-2.5 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
+              <div className="w-2.5 h-2.5 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      
   <div
   className="min-h-screen w-full flex items-center justify-center px-4 bg-gradient-to-br from-green-300 via-sky-200 to-blue-300 relative"
 >
@@ -217,10 +276,11 @@ export default function Registration() {
 
     <p className="text-center text-white mt-4">
       Already have an account?{" "}
-      <Link href="/login" className="text-blue-800 hover:underline">Login</Link>
+      <Link  href={redirect ? `/login?redirect=${redirect}` : "/login"} className="text-blue-800 hover:underline">Login</Link>
     </p>
   </div>
 </div>
+</>
 
 );
 

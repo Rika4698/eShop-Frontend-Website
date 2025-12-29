@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
-import { SetStateAction, useEffect } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { DashboardNav } from "./DashboardNav";
 import { adminLinks,  customerLinks,  vendorLinks } from "@/routes/admin.vendor.route";
@@ -28,6 +28,7 @@ export default function Sidebar({
   const { userData } = useUserDetails();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 console.log(userData,"userData");
 
   useEffect(() => {
@@ -71,18 +72,72 @@ console.log(userData,"userData");
     if (window.screen.width < 1024) setIsopen(false);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-  
-    logoutService();
+  const handleLogout = async () => {
+    setIsLoggingOut(true); // Start loading
+    const pathname = window.location.pathname;
 
+    try {
+      // Clear Redux state
+      dispatch(logout());
 
-    toast.success("Logged out successfully", { duration: 3000 });
-// Redirect to /home after logout
-router.push("/login");
+      // Call logout service to clear cookies
+      await logoutService(window.location.pathname);
+
+      toast.success("Logged out successfully", { duration: 2000 });
+
+      // Small delay to show success message
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Redirect to login with current path
+      window.location.href = `/login?redirect=${pathname}`;
+    } catch (error) {
+      console.error("Logout error:", error);
+      // toast.error("Logout failed. Please try again.");
+      setIsLoggingOut(false);
+    }
   };
 
   return (
+    <>
+    {isLoggingOut && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-md">
+          <div className="flex flex-col items-center gap-6 bg-white p-10 rounded-2xl shadow-2xl animate-fadeIn">
+            
+            {/* Animated Spinner */}
+            <div className="relative w-20 h-20">
+              {/* Outer ring */}
+              <div className="absolute inset-0 border-[6px] border-green-200 rounded-full"></div>
+              
+              {/* Spinning ring */}
+              <div className="absolute inset-0 border-[6px] border-green-600 rounded-full border-t-transparent animate-spin"></div>
+              
+              {/* Center pulse dot */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-4 h-4 bg-green-600 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            
+            {/* Loading Text */}
+            <div className="text-center space-y-2">
+              <h3 className="text-2xl font-bold text-gray-800">
+                Logging out...
+              </h3>
+              <p className="text-sm text-gray-600">
+                Please wait while we securely end your session
+              </p>
+            </div>
+
+            {/* Animated Dots */}
+            <div className="flex gap-2">
+              <div className="w-2.5 h-2.5 bg-green-600 rounded-full animate-bounce"></div>
+              <div className="w-2.5 h-2.5 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
+              <div className="w-2.5 h-2.5 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      
     <aside
       style={{
         transition: "0.3s",
@@ -132,16 +187,46 @@ router.push("/login");
         </div>
           {/* Logout Button */}
       <div className="px-4 py-10">
-        <Button
-          onClick={handleLogout}
-          className="w-[90%] mx-auto bg-[#1eb500] hover:bg-[#39ad4e]"
-        >
-          Logout
-        </Button>
+         <Button
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="w-[90%] mx-auto bg-[#1eb500] hover:bg-[#39ad4e] disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {isLoggingOut ? (
+                <span className="flex items-center gap-2">
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Logging out...
+                </span>
+              ) : (
+                "Logout"
+              )}
+            </Button>
+        
       </div>
       </div>
 
     
     </aside>
+
+    </>
   );
 }

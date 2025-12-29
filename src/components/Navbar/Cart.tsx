@@ -30,7 +30,7 @@ const Cart = ({ setOpenCart, openCart }:any) => {
             />
           </div>
           
-          <CartView/>
+          <CartView setOpenCart={setOpenCart}/>
         </div>
       </motion.div>
     </div>

@@ -33,9 +33,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import useUserDetails from "@/hooks/useUser";
 
 const ProductDetails = () => {
   const params = useParams();
+  const { userData } = useUserDetails();
+const userRole = userData?.userData?.role;
   const cart = useAppSelector((state) => state.products.cart);
  
   const productId = params?.id as string;
@@ -350,6 +353,11 @@ console.log(data,"rev");
             )}
           </div>
 
+
+          {userRole === "customer" ? (
+          
+          <>
+
           {/* Quantity Selector */}
           <div className="space-y-2">
             <p className="text-gray-700 text-base md:text-lg font-medium">
@@ -393,8 +401,20 @@ console.log(data,"rev");
               </button>
             )}
           </div>
+          </>
+      ) : (
+  <div className="py-4 text-center text-gray-500 font-semibold">
+    Only customers can add products to the cart.
+  </div>
+     )}
+
         </div>
       </div>
+
+
+
+
+
 
       {/* Shop Owner Section */}
       <section className="mb-12">

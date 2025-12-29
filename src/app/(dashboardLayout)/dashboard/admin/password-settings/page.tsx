@@ -44,17 +44,19 @@ const Security = () => {
 
   const handleLogoutAndRedirect = async () => {
     // Clear Redux state
+    const pathname = window.location.pathname;
     dispatch(logout());
     dispatch(clearCart());
     dispatch(clearCoupon());
     
     // Clear cookies
-    await logoutService();
+    await logoutService(window.location.pathname);
     
     // Redirect to login
-    router.push("/login");
+   router.replace(`/login?redirect=${pathname}`);
   };
 
+  
   const handlePasswordChange = async (data: IFormInputs) => {
     const passwordInfo = {
       oldPassword: data.oldPassword,

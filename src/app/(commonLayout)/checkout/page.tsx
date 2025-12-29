@@ -25,13 +25,25 @@ import { FaCircleXmark } from "react-icons/fa6";
 
 import { RiCoupon2Fill, RiErrorWarningFill } from "react-icons/ri";
 import { toast } from "sonner";
-import Loading from "../loading";
+import Loading from "../../loading";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 const CheckOut = () => {
     const { userData } = useUserDetails();
       const router = useRouter();
+   const {cart} = useAppSelector((state) => state.products);
+      
+     useEffect(() => {
+        if (cart.length === 0) {
+            toast.info("Your cart is empty. Redirecting to products...", {
+                duration: 2000,
+            });
+            router.push("/all-products"); 
+        }
+    }, [cart.length, router]);
+
+
     const { handleSubmit, formState, register, reset, getValues } =
         useForm<FieldValues>({
             defaultValues: {
@@ -199,9 +211,7 @@ const CheckOut = () => {
     // console.log(userData?.userData?.customerCoupons);
     const [placeOrder] = usePlaceOrderMutation();
 
-    const {
-        cart
-    } = useAppSelector((state) => state.products);
+   
 
     const appliedCoupon = useAppSelector(selectAppliedCoupon);
 

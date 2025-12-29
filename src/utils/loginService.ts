@@ -2,7 +2,9 @@
 "use server";
 
 import envData from "@/config/envData";
+import { deleteCookie, setCookie } from "@/lib/tokenHandlers";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 
 
@@ -40,6 +42,9 @@ console.log(role,"login");
 };
 
 
+
+
+
 export const loginUser = async (userData: Record<string, any>) => {
   try {
     const response = await fetch(`${envData.baseUrl}/auth/login`, {
@@ -47,6 +52,8 @@ export const loginUser = async (userData: Record<string, any>) => {
       headers: {
         "Content-Type": "application/json",
       },
+      
+      
       body: JSON.stringify(userData),
     });
 
@@ -58,9 +65,21 @@ export const loginUser = async (userData: Record<string, any>) => {
     const data = await response.json();
 
     if (data.success) {
-      const cookieStore = await cookies();
-      cookieStore.set("accessToken", data?.data?.accessToken);
-      cookieStore.set("refreshToken", data?.data?.refreshToken);
+        await setCookie("accessToken", data?.data?.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24, // 1 day
+        path: "/",
+      });
+
+      await setCookie("refreshToken", data?.data?.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: "/",
+      }); 
     }
 
     return data;
@@ -70,11 +89,18 @@ export const loginUser = async (userData: Record<string, any>) => {
 };
 
 
-export const logoutService = async () => {
-  const cookieStore = await cookies();
-  cookieStore.delete("accessToken");
-  cookieStore.delete("refreshToken");
+
+
+
+export const logoutService = async (pathname: string) => {
+  
+ await deleteCookie("accessToken");
+  await deleteCookie("refreshToken");
+   redirect(`/login?redirect=${pathname}`);
 };
+
+
+
 
 export const getAccessToken = async () => {
   const cookieStore = await cookies();

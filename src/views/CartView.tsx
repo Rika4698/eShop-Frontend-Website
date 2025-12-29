@@ -4,7 +4,13 @@ import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import CartProductCard from "./CartProductCard";
 
-const CartViews = () => {
+
+interface CartViewsProps {
+    setOpenCart: (open: boolean) => void;
+}
+
+
+const CartViews = ({setOpenCart}:CartViewsProps) => {
     const { cart } = useAppSelector((state) => state.products);
     const router = useRouter();
     const subtotal = cart.reduce(
@@ -13,6 +19,7 @@ const CartViews = () => {
     );
 
     const handleCheckout = () => {
+        setOpenCart(false);
         router.push("/checkout");
     };
 

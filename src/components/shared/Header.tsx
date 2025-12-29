@@ -205,18 +205,18 @@ const Header = () => {
                   </DropdownMenuContent>
                      </DropdownMenu>
                   </div>
-           <div className="flex ">
+           <Link href={"/"} className="flex ">
               <Image src="/logo.png" className="md:w-[72px] w-[50px] pt-2 hidden md:block"
                           width={170} height={50} alt="logo"/>
-                 </div>
-                      <div>
+                 </Link>
+             <Link href={"/"}>
              <h2 className="md:text-3xl text-[20px] font-bold text-green-800">
                  E<span className="md:text-2xl text-[16px] text-green-500">Shop</span> 
                  </h2>
               <p className="text-[12px] md:text-sm text-gray-400 flex">
                      Online Shopping
                  </p>
-                         </div>
+                         </Link>
                          </div>
                     </div>
 

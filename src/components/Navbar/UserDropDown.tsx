@@ -31,11 +31,11 @@ export function UserDropDown({ user }: UserDropDownProps) {
 
     const users = user?.userData;
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         dispatch(logout());
         dispatch(clearCart());
         dispatch(clearCoupon());
-        logoutService();
+        await logoutService(window.location.pathname);
 
         toast.success("Logged out successfully", { duration: 3000 });
     };

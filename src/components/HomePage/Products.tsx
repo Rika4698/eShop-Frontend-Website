@@ -51,6 +51,9 @@ const HomeProducts = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  
+
   // Update queryObj whenever currentPage or dataPerPage changes
   useEffect(() => {
     const newQueryObj = {

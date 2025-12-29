@@ -201,10 +201,10 @@ console.log(singleProduct,"sa");
     </Link>
 
       <Link
-      href={`/login`}
+      href={`/product/${singleProduct.id}`}
       className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-red-500 hover:text-white hover:rotate-[360deg] transition-all"
       >
-        <button title="Login as a customer">
+        <button title="view details">
     <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
     </button>
         </Link> </>
@@ -261,6 +261,8 @@ console.log(singleProduct,"sa");
             <Eye  className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
                   </Link>
+
+
                    </ul>
             <span  onClick={handleAddToCart}
              className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-32 h-16 sm:w-40 sm:h-[75px] rounded-t-full bg-primary text-white flex flex-col items-center justify-center text-xs sm:text-sm font-semibold opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300 cursor-pointer border border-white"  >

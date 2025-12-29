@@ -49,7 +49,12 @@ export const adminLinks: NavItem[] = [
     href: "/dashboard/admin/admin-profile",
     title: "Admin Profile",
     Icon: CiUser,
-  }
+  },
+   {
+    href: "/dashboard/admin/password-settings",
+    title: "Password Setting",
+    Icon: RiUserSettingsLine,
+  },
   
   
 ];
@@ -70,6 +75,11 @@ export const vendorLinks: NavItem[] = [
     href: "/dashboard/vendor/update-shop",
     Icon: GrServices,
     title: "Update Shop",
+  },
+   {
+    href: "/dashboard/vendor/password-settings",
+    title: "Password Setting",
+    Icon: RiUserSettingsLine,
   },
    {
     href: "/dashboard/vendor/manage-orders",

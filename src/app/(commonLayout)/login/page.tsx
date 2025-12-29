@@ -13,6 +13,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { verifyToken } from "@/utils/verifyToken";
 import { setUser, TUser } from "@/redux/features/auth/authSlice";
 import { loginUser } from "@/utils/loginService";
+import { getDefaultDashboardRoute, UserRole } from "@/lib/auth-utils";
 
 export type TLogin = {
   email: string;
@@ -26,33 +27,45 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [isLogInSuccess, setIsLogInSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<TLogin>();
 
-  useEffect(() => {
-    if (isLogInSuccess) {
-      const target = redirect || "/";
-      router.push(target);
-    }
-  }, [isLogInSuccess, redirect, router]);
+  // useEffect(() => {
+  //   if (isLogInSuccess) {
+  //     const target = redirect || "/";
+  //     router.push(target);
+  //   }
+  // }, [isLogInSuccess, redirect, router]);
 
   const handleLogin: SubmitHandler<FieldValues> = async (data) => {
-    toast.loading("Loading...");
-    try {
-      const res = await loginUser(data);
+ setIsLoading(true);
+  const loadingToast = toast.loading("Logging in...");
 
-      if (res.success) {
-        toast.dismiss();
-        const user = verifyToken(res.data.accessToken) as TUser;
-        dispatch(setUser({ user: user, token: res.data.accessToken }));
+  try {
+    const res = await loginUser(data);
 
-        setIsLogInSuccess(true);
-        toast.success("Logged in successfully", { duration: 3000 });
+    if (res.success) {
+      const user = verifyToken(res.data.accessToken) as TUser;
+      dispatch(setUser({ user, token: res.data.accessToken }));
+
+      toast.dismiss(loadingToast);
+      toast.success("Logged in successfully");
+
+      const redirect = searchParams.get("redirect");
+
+      let targetRoute = "/";
+      if (redirect && redirect !== "/login") {
+        targetRoute = redirect;
       }
-    } catch (error: any) {
-      toast.dismiss();
-      toast.error(error?.message);
+
+      router.replace(targetRoute);
     }
+  } catch (error: any) {
+    toast.dismiss(loadingToast);
+    toast.error(error?.message || "Login failed");
+    setIsLoading(false);
+  }
   };
 
  
@@ -89,7 +102,10 @@ export default function Login() {
             <label className="text-sm font-medium text-white/90">Email *</label>
             <input
               type="text"
-              {...register("email", { required: "Email is required" })}
+              {...register("email", { required: "Email is required",  pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address"
+                } })}
               className="w-full p-3 mt-1 rounded-lg bg-white/30 border border-white/40 focus:ring-2 focus:ring-green-200 outline-none text-black "
               placeholder="Enter your email"
             />
@@ -103,7 +119,10 @@ export default function Login() {
             <label className="text-sm font-medium text-white/90">Password *</label>
             <input
               type={showPassword ? "text" : "password"}
-              {...register("password", { required: "Password is required" })}
+              {...register("password", { required: "Password is required", minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters"
+                } })}
               className="w-full p-3 mt-1 rounded-lg bg-white/30 border border-white/40 focus:ring-2 focus:ring-green-200 outline-none text-black "
               placeholder="Enter your password"
             />
@@ -130,15 +149,26 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold text-lg transition"
+            disabled={isLoading}
+            className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-300 disabled:cursor-not-allowed text-white py-3 rounded-lg font-semibold text-lg transition shadow-lg hover:shadow-xl flex items-center justify-center"
           >
-            Login
+            {isLoading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Logging in...
+              </>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
 
         <p className="text-center text-white/80 mt-6">
           Don't have an account?{" "}
-          <Link href="/register" className="text-green-800 font-medium hover:underline">
+          <Link href={redirect ? `/register?redirect=${redirect}` : "/register"} className="text-green-800 font-medium hover:underline">
             Register
           </Link>
         </p>
