@@ -233,7 +233,7 @@ useEffect(() => {
         className={`px-4 py-2 rounded-lg ${
           currentPage === index + 1
             ? "bg-[#03b500] text-white"
-            : "bg-[#2ab500] text-gray-700 hover:bg-[#00b536]"
+            : "bg-[#babeb8] text-gray-700 hover:bg-[#ccd4cf]"
         }`}
       >
         {index + 1}

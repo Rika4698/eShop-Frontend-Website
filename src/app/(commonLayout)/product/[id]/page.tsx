@@ -354,7 +354,7 @@ console.log(data,"rev");
           </div>
 
 
-          {userRole === "customer" ? (
+          {userRole === "CUSTOMER" ? (
           
           <>
 

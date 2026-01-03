@@ -7,13 +7,14 @@ import useUserDetails from "@/hooks/useUser";
 import { useChangePasswordMutation } from "@/redux/features/category/authApi";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/features/auth/authSlice";
 import { clearCart } from "@/redux/features/products/productSlice";
 import { clearCoupon } from "@/redux/features/coupon/couponSlice";
 import { logoutService } from "@/utils/loginService";
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from "lucide-react";
+import { baseApi } from "@/redux/api/baseApi";
 
 interface IFormInputs {
   email: string;
@@ -27,6 +28,7 @@ const Security = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useAppDispatch();
 
   const {
@@ -44,16 +46,16 @@ const Security = () => {
 
   const handleLogoutAndRedirect = async () => {
     // Clear Redux state
-    const pathname = window.location.pathname;
-    dispatch(logout());
-    dispatch(clearCart());
-    dispatch(clearCoupon());
-    
-    // Clear cookies
-    await logoutService(window.location.pathname);
-    
-    // Redirect to login
-   router.replace(`/login?redirect=${pathname}`);
+     dispatch(logout());
+        dispatch(clearCart());
+        dispatch(clearCoupon());
+        dispatch(baseApi.util.resetApiState());
+        
+        // Clear cookies
+        await logoutService();
+        
+        // Redirect to login
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
   };
 
   

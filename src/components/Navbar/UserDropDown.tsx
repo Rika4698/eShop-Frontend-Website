@@ -17,6 +17,11 @@ import { logoutService } from "@/utils/loginService";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import { baseApi } from "@/redux/api/baseApi";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+
+
 interface UserDropDownProps {
     user: {
         userData: {
@@ -27,18 +32,47 @@ interface UserDropDownProps {
     };
 }
 export function UserDropDown({ user }: UserDropDownProps) {
+   
     const dispatch = useAppDispatch();
-
+ const router = useRouter();
+ const pathname = usePathname();
     const users = user?.userData;
+    const searchParams = useSearchParams();
+
+const fullPath = searchParams.toString()
+  ? `${pathname}?${searchParams.toString()}`
+  : pathname;
+
+    const shouldRedirectAfterLogout =
+    pathname.startsWith("/product") ||
+    pathname === "/shop" ||
+    pathname === "/shop-page";
 
     const handleLogout = async () => {
-        dispatch(logout());
-        dispatch(clearCart());
-        dispatch(clearCoupon());
-        await logoutService(window.location.pathname);
+        try {
+   
+    dispatch(logout());
+    dispatch(clearCart());
+    dispatch(clearCoupon());
+    dispatch(baseApi.util.resetApiState());
 
-        toast.success("Logged out successfully", { duration: 3000 });
-    };
+   
+    await logoutService();
+
+    
+    toast.success("Logged out successfully");
+   if (shouldRedirectAfterLogout) {
+        router.replace(
+          `/login?redirect=${encodeURIComponent(fullPath)}`
+        );
+      }
+  } catch (err) {
+    toast.error("Logout failed");
+  }
+
+
+  };
+
 
     // console.log(user?.role,"role");
     // console.log(users);

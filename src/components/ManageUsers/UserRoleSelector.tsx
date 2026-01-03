@@ -11,25 +11,25 @@ import { UserRole } from "@/types/modal";
 import React from "react";
 
 interface IProps {
-  onRoleChange: (role: UserRole | " ") => void;
-  selectedRole?: UserRole | " ";
+  onRoleChange: (role: UserRole | null) => void;
+  selectedRole?: UserRole | null;
 }
 
 const UserRoleSelector: React.FC<IProps> = ({
   onRoleChange,
-  selectedRole = " ",
+  selectedRole ,
 }) => {
   return (
     <div className="mb-4">
       <Select
-        value={selectedRole} // Use value instead of defaultValue for controlled component
-        onValueChange={(value) => onRoleChange(value as UserRole | " ")}
+        value={selectedRole ?? "all"} // Use value instead of defaultValue for controlled component
+        onValueChange={(value) => onRoleChange(value === "all" ? null : (value as UserRole))}
       >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Filter by role" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value=" ">All</SelectItem>
+          <SelectItem value="all">All</SelectItem>
           <SelectItem value="CUSTOMER">Customer</SelectItem>
           <SelectItem value="VENDOR">Vendor</SelectItem>
           <SelectItem value="ADMIN">Admin</SelectItem>

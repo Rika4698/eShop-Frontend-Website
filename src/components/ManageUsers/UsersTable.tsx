@@ -18,7 +18,7 @@ import { useState } from "react";
 interface IProps {
   users: IUser[];
   isLoading: boolean;
-  onDelete: (userId: string) => void;  // onDelete prop
+  onDelete: (userId: string) => void;  
 }
 
 const UsersTable: React.FC<IProps> = ({ users, isLoading, onDelete }) => {
@@ -37,7 +37,7 @@ const UsersTable: React.FC<IProps> = ({ users, isLoading, onDelete }) => {
     setIsDeleteOpen(true);
   };
 
-
+  // console.log(users)
   return (
       <div>
       <Table>
@@ -82,13 +82,25 @@ const UsersTable: React.FC<IProps> = ({ users, isLoading, onDelete }) => {
     <LucideMoreVertical className="w-4 h-4" />
   </Button>
           )}
-
+               {( (user.customer?.orders?.length || 0) === 0 &&
+      (user.customer?.following?.length || 0) === 0 &&
+      (user.vendor?.products?.length || 0) === 0 &&
+      (user.vendor?.followers?.length || 0) === 0) && 
                   <Button
                     onClick={() => handleDeleteClick(user.id)}
                     variant="destructive"
                   >
                     <Trash2 className="w-4 h-4" />
-                  </Button>
+                  </Button>}
+
+                  {user.status === "BLOCKED" && 
+      ((user.customer?.orders?.length || 0) > 0 ||
+        (user.customer?.following?.length || 0) > 0 ||
+        (user.vendor?.products?.length || 0) > 0 ||
+        (user.vendor?.followers?.length || 0) > 0)? 
+                    <h2 className="text-gray-500">No Action</h2>:""
+                  }
+
                 </div>
               </TableCell>
             </TableRow>

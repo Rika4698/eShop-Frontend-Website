@@ -13,60 +13,73 @@ const ManageUsersView = () => {
     page: number;
     limit: number;
     searchTerm: string;
-    role: UserRole | " ";
+    role: UserRole | null;
   }>({
     page: 1,
     limit: 10,
     searchTerm: "",
-    role: " ", 
+    role: null, 
   });
 
   const { page, limit, searchTerm, role } = query;
 
-  const { data, isFetching } = useGetAllTypeUsersQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isFetching } = useGetAllTypeUsersQuery({
+  page: query.page,
+    limit: query.limit,
+    searchTerm: query.searchTerm.length ? query.searchTerm : undefined,
+    role: query.role ?? undefined,
+});
 
-  const filteredUsers = useMemo(() => {
-    if (!data || !data.data) return [];
+  console.log(data,"dt");
 
-    const term = searchTerm.trim().toLowerCase();
+  // const filteredUsers = useMemo(() => {
+  //   if (!data || !data.data) return [];
 
-    return data.data.filter((user) => {
-      const matchesSearch =
-        !term ||
-        (user.name?.toLowerCase().includes(term) ?? false) ||
-        (user.email?.toLowerCase().includes(term) ?? false) ||
-        (user.role?.toLowerCase().includes(term) ?? false);
+  //   const term = searchTerm.trim().toLowerCase();
 
-      const matchesRole = !role || role === " " || user.role === role;
+  //   return data.data.filter((user) => {
+  //     const matchesSearch =
+  //       !term ||
+  //       (user.name?.toLowerCase().includes(term) ?? false) ||
+  //       (user.email?.toLowerCase().includes(term) ?? false) ||
+  //       (user.role?.toLowerCase().includes(term) ?? false);
 
-      return matchesSearch && matchesRole;
-    });
-  }, [data, searchTerm, role]);
+  //     const matchesRole = !role || role === " " || user.role === role;
 
-  const totalUsers = filteredUsers.length;
-  const totalPages = Math.ceil(totalUsers / limit);
-  const paginatedUsers = filteredUsers.slice((page - 1) * limit, page * limit);
+  //     return matchesSearch && matchesRole;
+  //   });
+  // }, [data, searchTerm, role]);
 
-  const handleSearchChange = useCallback((newSearchTerm: string) => {
-    console.log("Search term changed:", newSearchTerm); 
-    setQuery((prev) => ({ ...prev, searchTerm: newSearchTerm, page: 1 }));
+  const users = data?.data ?? [];
+  const meta = data?.meta;
+  const totalPages = meta?.totalPage ?? 1;
+   const totalUsers = data?.meta?.total || 0;
+
+
+  const handleSearchChange = useCallback((value?: string) => {
+    setQuery((prev) => ({
+      ...prev,
+      searchTerm: value ?? "",
+      page: 1,
+    }));
   }, []);
 
 
+  //  Role
+  const handleRoleChange = useCallback((newRole: UserRole | null) => {
+  setQuery((prev) => ({
+    ...prev,
+    role: newRole,
+    page: 1,
+  }));
+}, []);
 
-  const handleRoleChange = useCallback((newRole: UserRole | " ") => {
-    setQuery((prev) => ({ ...prev, role: newRole, page: 1 }));
-  }, []);
-
-
-
-  const handlePageChange = useCallback((newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setQuery((prev) => ({ ...prev, page: newPage }));
+  // Pagination
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setQuery((prev) => ({ ...prev, page }));
     }
-  }, [totalPages]);
+  };
 
   
 
@@ -84,15 +97,15 @@ const ManageUsersView = () => {
         />
 
         <UserRoleSelector 
-          onRoleChange={handleRoleChange} 
-          selectedRole={role}
+          selectedRole={query.role}
+        onRoleChange={handleRoleChange}
         />
 
         {isFetching ? (
           <div>Loading...</div>
         ) : (
           <UsersTable
-            users={paginatedUsers}
+            users={users}
             isLoading={isFetching}
             onDelete={(id) => console.log("Deleted", id)}
           />
@@ -100,8 +113,8 @@ const ManageUsersView = () => {
 
         <div className="flex justify-center mt-4 space-x-2">
           <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page === 1}
+            onClick={() => handlePageChange(query.page - 1)}
+            disabled={query.page === 1}
             className="px-3 py-1 border rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
           >
             Previous
@@ -112,7 +125,7 @@ const ManageUsersView = () => {
               key={idx}
               onClick={() => handlePageChange(idx + 1)}
               className={`px-3 py-1 border rounded ${
-                page === idx + 1
+                query.page === idx + 1
                   ? "bg-green-700 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               }`}
@@ -122,8 +135,8 @@ const ManageUsersView = () => {
           ))}
 
           <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page === totalPages}
+            onClick={() => handlePageChange(query.page + 1)}
+            disabled={query.page === totalPages}
             className="px-3 py-1 border rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
           >
             Next

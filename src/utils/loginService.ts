@@ -4,7 +4,7 @@
 import envData from "@/config/envData";
 import { deleteCookie, setCookie } from "@/lib/tokenHandlers";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+
 
 
 
@@ -26,14 +26,38 @@ console.log(role,"login");
     });
 
     const data = await response.json();
+    // console.log("Register Response:", JSON.stringify(data, null, 2));
 
     if (!response.ok || !data.success) {
       throw new Error(data.message || "Registration failed");
     }
 
-    // Set cookie
-    const cookieStore = await cookies();
-    cookieStore.set("accessToken", data?.token);
+    const accessToken = data?.data?.accessToken || data.token;
+    const refreshToken = data?.data?.refreshToken;
+
+    // console.log(" Access Token:", data?.token ? "Found " : "Missing ");
+    // console.log("Refresh Token:", data?.data?.refreshToken ? "Found " : "Missing ");
+        
+    if(accessToken){
+      await setCookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24, // 1 day
+      path: "/",
+    });
+  }
+
+   
+    if (refreshToken) {
+      await setCookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: "/",
+      });
+    }
 
     return data;
   } catch (error: any) {
@@ -63,6 +87,7 @@ export const loginUser = async (userData: Record<string, any>) => {
     }
 
     const data = await response.json();
+    // console.log("Register Response:", JSON.stringify(data, null, 2));
 
     if (data.success) {
         await setCookie("accessToken", data?.data?.accessToken, {
@@ -92,11 +117,11 @@ export const loginUser = async (userData: Record<string, any>) => {
 
 
 
-export const logoutService = async (pathname: string) => {
+export const logoutService = async () => {
   
  await deleteCookie("accessToken");
   await deleteCookie("refreshToken");
-   redirect(`/login?redirect=${pathname}`);
+  
 };
 
 

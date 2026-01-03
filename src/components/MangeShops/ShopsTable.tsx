@@ -55,7 +55,7 @@ const ShopsTable: React.FC<IProps> = ({ shops, isLoading, onDelete }) => {
             <TableCell className="whitespace-nowrap">
               {shop.email || "No email"}
             </TableCell>
-            <TableCell className="whitespace-nowrap">
+            <TableCell className="max-w-[250px] whitespace-nowrap overflow-hidden text-ellipsis">
               {shop.vendor.description || "No description"}
             </TableCell>
             <TableCell className="whitespace-nowrap">

@@ -48,40 +48,47 @@ const formatTime = (dateString: string) => {
 const OrderList = () => {
   const { userData } = useUserDetails();
   const [currentPage, setCurrentPage] = useState(1);
-  const dataPerPage = 8;
+  const limit = 8;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
-  const [queryObj, setQueryObj] = useState({
+
+  // const [queryObj, setQueryObj] = useState({
+  //   page: currentPage,
+  //   limit,
+  //   vendorId: userData?.userData?.id,
+  // });
+
+  const { data: vendorOrders, isLoading , isFetching } = useGetAllOrdersQuery({
     page: currentPage,
-    limit: dataPerPage,
+    limit,
     vendorId: userData?.userData?.id,
+  }, {
+    skip: !userData?.userData.id,
+    refetchOnMountOrArgChange: true,
   });
 
-  const { data: vendorOrders, isLoading } = useGetAllOrdersQuery(queryObj, {
-    skip: !userData?.userData,
-  });
+  console.log(vendorOrders);
 
-  const totalPages = Math.ceil(
-    (vendorOrders?.meta?.total || 0) / dataPerPage
-  );
+  const orders = vendorOrders?.data || [];
+  const totalPages = Math.ceil((vendorOrders?.meta?.total || 0) / limit);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page: number) => {
+  //   setCurrentPage(page);
+  // };
 
    const openDetailsDialog = (order: IOrder) => {
     setSelectedOrder(order);
     setIsDialogOpen(true);
   };
 
-  useEffect(() => {
-    setQueryObj((prev) => ({
-      ...prev,
-      page: currentPage,
-      limit: dataPerPage,
-      vendorId: userData?.userData?.id,
-    }));
-  }, [currentPage, userData?.userData]);
+  // useEffect(() => {
+  //   setQueryObj((prev) => ({
+  //     ...prev,
+  //     page: currentPage,
+  //     limit: dataPerPage,
+  //     vendorId: userData?.userData?.id,
+  //   }));
+  // }, [currentPage, userData?.userData]);
 
   // Get payment status badge color
   const getPaymentStatusColor = (status: string) => {
@@ -96,13 +103,21 @@ const OrderList = () => {
         return "bg-gray-100 text-gray-800";
     }
   };
+
+  if (isLoading) {
+    return <div className="text-center py-20">Loading...</div>;
+  }
+
 console.log(vendorOrders?.data);
+
+
+
   return (
     <div>
       <h1 className="text-xl font-semibold mb-4">Order History</h1>
 
       <div>
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <div className="text-center py-8">Loading...</div>
         ) : (
           <div>
@@ -125,13 +140,13 @@ console.log(vendorOrders?.data);
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {vendorOrders?.data?.length > 0 &&
-                    vendorOrders?.data?.map((singleOrder: IOrder, index: number) => {
+                  {orders?.length > 0 &&
+                    orders?.map((singleOrder: IOrder, index: number) => {
                       return (
                         <TableRow key={singleOrder.id}>
                           {/* Serial Number */}
                           <TableCell className="font-medium">
-                            {index + 1 + (currentPage - 1) * dataPerPage}
+                            {(currentPage - 1) * limit + index + 1 }
                           </TableCell>
 
                           {/* Order Date & Time */}
@@ -540,50 +555,39 @@ console.log(vendorOrders?.data);
 
             {/* Pagination */}
             <div className="pt-7">
-              {vendorOrders?.data?.length > 0 && (
-                <div className="flex justify-center items-center mt-4">
-                  <div className="flex items-center space-x-2">
-                    {/* Left Arrow Button */}
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className={`${
-                        currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-                      } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
-                    >
-                      <span className="font-bold text-lg">{"<"}</span>
-                    </button>
+              {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => p - 1)}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            {"<"}
+          </button>
 
-                    {/* Page Numbers */}
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handlePageChange(index + 1)}
-                        className={`${
-                          currentPage === index + 1
-                            ? "bg-[#1d6e0f] text-white"
-                            : "bg-white text-rose-600"
-                        } px-4 py-2 rounded-full transition duration-200 hover:bg-[#04c41a] hover:text-white`}
-                      >
-                        {index + 1}
-                      </button>
-                    ))}
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === i + 1
+                  ? "bg-green-600 text-white"
+                  : "border "
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
 
-                    {/* Right Arrow Button */}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className={`${
-                        currentPage === totalPages
-                          ? "cursor-not-allowed opacity-50"
-                          : "cursor-pointer"
-                      } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
-                    >
-                      <span className="font-bold text-lg">{">"}</span>
-                    </button>
-                  </div>
-                </div>
-              )}
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            {">"}
+          </button>
+        </div>
+      )}
             </div>
           </div>
         )}

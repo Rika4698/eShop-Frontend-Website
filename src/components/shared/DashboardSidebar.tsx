@@ -13,7 +13,10 @@ import { X } from "lucide-react";
 
 import { logout } from "@/redux/features/auth/authSlice";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { baseApi } from "@/redux/api/baseApi";
+import { clearCart } from "@/redux/features/products/productSlice";
+import { clearCoupon } from "@/redux/features/coupon/couponSlice";
 type SidebarProps = {
   className?: string;
   setIsopen: React.Dispatch<SetStateAction<boolean>>;
@@ -28,6 +31,7 @@ export default function Sidebar({
   const { userData } = useUserDetails();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const pathname = usePathname();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 console.log(userData,"userData");
 
@@ -73,29 +77,33 @@ console.log(userData,"userData");
   };
 
   const handleLogout = async () => {
-    setIsLoggingOut(true); // Start loading
-    const pathname = window.location.pathname;
+    setIsLoggingOut(true); 
+    
 
     try {
-      // Clear Redux state
+    
       dispatch(logout());
-
-      // Call logout service to clear cookies
-      await logoutService(window.location.pathname);
+       dispatch(clearCart());
+         dispatch(clearCoupon());
+     dispatch(baseApi.util.resetApiState());
+      await logoutService();
 
       toast.success("Logged out successfully", { duration: 2000 });
 
-      // Small delay to show success message
+      
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Redirect to login with current path
-      window.location.href = `/login?redirect=${pathname}`;
+   
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
     } catch (error) {
       console.error("Logout error:", error);
-      // toast.error("Logout failed. Please try again.");
+      
       setIsLoggingOut(false);
     }
   };
+
+ 
+  
 
   return (
     <>
@@ -190,7 +198,7 @@ console.log(userData,"userData");
          <Button
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="w-[90%] mx-auto bg-[#1eb500] hover:bg-[#39ad4e] disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-[90%] mx-auto bg-[#f72b2b] hover:bg-[#bc0909] disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isLoggingOut ? (
                 <span className="flex items-center gap-2">

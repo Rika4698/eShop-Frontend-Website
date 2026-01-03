@@ -20,6 +20,7 @@ interface VendorStats {
   totalRevenue: number;
   totalReviews: number;
   averageRating: number;
+  totalFollowers: number;
 }
 
 const WelcomePage = () => {
@@ -59,6 +60,18 @@ const WelcomePage = () => {
   const isLoading = userLoading || productsLoading || ordersLoading || reviewsLoading || !userData?.userData?.id;
 
 
+// Average Rating
+    const averageRating = useMemo(() => {
+  if (!reviewsData?.data?.length) return 0;
+
+  const sum = reviewsData.data.reduce(
+    (acc: number, r: any) => acc + (r.rating ?? 0),
+    0
+  );
+
+  return Number((sum / reviewsData.data.length).toFixed(1));
+}, [reviewsData]);
+
 
 
   const vendorStats = useMemo<VendorStats>(() => {
@@ -83,12 +96,12 @@ const WelcomePage = () => {
     const totalCustomers = uniqueCustomers.size;
 
     // Total Reviews
-    const totalReviews = reviewsData?.length || 0;
+    const totalReviews = reviewsData?.meta.total || 0;
 
-    // Average Rating
-    const averageRating = totalReviews > 0
-      ? (reviewsData?.reduce((sum: number, review: any) => sum + review.rating, 0) || 0) / totalReviews
-      : 0;
+    // console.log(reviewsData,"rr");
+
+     const totalFollowers =
+    userData?.userData?.followers?.length || 0;
 
     return {
       totalProducts,
@@ -97,8 +110,9 @@ const WelcomePage = () => {
       totalRevenue,
       totalReviews,
       averageRating,
+      totalFollowers,
     };
-  }, [productsData, ordersData, reviewsData]);
+  }, [productsData, ordersData, reviewsData, averageRating]);
 
   const stats = [
     {
@@ -107,7 +121,7 @@ const WelcomePage = () => {
       icon: FaBox,
       color: "bg-blue-500",
       gradient: "from-blue-400 to-blue-600",
-      link: "/dashboard/vendor/products",
+      
     },
     {
       title: "Total Orders",
@@ -115,7 +129,7 @@ const WelcomePage = () => {
       icon: FaShoppingCart,
       color: "bg-orange-500",
       gradient: "from-orange-400 to-orange-600",
-      link: "/dashboard/vendor/orders",
+      
     },
     {
       title: "Total Customers",
@@ -123,15 +137,21 @@ const WelcomePage = () => {
       icon: FaUsers,
       color: "bg-purple-500",
       gradient: "from-purple-400 to-purple-600",
-      link: "/dashboard/vendor/orders",
+     
     },
+     {
+    title: "Total Followers", 
+    value: vendorStats.totalFollowers.toString(),
+    icon: FaUsers,
+    gradient: "from-pink-400 to-pink-600",
+  },
     {
       title: "Total Reviews",
       value: vendorStats.totalReviews.toString(),
       icon: FaStar,
       color: "bg-yellow-500",
       gradient: "from-yellow-400 to-yellow-600",
-      link: "/dashboard/vendor/reviews",
+      
     },
   ];
 
@@ -141,28 +161,28 @@ const WelcomePage = () => {
       description: "Create and list a new product",
       icon: Package,
       color: "bg-blue-50 text-blue-600 hover:bg-blue-100",
-      link: "/dashboard/vendor/products/add",
+      link: "/dashboard/vendor/create-product",
     },
     {
       title: "View Products",
       description: "Manage your product inventory",
       icon: ShoppingBag,
       color: "bg-green-50 text-green-600 hover:bg-green-100",
-      link: "/dashboard/vendor/products",
+      link: "/dashboard/vendor/manage-products",
     },
     {
       title: "View Orders",
       description: "Check pending and completed orders",
       icon: FaShoppingCart,
       color: "bg-orange-50 text-orange-600 hover:bg-orange-100",
-      link: "/dashboard/vendor/orders",
+      link: "/dashboard/vendor/manage-orders",
     },
     {
       title: "Manage Reviews",
       description: "Respond to customer reviews",
       icon: MessageSquare,
       color: "bg-purple-50 text-purple-600 hover:bg-purple-100",
-      link: "/dashboard/vendor/reviews",
+      link: "/dashboard/vendor/manage-reviews",
     },
     
   ];
@@ -317,9 +337,9 @@ const WelcomePage = () => {
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <Link
+              <div
                 key={index}
-                href={stat.link}
+               
                 className="group block"
               >
                 <div className={`bg-gradient-to-br ${stat.gradient} rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 text-white transform hover:scale-105 cursor-pointer`}>
@@ -336,7 +356,7 @@ const WelcomePage = () => {
                     {stat.value}
                   </p>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
@@ -374,7 +394,7 @@ const WelcomePage = () => {
           </div>
         </div>
 
-        {/* Recent Activity Section */}
+        {/* Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Recent Orders */}
           <div className="bg-white rounded-2xl shadow-lg p-6">
@@ -399,7 +419,7 @@ const WelcomePage = () => {
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-gray-800">
-                          {order.customer?.name || "Customer"}
+                       <span className="font-medium">Customer name:</span> {order.customer?.name || "Customer"}
                         </p>
                         <p className="text-xs text-gray-500">
                           {order.orderDetails?.length || 0} items

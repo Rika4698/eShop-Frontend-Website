@@ -80,6 +80,7 @@ export default function Registration() {
         }
   
         router.replace(targetRoute);
+         router.refresh(); 
 
       } else {
         toast.error("Failed to create account. Invalid token.");

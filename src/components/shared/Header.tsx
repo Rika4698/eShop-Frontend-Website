@@ -41,6 +41,8 @@ const Header = () => {
     const productsForComparison = useAppSelector(selectCompareProducts);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+    console.log(userData,"uu");
+
     const { data: allProductsResponse, isLoading } = useGetAllProductsQuery(
         {
             searchTerm: debouncedSearchTerm,
@@ -103,11 +105,11 @@ const Header = () => {
                                 <div className="flex lg:gap-12  items-center ">
                                     <div className="flex items-center cursor-pointer ">
                                         <div className=" flex lg:hidden  ">
-                                            <DropdownMenu >
+                                            <DropdownMenu  open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                                                 <DropdownMenuTrigger
                                                     asChild
                                                     className="border-none "    >
-                                                    <Button variant="outline">
+                                                    <Button variant="outline"  onClick={() => setIsDropdownOpen(true)}>
                                                         <Menu className="text-gray-600" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
@@ -121,7 +123,7 @@ const Header = () => {
 
                        
                             <DropdownMenuItem className="lg:hidden"  onClick={handleMobileMenuClick}>
-                     <Link href="/all-product"   className={`text-[14px] uppercase ${path === "/all-product"
+                     <Link href="/all-products"   className={`text-[14px] uppercase ${path === "/all-product"
             ? "text-green-600 font-semibold"
             : "text-gray-700"
         }`}>  Products </Link>

@@ -1,6 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useRef, useState, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { motion, useInView } from "framer-motion";
 import ReactStars from "react-stars";
@@ -8,6 +9,7 @@ import { IOrder } from "@/types/modal";
 import { useCreateReviewMutation } from "@/redux/features/review/reviewsApi";
 import { toast } from "sonner";
 import Image from "next/image";
+import Loading from "@/app/loading";
 
 interface FeedbackFormValues {
   feedback: string;
@@ -17,11 +19,27 @@ interface FeedbackFormValues {
 interface ReviewModalProps {
   onClose?: () => void;
   singleOrder?: IOrder | null;
+  isFetching?: boolean;
 }
 
-const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
+const AddReview = ({ onClose, singleOrder, isFetching=false }: ReviewModalProps) => {
   const [selectedProductIndex, setSelectedProductIndex] = useState(0);
-  const [reviewedProducts, setReviewedProducts] = useState<Set<number>>(new Set());
+
+ 
+  const initialReviewedProducts = useMemo(() => {
+    const alreadyReviewedIndexes = new Set<number>();
+    singleOrder?.orderDetails?.forEach((detail, index) => {
+      const hasReview = singleOrder?.customer?.reviews?.some(
+        (review) => review.productId === detail.productId
+      );
+      if (hasReview) {
+        alreadyReviewedIndexes.add(index);
+      }
+    });
+    return alreadyReviewedIndexes;
+  }, [singleOrder]);
+
+  const [reviewedProducts, setReviewedProducts] = useState<Set<number>>(initialReviewedProducts);
 
   const {
     control,
@@ -40,8 +58,13 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
 
   const [createReview] = useCreateReviewMutation();
 
-  // Get current selected product
+  
   const currentProduct = singleOrder?.orderDetails?.[selectedProductIndex];
+
+
+  const existingReview = singleOrder?.customer?.reviews?.find(
+    (review) => review.productId === currentProduct?.productId
+  );
 
   const onSubmit = async (data: FeedbackFormValues) => {
     if (!currentProduct) {
@@ -58,23 +81,22 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
 
     try {
       await toast.promise(createReview(reviewData).unwrap(), {
-        loading: "Submitting review...",
-        success: "Review added successfully!",
+        loading: existingReview ? "Updating review..." : "Submitting review...",
+        success: existingReview ? "Review updated successfully!" : "Review added successfully!",
         error: "Failed to submit review",
       });
 
-      // Mark this product as reviewed
+      
       setReviewedProducts((prev) => new Set(prev).add(selectedProductIndex));
 
-      // Reset form
       reset();
 
-      // Move to next product if available
+     
       if (selectedProductIndex < (singleOrder?.orderDetails?.length || 0) - 1) {
         setSelectedProductIndex(selectedProductIndex + 1);
         toast.success("You can review the next product now!", { duration: 2000 });
       } else {
-        // All products reviewed
+        
         toast.success("All products reviewed! Thank you!", { duration: 3000 });
         setTimeout(() => {
           onClose && onClose();
@@ -103,7 +125,14 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
 
   const totalProducts = singleOrder?.orderDetails?.length || 0;
 
+   if (isFetching) {
+    return <Loading />;
+  }
+
   return (
+    <>
+ 
+
     <div className="overflow-y-auto">
       <div className="mb-4">
         <h1 className="text-center text-3xl font-bold text-black mb-2">
@@ -114,45 +143,48 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
         </p>
       </div>
 
-      {/* Product Selection Tabs */}
+      {/* Tabs */}
       {totalProducts > 1 && (
         <div className="flex gap-2 mb-4 overflow-x-auto pb-2 px-4">
-          {singleOrder?.orderDetails?.map((detail, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => handleSelectProduct(index)}
-              className={`relative flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all ${
-                selectedProductIndex === index
-                  ? "border-green-600 bg-green-50"
-                  : "border-gray-300 hover:border-green-400"
-              }`}
-            >
-              {/* Product Image */}
-              <Image
-                src={detail?.product?.image?.[0] || "/placeholder.png"}
-                alt={detail?.product?.name || "Product"}
-                width={40}
-                height={40}
-                className="w-10 h-10 rounded object-cover"
-              />
-              
-              {/* Product Name */}
-              <div className="text-left">
-                <p className="text-sm font-semibold text-black line-clamp-1">
-                  {detail?.product?.name}
-                </p>
-                <p className="text-xs text-gray-500">Qty: {detail.quantity}</p>
-              </div>
+          {singleOrder?.orderDetails?.map((detail, index) => {
+            const hasReview = reviewedProducts.has(index);
+            return (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleSelectProduct(index)}
+                className={`relative flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all ${
+                  selectedProductIndex === index
+                    ? "border-green-600 bg-green-50"
+                    : "border-gray-300 hover:border-green-400"
+                }`}
+              >
+                {/* Image */}
+                <Image
+                  src={detail?.product?.image?.[0] || "/placeholder.png"}
+                  alt={detail?.product?.name || "Product"}
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded object-cover"
+                />
+                
+                {/* Product Name */}
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-black line-clamp-1">
+                    {detail?.product?.name}
+                  </p>
+                  <p className="text-xs text-gray-500">Qty: {detail.quantity}</p>
+                </div>
 
-              {/* Reviewed Badge */}
-              {reviewedProducts.has(index) && (
-                <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                  ✓ Reviewed
-                </span>
-              )}
-            </button>
-          ))}
+               
+                {hasReview && (
+                  <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                    ✓ Reviewed
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -168,7 +200,7 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
           transition={{ duration: 0.8, delay: 0.3, ease: "easeInOut" }}
           className="flex-1"
         >
-          {/* Current Product Display */}
+     
           {currentProduct && (
             <div className="px-10 mb-4">
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -179,7 +211,7 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
                   height={80}
                   className="w-20 h-20 rounded-lg object-cover"
                 />
-                <div>
+                <div className="flex-1">
                   <h3 className="font-bold text-lg text-black">
                     {currentProduct?.product?.name}
                   </h3>
@@ -190,7 +222,34 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
                     Total: ৳{(currentProduct.quantity * currentProduct.pricePerUnit).toFixed(2)}
                   </p>
                 </div>
+
+              
+                {existingReview && (
+                  <div className="flex flex-col items-end">
+                    <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full mb-1">
+                      Already Reviewed
+                    </span>
+                    <p className="text-xs text-gray-600">
+                      Rating: {existingReview.rating} ⭐
+                    </p>
+                  </div>
+                )}
               </div>
+
+              {/* Show existing review */}
+              {existingReview && (
+                <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <p className="text-sm font-semibold text-blue-800 mb-1">
+                    Your Previous Review:
+                  </p>
+                  <p className="text-sm text-gray-700 italic">
+                    "{existingReview.comment}"
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    You can submit another review for this product
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
@@ -198,7 +257,7 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
             <form onSubmit={handleSubmit(onSubmit)} className="mt-3">
               <div>
                 <label htmlFor="feedback" className="text-lg font-semibold block mb-2">
-                  Your Review:
+                  {existingReview ? "Add Update Review:" : "Your Review:"}
                 </label>
                 <Controller
                   name="feedback"
@@ -235,7 +294,7 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
                       value={field.value}
                       onChange={(newRating) => field.onChange(Math.round(newRating))}
                       size={48}
-                       half={false} 
+                      half={false} 
                       color2={"#f5840c"}
                     />
                   )}
@@ -250,14 +309,13 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
                   type="submit"
                   className="relative h-12 flex-1 origin-top transform rounded-lg border-2 border-green-700 bg-green-700 text-white hover:bg-green-800 uppercase font-bold px-3 transition-colors"
                 >
-                  {reviewedProducts.has(selectedProductIndex) 
-                    ? "Update Review" 
+                  {existingReview 
+                    ? "Add Update Review" 
                     : "Submit Review"}
                 </button>
 
                 {totalProducts > 1 && 
-                  selectedProductIndex < totalProducts - 1 && 
-                  !reviewedProducts.has(selectedProductIndex) && (
+                  selectedProductIndex < totalProducts - 1 && (
                   <button
                     type="button"
                     onClick={handleSkipProduct}
@@ -287,7 +345,10 @@ const AddReview = ({ onClose, singleOrder }: ReviewModalProps) => {
           </div>
         </motion.div>
       </motion.div>
-    </div>
+    </div> 
+    
+  
+    </>
   );
 };
 

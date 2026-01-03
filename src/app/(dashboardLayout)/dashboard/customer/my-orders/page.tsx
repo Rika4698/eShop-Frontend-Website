@@ -49,29 +49,32 @@ const formatTime = (dateString: string) => {
 const MyOrders = () => {
   const { userData } = useUserDetails();
   const [currentPage, setCurrentPage] = useState(1);
-  const dataPerPage = 8;
+  const limit = 8;
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 
-  const [queryObj, setQueryObj] = useState({
+  // const [queryObj, setQueryObj] = useState({
+  //   page: currentPage,
+  //   limit: dataPerPage,
+  //   customerId: userData?.userData?.id,
+  // });
+
+  const { data: customerOrders, isLoading, isFetching } = useGetAllOrdersQuery({
     page: currentPage,
-    limit: dataPerPage,
+    limit,
     customerId: userData?.userData?.id,
+  }, {
+    skip: !userData?.userData,refetchOnMountOrArgChange: true,
   });
 
-  const { data: customerOrders, isLoading } = useGetAllOrdersQuery(queryObj, {
-    skip: !userData?.userData,
-  });
+  const orders = customerOrders?.data || [];
+  const totalPages = Math.ceil((customerOrders?.meta?.total || 0) / limit);
 
-  const totalPages = Math.ceil(
-    (customerOrders?.meta?.total || 0) / dataPerPage
-  );
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page: number) => {
+  //   setCurrentPage(page);
+  // };
 
   const handleAddReviewClick = (order: IOrder) => {
     setSelectedOrder(order);
@@ -88,14 +91,15 @@ const MyOrders = () => {
     setSelectedOrder(null);
   };
 
-  useEffect(() => {
-    setQueryObj((prev) => ({
-      ...prev,
-      page: currentPage,
-      limit: dataPerPage,
-      customerId: userData?.userData?.id,
-    }));
-  }, [currentPage, userData?.userData]);
+  // useEffect(() => {
+  //   setQueryObj((prev) => ({
+  //     ...prev,
+  //     page: currentPage,
+  //     limit: dataPerPage,
+  //     customerId: userData?.userData?.id,
+  //   }));
+  // }, [currentPage, userData?.userData]);
+  
 
   // Get payment status badge color
   const getPaymentStatusColor = (status: string) => {
@@ -111,12 +115,18 @@ const MyOrders = () => {
     }
   };
 
+    if (isLoading) {
+    return <div className="text-center py-20">Loading...</div>;
+  }
+
+  console.log(orders,"mm");
+
   return (
     <div>
       <h1 className="text-xl font-semibold mb-4">My Orders</h1>
 
       <div>
-        {isLoading ? (
+        {isLoading || isFetching ?  (
           <Loading />
         ) : (
           <div>
@@ -138,13 +148,13 @@ const MyOrders = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {customerOrders?.data.length > 0 &&
-                    customerOrders?.data?.map((singleOrder: IOrder, index: number) => {
+                  {orders?.length > 0 &&
+                    orders?.map((singleOrder: IOrder, index: number) => {
                       return (
                         <TableRow key={singleOrder.id}>
-                          {/* Serial Number */}
+                        
                           <TableCell className="font-medium">
-                            {index + 1 + (currentPage - 1) * dataPerPage}
+                            {(currentPage - 1) * limit + index + 1 }
                           </TableCell>
 
                           {/* Order Date & Time */}
@@ -159,7 +169,7 @@ const MyOrders = () => {
                             </div>
                           </TableCell>
 
-                          {/* Product Images - All products in this order */}
+                          {/* Product Images */}
                           <TableCell>
                             <div className="flex flex-wrap gap-2">
                               {singleOrder?.orderDetails?.map((detail, idx) => (
@@ -171,6 +181,8 @@ const MyOrders = () => {
                                     alt={detail?.product?.name || "product"}
                                     className="w-12 h-12 rounded-lg object-cover border border-gray-200"
                                   />
+
+
                                   {/* Quantity badge on image */}
                                   <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                                     {detail.quantity}
@@ -180,7 +192,7 @@ const MyOrders = () => {
                             </div>
                           </TableCell>
 
-                          {/* Product Names - All products in this order */}
+                          {/* Product Names  */}
                           <TableCell>
                             <div className="flex flex-col gap-1 whitespace-nowrap">
                               {singleOrder?.orderDetails?.map((detail, idx) => (
@@ -252,7 +264,7 @@ const MyOrders = () => {
 
 
 
-                        {/* Action - Add Review */}
+                        {/* Action */}
 
                           <TableCell>
                             <div className="flex flex-col sm:flex-row gap-2 py-2">
@@ -276,6 +288,7 @@ const MyOrders = () => {
                                   </DialogHeader>
 
                                   <div className="space-y-4 overflow-x-hidden">
+
                                     {/* Order Summary */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                       {/* Customer Info Card */}
@@ -345,6 +358,7 @@ const MyOrders = () => {
                                         </div>
                                       </div>
                                     </div>
+
 
                                     {/* Coupon & Discount Info - FIXED */}
                                     {singleOrder?.couponCode && singleOrder?.couponUsages?.[0]?.coupon && (
@@ -443,6 +457,7 @@ const MyOrders = () => {
                                     <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                                       <h3 className="font-semibold text-sm mb-3">Price Summary</h3>
                                       <div className="space-y-2 text-sm">
+
                                         {/* Subtotal Calculation */}
                                         <div className="flex justify-between">
                                           <span>Subtotal:</span>
@@ -487,7 +502,7 @@ const MyOrders = () => {
                                           </span>
                                         </div>
 
-                                        {/* Coupon Discount - FIXED */}
+                                       
                                         {singleOrder?.couponCode && singleOrder?.couponUsages?.[0]?.coupon && (
                                           <div className="flex justify-between text-yellow-700">
                                             <span>Discount ({(() => {
@@ -522,13 +537,13 @@ const MyOrders = () => {
 
                                         <div className="h-px bg-gray-300 my-2"></div>
 
-                                        {/* Total Paid */}
+                                      
                                         <div className="flex justify-between text-lg font-bold text-green-700">
                                           <span>Total Paid:</span>
                                           <span>{singleOrder?.totalPrice?.toFixed(2)} TK</span>
                                         </div>
 
-                                        {/* Calculation Breakdown Info */}
+                                    
                                         <div className="mt-3 pt-3 border-t border-green-200">
                                           <p className="text-xs text-gray-600 italic">
                                             * Shipping: 5% of subtotal, Taxes: 2% of subtotal
@@ -558,10 +573,13 @@ const MyOrders = () => {
                                     <DialogHeader>
                                       <DialogTitle>Add Product Review</DialogTitle>
                                     </DialogHeader>
+                                    {isLoading ||isFetching? (<Loading/>):
                                     <AddReview
                                       singleOrder={selectedOrder}
                                       onClose={closeModal}
-                                    />
+                                      isFetching={isFetching}
+                                     
+                                    />}
                                     <DialogFooter>
                                       <Button
                                         variant="secondary"
@@ -590,47 +608,39 @@ const MyOrders = () => {
 
             {/* Pagination */}
             <div className="pt-7">
-              {customerOrders?.data?.length > 0 && (
-                <div className="flex justify-center items-center mt-4">
-                  <div className="flex items-center space-x-2">
-                    {/* Left Arrow Button */}
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className={`${currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-                        } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
-                    >
-                      <span className="font-bold text-lg">{"<"}</span>
-                    </button>
+                {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => p - 1)}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            {"<"}
+          </button>
 
-                    {/* Page Numbers */}
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handlePageChange(index + 1)}
-                        className={`${currentPage === index + 1
-                            ? "bg-[#1d6e0f] text-white"
-                            : "bg-white text-rose-600"
-                          } px-4 py-2 rounded-full transition duration-200 hover:bg-[#04c41a] hover:text-white`}
-                      >
-                        {index + 1}
-                      </button>
-                    ))}
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === i + 1
+                  ? "bg-green-600 text-white"
+                  : "border "
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
 
-                    {/* Right Arrow Button */}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className={`${currentPage === totalPages
-                          ? "cursor-not-allowed opacity-50"
-                          : "cursor-pointer"
-                        } p-2 bg-gray-300 rounded-full hover:bg-[#04c41a] text-white transition-colors duration-200`}
-                    >
-                      <span className="font-bold text-lg">{">"}</span>
-                    </button>
-                  </div>
-                </div>
-              )}
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            {">"}
+          </button>
+        </div>
+      )}
             </div>
           </div>
         )}

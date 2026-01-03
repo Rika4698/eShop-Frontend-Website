@@ -60,6 +60,7 @@ export default function Login() {
       }
 
       router.replace(targetRoute);
+       router.refresh();
     }
   } catch (error: any) {
     toast.dismiss(loadingToast);
@@ -76,7 +77,7 @@ export default function Login() {
       {/* Background overlay */}
       <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
 
-      <div className="relative z-10 w-full max-w-md p-8 rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30 shadow-2xl my-6">
+      <div className="relative z-10 w-full max-w-md p-8 rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30 shadow-2xl my-6 mx-3">
         <div className="flex justify-center mb-6 ">
           <Link href={"/"}>
             <Image

@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 interface IProps {
-  onValueChange: (value: string) => void;
+  onValueChange: (value: string | undefined) => void;
   className?: string;
   placeholder?: string;
   debounceTimeOut?: number;
@@ -17,19 +17,21 @@ const NextSearchBox: React.FC<IProps> = ({
   onValueChange,
   className,
   placeholder,
-  debounceTimeOut = 500,
+  debounceTimeOut = 100,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [debouncedValue] = useDebounce<string>(inputValue, debounceTimeOut);
 
   // Auto-search: Call onValueChange when debounced value changes
   useEffect(() => {
-    onValueChange(debouncedValue);
-  }, [debouncedValue, onValueChange]);
+    const value = (debouncedValue.trim());
+    onValueChange(value.length ? value : undefined);
+  }, [debouncedValue]);
 
   // Manual search on button click
   const handleSearch = () => {
-    onValueChange(inputValue);
+    const value = (inputValue.trim());
+    onValueChange(value === "" ? undefined : value);
   };
 
   // Clear input with X button

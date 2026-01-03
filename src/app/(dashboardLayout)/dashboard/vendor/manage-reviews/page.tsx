@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { MessageSquare, Star } from "lucide-react";
+import Loading from "@/app/loading";
 
 interface IReview {
   id: string;
@@ -73,30 +74,32 @@ const StarDisplay = ({ rating }: { rating: number }) => {
 const Myreviews = () => {
   const { userData } = useUserDetails();
   const [currentPage, setCurrentPage] = useState(1);
-  const dataPerPage = 10;
+  const limit = 10;
   const [replyText, setReplyText] = useState("");
   const [selectedReview, setSelectedReview] = useState<IReview | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data: allReviews, isLoading } = useGetAllReviewsQuery(
+  const { data: allReviews, isLoading, isFetching } = useGetAllReviewsQuery(
     {
       page: currentPage,
-      limit: dataPerPage,
+      limit,
       vendorId: userData?.userData?.id,
     },
-    { skip: !userData?.userData?.id }
+    { skip: !userData?.userData?.id,refetchOnMountOrArgChange: true, }
   );
 
   const [createReply, { isLoading: isReplying }] = useCreateReplyMutation();
 
-  const totalPages = Math.ceil((allReviews?.length || 0) / dataPerPage);
+  const reviews = allReviews?.data || [];
+  const totalPages = allReviews?.meta?.totalPage || 1;
+
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
   const handleReplySubmit = async () => {
-    if (!replyText.trim()) {
+    if (!replyText.trim() ) {
       toast.error("Please enter a reply message");
       return;
     }
@@ -157,13 +160,16 @@ const Myreviews = () => {
   }
 
   // Paginate reviews
-  const startIndex = (currentPage - 1) * dataPerPage;
-  const paginatedReviews = allReviews?.slice(startIndex, startIndex + dataPerPage);
+  // const startIndex = (currentPage - 1) * dataPerPage;
+  // const paginatedReviews = allReviews?.slice(startIndex, startIndex + dataPerPage);
 
   return (
     <div>
       <h1 className="text-xl font-semibold mb-4">Customer Reviews</h1>
-
+    <div>
+      {isLoading || isFetching ? (
+          <div className="text-center py-8"><Loading/></div>
+        ) : (
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -179,12 +185,12 @@ const Myreviews = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedReviews && paginatedReviews.length > 0 ? (
-              paginatedReviews.map((review: IReview, index: number) => (
+            {reviews.length > 0 ? (
+              reviews.map((review: IReview, index: number) => (
                 <TableRow key={review.id}>
                  
                   <TableCell className="font-medium">
-                    {startIndex + index + 1}
+                    {(currentPage - 1) * limit + index + 1}
                   </TableCell>
 
                   {/* Product Info */}
@@ -390,48 +396,50 @@ const Myreviews = () => {
             )}
           </TableBody>
         </Table>
+      </div>)} 
+
       </div>
+      
 
       {/* Pagination */}
-      {allReviews && allReviews.length > 0 && totalPages > 1 && (
-        <div className="flex justify-center items-center mt-6 space-x-2">
+     {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
           <button
-            onClick={() => handlePageChange(currentPage - 1)}
+            onClick={() =>
+              setCurrentPage((p) => Math.max(1, p - 1))
+            }
             disabled={currentPage === 1}
-            className={`${
-              currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-            } p-2 bg-gray-300 rounded-full hover:bg-green-600 text-white transition-colors duration-200`}
           >
             {"<"}
           </button>
 
-          {Array.from({ length: totalPages }).map((_, idx) => (
+          {Array.from({ length: totalPages }).map((_, i) => (
             <button
-              key={idx}
-              onClick={() => handlePageChange(idx + 1)}
-              className={`${
-                currentPage === idx + 1
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === i + 1
                   ? "bg-green-600 text-white"
-                  : "bg-white text-green-600 border border-green-600"
-              } px-4 py-2 rounded-full transition duration-200 hover:bg-green-600 hover:text-white`}
+                  : "border"
+              }`}
             >
-              {idx + 1}
+              {i + 1}
             </button>
           ))}
 
           <button
-            onClick={() => handlePageChange(currentPage + 1)}
+            onClick={() =>
+              setCurrentPage((p) =>
+                Math.min(totalPages, p + 1)
+              )
+            }
             disabled={currentPage === totalPages}
-            className={`${
-              currentPage === totalPages
-                ? "cursor-not-allowed opacity-50"
-                : "cursor-pointer"
-            } p-2 bg-gray-300 rounded-full hover:bg-green-600 text-white transition-colors duration-200`}
           >
             {">"}
           </button>
         </div>
       )}
+
     </div>
   );
 };

@@ -7,53 +7,67 @@ import ShopsTable from "@/components/MangeShops/ShopsTable";
 import { useGetAllTypeUsersQuery } from "@/redux/features/users/userApi";
 import { IVendor } from "@/types/modal";
 
+interface IQuery {
+  page: number;
+  limit: number;
+  searchTerm: string;
+  role: "VENDOR";
+  
+}
+
 const MangeShop = () => {
-  const [query, setQuery] = useState({
+  const [query, setQuery] = useState<IQuery>({
     page: 1,
     limit: 10,
     searchTerm: "",
     role: "VENDOR",
-    isBlackListed: "",
+   
   });
 
-  const { page, limit, searchTerm, role, isBlackListed } = query;
+  const { page, limit, searchTerm, role } = query;
 
-  const { data, isFetching } = useGetAllTypeUsersQuery(undefined, {
+  const { data, isFetching } = useGetAllTypeUsersQuery({
+      page,
+      limit,
+      searchTerm,
+      role,
+      
+    }, {
     refetchOnMountOrArgChange: true,
   });
 
   // Filter vendors frontend
-  const filteredVendors = useMemo(() => {
-    if (!data?.data) return [];
-    const term = searchTerm.trim().toLowerCase();
+  // const filteredVendors = useMemo(() => {
+  //   if (!data?.data) return [];
+  //   const term = searchTerm.trim().toLowerCase();
 
-    return data.data.filter(
-      (user) =>
-        user.role === "VENDOR" &&
-        (!term ||
-          (user.name?.toLowerCase().includes(term) ?? false) ||
-          (user.email?.toLowerCase().includes(term) ?? false))
-    );
-  }, [data, searchTerm]);
-
-  const totalVendors = filteredVendors.length;
+  //   return data.data.filter(
+  //     (user) =>
+  //       user.role === "VENDOR" &&
+  //       (!term ||
+  //         (user.name?.toLowerCase().includes(term) ?? false) ||
+  //         (user.email?.toLowerCase().includes(term) ?? false))
+  //   );
+  // }, [data, searchTerm]);
+const vendors = data?.data || [];
+  const totalVendors = data?.meta?.total || 0;
   const totalPages = Math.ceil(totalVendors / limit);
 
-  const paginatedVendors = filteredVendors.slice((page - 1) * limit, page * limit);
-
   // Handlers
-  const handleSearchChange = useCallback((newSearchTerm: string) => {
-    setQuery((prev) => ({ ...prev, searchTerm: newSearchTerm, page: 1 }));
-  }, []);
+   const handleSearchChange = useCallback((value?: string) => {
+     setQuery((prev) => ({
+       ...prev,
+       searchTerm: value ?? "",
+       page: 1,
+     }));
+   }, []);
 
-  const handlePageChange = useCallback(
-    (newPage: number) => {
-      if (newPage >= 1 && newPage <= totalPages) {
-        setQuery((prev) => ({ ...prev, page: newPage }));
-      }
-    },
-    [totalPages]
-  );
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setQuery((prev) => ({ ...prev, page }));
+    }
+  };
 
   return (
     <Card className="w-full mx-auto relative">
@@ -71,7 +85,7 @@ const MangeShop = () => {
 
         {/* Shops Table */}
         <ShopsTable
-          shops={paginatedVendors as unknown as IVendor[]}
+          shops={vendors as unknown as IVendor[]}
           isLoading={isFetching}
           onDelete={(id) => console.log("Deleted", id)}
         />

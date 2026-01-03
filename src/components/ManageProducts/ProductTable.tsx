@@ -15,9 +15,11 @@ interface IProps {
   products: IProduct[];
   categories: ICategory[];
   isLoading: boolean;
+  currentPage: number;
+  dataPerPage: number;
 }
 
-const ProductTable: React.FC<IProps> = ({ products,categories, isLoading }) => {
+const ProductTable: React.FC<IProps> = ({ products,categories, isLoading, currentPage,dataPerPage }) => {
   const [productToEdit, setProductToEdit] = useState<IProduct | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
@@ -38,6 +40,7 @@ if (isLoading) return <p>Loading...</p>;
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>No.</TableHead>
               <TableHead className="w-[300px]">Product Name</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Discount</TableHead>
@@ -47,8 +50,9 @@ if (isLoading) return <p>Loading...</p>;
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
+            {products.map((product, index) => (
               <TableRow key={product.id}>
+                <TableCell>{(currentPage - 1) * dataPerPage + index + 1}</TableCell>
                 <TableCell className="font-medium whitespace-nowrap">
                   <p className="line-clamp-2">{trimText(product.name, 70)}</p>
                 </TableCell>
@@ -68,10 +72,11 @@ if (isLoading) return <p>Loading...</p>;
                     >
                       <MdEdit />
                     </Link>
+                    {product.orderDetails.length === 0 && 
                     <ProductDelete
                       productId={product.id}
                       productName={product.name}
-                    />
+                    />}
                     <DuplicateProduct productId={product.id} />
                   </div>
                 </TableCell>

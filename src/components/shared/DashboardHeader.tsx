@@ -1,4 +1,4 @@
-import { ISideBarState } from "@/app/(dashboard)/layout";
+import { ISideBarState } from "@/app/(dashboardLayout)/layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {

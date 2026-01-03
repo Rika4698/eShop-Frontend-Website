@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TMeta, TResponseRedux } from "@/types/global";
 import { baseApi } from "../../api/baseApi";
 import { IUser } from "@/types/modal";
@@ -6,14 +7,24 @@ import { IUser } from "@/types/modal";
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
 
- getAllTypeUsers: builder.query<{ data: IUser[]; meta: TMeta }, void>({
-      query: () => ({ url: "/users/all" }), 
-      transformResponse: (response: TResponseRedux<IUser[]>) => ({
-        data: response.data || [],
-        meta: response.meta || { total: 0, page: 1, limit: 10, totalPage: 1 },
+ getAllTypeUsers: builder.query<
+  { data: IUser[]; meta: TMeta },
+  { page: number; limit: number; searchTerm?: string; role?: string }>({
+  query: (params) => ({
+    url: "/users/all",
+    params,
+  }),
+   transformResponse: (response: TResponseRedux<IUser[]>) => ({
+        data: response.data ?? [],
+        meta: response.meta ?? {
+          total: 0,
+          page: 1,
+          limit: 10,
+          totalPage: 1,
+        },
       }),
-      providesTags: ["users"],
-    }),
+  providesTags: ["users"],
+}),
 
 
   updateUserStatus: builder.mutation({
@@ -91,13 +102,16 @@ const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["users"],
     }),
 
-     getPublicVendors: builder.query({
-      query: (params) => ({
-        url: '/users/vendors/all',
-        method: 'GET',
-        params: params, 
-      }),
-    }),
+     getPublicVendors: builder.query<
+  { data: any[]; meta: any },
+  { page: number; limit: number; searchTerm?: string; categoryId?: string }
+>({
+  query: (params) => ({
+    url: "/users/vendors/all",
+    method: "GET",
+    params,
+  }),
+}),
 
 
     deleteUser: builder.mutation({

@@ -17,6 +17,7 @@ const productApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["products"],
     }),
+    
 
     getAllProducts: builder.query({
       query: (queryObj) => {

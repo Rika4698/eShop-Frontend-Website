@@ -26,11 +26,16 @@ const Shop = () => {
     categoryId: categoryId && categoryId !== "null" ? categoryId : undefined,
   });
 console.log(data,"dd");
+
+
   const vendors = data?.data || [];
   console.log(vendors);
   const meta = data?.meta || { total: 0, page: 1, limit: 6, totalPage: 0 };
 
   const { data: allCategories } = useGetAllCategoriesQuery(undefined);
+
+
+
   const categoryName =
     categoryId && allCategories?.find((c: any) => c.id === categoryId)?.name;
       const [followUser] = useFollowUserMutation();
@@ -45,7 +50,7 @@ console.log(data,"dd");
     const timer = setTimeout(() => {
       setDebouncedSearch(value);
       setPage(1); // Reset to first page
-    }, 500);
+    }, 100);
 
     return () => clearTimeout(timer);
   }, []);

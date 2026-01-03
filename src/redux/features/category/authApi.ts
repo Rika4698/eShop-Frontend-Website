@@ -13,7 +13,9 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
+      invalidatesTags: ["users"],
     }),
+
    
    getMyProfile: builder.query<{ userData: any }, void>({
       query: () => ({
@@ -25,6 +27,7 @@ const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["users"],
     }),
+
 
     getSingleVendor: builder.query({
       query: (id: string) => {
@@ -77,6 +80,15 @@ const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["users"],
     }),
 
+
+    logout: builder.mutation<void, void>({
+  query: () => ({
+    url: "/auth/logout",
+    method: "POST",
+  }),
+   invalidatesTags: ["users"],
+}),
+
   }),
    overrideExisting: false,
 });
@@ -88,5 +100,6 @@ export const {
   useForgotPasswordMutation,
   useGetSingleCustomerQuery,
   useGetSingleVendorQuery,
+  useLogoutMutation,
 
 } = authApi;

@@ -26,6 +26,7 @@ export async function proxy(request:NextRequest){
     const accessToken = (await getCookie("accessToken")) || null;
     let userRole: UserRole | null = null;
     console.log(accessToken);
+    
 
     if(accessToken) {
         try{

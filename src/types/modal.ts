@@ -96,7 +96,7 @@ export interface ICustomer {
     updatedAt: Date;
     orders: IOrder[];
     reviews: IReview[];
-    follows: IFollow[];
+    following: IFollow[];
     recentProductView: IRecentProductView[];
     user: IUser;
 }
