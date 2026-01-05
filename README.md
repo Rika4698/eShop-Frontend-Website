@@ -550,11 +550,20 @@ eShop-Frontend-Website/
 
 
 ### Payment Result Pages
-- `/checkout
+- `/checkout`- Order details with customer information.
 - `/payment-success` - Payment successful
 - `/payment-failed` - Payment failed
 - `/payment-cancel` - Payment cancel
 
+### Protected Pages
+- `/product/id`-Single product details
+- `/shop-page?shop=id`-Single shop details
+- `/shop`- All shop
+- `/checkout`- Order details with customer information.
+- `/payment-success?orderid` - Payment successful
+- `/payment-failed?transactionId` - Payment failed
+- `/payment-cancel?transactionId` - Payment cancel
+- All dashboard page
 
 ---
 
