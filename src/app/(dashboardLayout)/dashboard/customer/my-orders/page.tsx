@@ -27,7 +27,7 @@ import { Eye, MapPin, Tag, Percent } from "lucide-react";
 
 
 
-// If date-fns is not installed, use this simple function instead:
+
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
@@ -119,7 +119,7 @@ const MyOrders = () => {
     return <div className="text-center py-20">Loading...</div>;
   }
 
-  console.log(orders,"mm");
+  // console.log(orders,"mm");
 
   return (
     <div>
@@ -407,12 +407,12 @@ const MyOrders = () => {
                                               <p>Redeemed: {singleOrder?.couponUsages?.[0]?.isRedeemed ? "✓ Yes" : "✗ No"}</p>
                                             </div>
                                             <div>
-                                              <p>Used Count: {(() => {
+                                              {/* <p>Used Count: {(() => {
                                                 const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
                                                   ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
                                                   : singleOrder?.couponUsages?.[0]?.coupon;
                                                 return coupon?.usedCount || 0;
-                                              })()}</p>
+                                              })()}</p> */}
                                             </div>
                                           </div>
                                         </div>

@@ -67,7 +67,7 @@ const OrderList = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  console.log(vendorOrders);
+  // console.log(vendorOrders);
 
   const orders = vendorOrders?.data || [];
   const totalPages = Math.ceil((vendorOrders?.meta?.total || 0) / limit);
@@ -108,7 +108,7 @@ const OrderList = () => {
     return <div className="text-center py-20">Loading...</div>;
   }
 
-console.log(vendorOrders?.data);
+// console.log(vendorOrders?.data);
 
 
 
@@ -393,12 +393,12 @@ console.log(vendorOrders?.data);
                                                                       <p>Redeemed: {singleOrder?.couponUsages?.[0]?.isRedeemed ? "✓ Yes" : "✗ No"}</p>
                                                                     </div>
                                                                     <div>
-                                                                      <p>Used Count: {(() => {
+                                                                      {/* <p>Used Count: {(() => {
                                                                         const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
                                                                           ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
                                                                           : singleOrder?.couponUsages?.[0]?.coupon;
                                                                         return coupon?.usedCount || 0;
-                                                                      })()}</p>
+                                                                      })()}</p> */}
                                                                     </div>
                                                                   </div>
                                                                 </div>

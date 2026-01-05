@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Button } from "@/components/ui/button";
@@ -32,11 +33,15 @@ const EditCategory: React.FC<IProps> = ({ category }) => {
   const [updateCategory, { isSuccess, isError, error, isLoading }] = useUpdateCategoryMutation();
   const [formData, setFormData] = useState<{
     category: string;
-    image: File | null;
-  }>({
-    category: category.label || "",
-    image: null,
-  });
+  label: string;
+  image: File | null;
+}>({
+  category: category.name || "",   
+  label: category.label || "",     
+  image: null,
+});
+
+
   const id = category.id
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -49,16 +54,17 @@ const EditCategory: React.FC<IProps> = ({ category }) => {
   };
 
   const handleUpdateCategory = async () => {
-    const { category, image } = formData;
+    const { category,label, image } = formData;
 
-    if (!category || !image) {
-      toast.error("Please fill in all required fields (label and image)");
-      return;
-    }
+    // if (!category || !image) {
+    //   toast.error("Please fill in all required fields (label and image)");
+    //   return;
+    // }
 
     // Preparing FormData
     const payload = new FormData();
     payload.append("category", category);
+     payload.append("label", label); 
     if (image) {
       payload.append("image", image); 
     }
@@ -68,8 +74,17 @@ const EditCategory: React.FC<IProps> = ({ category }) => {
       await updateCategory({ categoryId: id, formData: payload }).unwrap();
       toast.success("Category updated successfully!");
       setIsOpen(false);
-    } catch (error) {
-      toast.error("Error updating category!");
+    } 
+      catch (error: any) {
+          console.error("Create category error:", error);
+      
+          
+          const errorMessage =
+            error?.data?.message ||
+            error?.error ||
+            "Failed to create category";
+      
+          toast.error(errorMessage || "Error updating category!");
     }
   };
 
@@ -120,6 +135,20 @@ const EditCategory: React.FC<IProps> = ({ category }) => {
     />
   </label>
 </div>
+
+
+ <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="label" className="text-right">
+              Label 
+            </Label>
+            <Input
+              name="label"
+              id="label"
+              value={formData.label}
+              onChange={handleInputChange}
+              className="col-span-3"
+            />
+          </div>
 
         </div>
         <DialogFooter className="gap-2">

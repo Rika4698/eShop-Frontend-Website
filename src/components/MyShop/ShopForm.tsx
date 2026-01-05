@@ -21,52 +21,48 @@ interface IProps {
   };
 }
 
+/* ================= VALIDATION ================= */
 const validationSchema = Yup.object({
   shopName: Yup.string()
     .required("Shop name is required")
-    .min(3, "Shop name must be at least 3 characters").optional(),
+    .min(3, "Shop name must be at least 3 characters"),
+
   description: Yup.string()
     .required("Description is required")
-    .min(10, "Description must be at least 10 characters").optional(),
+    .min(10, "Description must be at least 10 characters"),
+
+  logo: Yup.mixed().required("Shop logo is required"),
 });
 
 const ShopForm: React.FC<IProps> = ({ initialValues }) => {
-  const [logo, setLogo] = useState<{ url?: string; file?: File }>({
-    url: initialValues?.logo,
-    file: undefined,
-  });
-  const [updateCustomer] = useUpdateVendorMutation();
+  const [preview, setPreview] = useState<string | null>(
+    initialValues?.logo || null
+  );
+  const [updateVendor] = useUpdateVendorMutation();
 
-  const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    formData.append("data", JSON.stringify(data));
-
-    // Handle image upload if provided
-    if (logo.file) {
-      formData.append("image", logo.file);
-    }
-    console.log("Form Data: ", formData);
-
-    toast.loading("Updating Profile...");
+  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+    const toastId = toast.loading("Updating shop...");
 
     try {
-      const res = await updateCustomer(formData).unwrap();
+      const formData = new FormData();
+      formData.append(
+        "data",
+        JSON.stringify({
+          shopName: values.shopName,
+          description: values.description,
+        })
+      );
+      formData.append("image", values.logo);
+
+      const res = await updateVendor(formData).unwrap();
+
       if (res.success) {
-        toast.success("Profile updated successfully!");
+        toast.success("Shop updated successfully!", { id: toastId });
       }
     } catch (error: any) {
-      console.error("Error updating profile:", error.message);
-      toast.error("Failed to update profile.");
+      toast.error(error?.data?.message || "Update failed", { id: toastId });
     } finally {
-      toast.dismiss();
-    }
-  };
-
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setLogo({ url, file });
+      setSubmitting(false);
     }
   };
 
@@ -74,91 +70,85 @@ const ShopForm: React.FC<IProps> = ({ initialValues }) => {
     <div className="mx-auto p-4">
       <Card className="w-full mx-auto">
         <CardHeader>
-          <CardTitle>{initialValues ? "Update Shop" : "Create Shop"}</CardTitle>
+          <CardTitle>Update Shop</CardTitle>
         </CardHeader>
+
         <CardContent>
           <Formik
             initialValues={{
               shopName: initialValues?.shopName || "",
               description: initialValues?.description || "",
-              logo: "", // You can leave this empty or handle initial value for logo
+              logo: null,
             }}
             validationSchema={validationSchema}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
           >
-            <Form className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="shopName">Shop Name</Label>
-                <Field
-                  name="shopName"
-                  id="shopName"
-                  as={Input}
-                  placeholder="Enter your shop name"
-                  className="input"
-                />
-                <ErrorMessage
-                  name="shopName"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Field
-                  name="description"
-                  id="description"
-                  as={Textarea}
-                  placeholder="Describe your shop"
-                  className="textarea"
-                />
-                <ErrorMessage
-                  name="description"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="logo">Logo</Label>
-                
-                <label
-    htmlFor="logo"
-    className="flex items-center justify-between border rounded-md px-3 py-2 cursor-pointer bg-gray-50 hover:bg-gray-100"
-  >
-    <span className="font-medium text-sm">
-      {logo.file ? logo.file.name : "Upload files"}
-    </span>
+            {({ setFieldValue, isSubmitting }) => (
+              <Form className="space-y-4">
+                {/* Shop Name */}
+                <div className="space-y-2">
+                  <Label>Shop Name *</Label>
+                  <Field as={Input} name="shopName" />
+                  <ErrorMessage
+                    name="shopName"
+                    component="p"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
 
-    <Input
-      id="logo"
-      type="file"
-      accept="image/*"
-      className="hidden"
-      onChange={handleLogoChange}
-     
-    />
-  </label>
-                {logo.url && (
-                  <div className="mt-4">
-                    <h3 className="text-lg font-semibold mb-2">Logo Preview</h3>
+                {/* Description */}
+                <div className="space-y-2">
+                  <Label>Description *</Label>
+                  <Field as={Textarea} name="description" />
+                  <ErrorMessage
+                    name="description"
+                    component="p"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+
+                {/* Logo */}
+                <div className="space-y-2">
+                  <Label>Shop Logo *</Label>
+
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.currentTarget.files?.[0];
+                      if (file) {
+                        setFieldValue("logo", file);
+                        setPreview(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+
+                  <ErrorMessage
+                    name="logo"
+                    component="p"
+                    className="text-red-500 text-sm"
+                  />
+
+                  {preview && (
                     <Image
-                      src={logo.url}
-                      alt="Shop Logo Preview"
-                      width={100}
-                      height={100}
-                      className="rounded-lg object-cover"
+                      src={preview}
+                      alt="Logo preview"
+                      width={120}
+                      height={120}
+                      className="rounded-md mt-2"
                     />
-                    
-                  </div>
+                  )}
+                </div>
 
-
-
-                  
-                )}
-              </div>
-              <Button type="submit" className="w-full bg-[#33a730]    hover:bg-[#1c8618]">
-                {initialValues ? "Update Shop" : "Create Shop"}
-              </Button>
-            </Form>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-[#33a730] hover:bg-[#1c8618]"
+                >
+                  {isSubmitting ? "Saving..." : "Update Shop"}
+                </Button>
+              </Form>
+            )}
           </Formik>
         </CardContent>
       </Card>

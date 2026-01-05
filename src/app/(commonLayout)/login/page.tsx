@@ -26,7 +26,7 @@ export default function Login() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLogInSuccess, setIsLogInSuccess] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<TLogin>();
@@ -44,27 +44,27 @@ export default function Login() {
 
   try {
     const res = await loginUser(data);
-
-    if (res.success) {
-      const user = verifyToken(res.data.accessToken) as TUser;
+    console.log(res);
+   if (res.success ) {
+   
+        const user = verifyToken(res.data.accessToken) as TUser;
       dispatch(setUser({ user, token: res.data.accessToken }));
+      
+         toast.dismiss(loadingToast);
+        toast.success("Login successful!", { duration: 3000 });
 
-      toast.dismiss(loadingToast);
-      toast.success("Logged in successfully");
+        let targetRoute = "/";
+        if (redirect && redirect !== "/login") {
+          targetRoute = redirect;
+        }
 
-      const redirect = searchParams.get("redirect");
-
-      let targetRoute = "/";
-      if (redirect && redirect !== "/login") {
-        targetRoute = redirect;
-      }
-
-      router.replace(targetRoute);
-       router.refresh();
-    }
+        router.replace(targetRoute);
+        router.refresh();
+      } 
+    
   } catch (error: any) {
     toast.dismiss(loadingToast);
-    toast.error(error?.message || "Login failed");
+    toast.error(error?.message ||  error?.response?.data?.message || "Login failed");
     setIsLoading(false);
   }
   };

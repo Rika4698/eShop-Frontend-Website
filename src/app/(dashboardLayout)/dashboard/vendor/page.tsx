@@ -192,6 +192,8 @@ const WelcomePage = () => {
     return ordersData?.data?.slice(0, 5) || [];
   }, [ordersData]);
 
+
+  
   return (
     <div className="min-h-screen  overflow-x-hidden">
       {isLoading ? (

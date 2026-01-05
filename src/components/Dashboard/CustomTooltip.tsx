@@ -7,11 +7,10 @@ type CustomTooltipProps = {
 export const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) return null;
 
-  // Recharts e je bar hover kora hoy, sheta payload[0] e thake
-  // But safety jonno check kori je value ache kina
+
   let hoveredItem = payload[0];
   
-  // If first item has no value, check second item
+  
   if (hoveredItem.value === undefined || hoveredItem.value === null) {
     hoveredItem = payload.find(item => item.value !== undefined && item.value !== null) || payload[0];
   }

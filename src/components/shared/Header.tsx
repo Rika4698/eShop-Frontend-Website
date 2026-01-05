@@ -32,6 +32,7 @@ const Header = () => {
     const path = usePathname();
 
     const { userData, isLoading: userLoading  } = useUserDetails();
+    console.log(userData,"data");
     const cartProduct = useAppSelector((state) => state.products.cart);
     const [openCart, setOpenCart] = useState(false);
     const [openWishlist, setOpenWishlist] = useState(false);

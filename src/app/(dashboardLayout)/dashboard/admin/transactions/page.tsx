@@ -387,12 +387,12 @@ const AdminOrdersPage = () => {
                                             <p>Redeemed: {singleOrder?.couponUsages?.[0]?.isRedeemed ? "✓ Yes" : "✗ No"}</p>
                                           </div>
                                           <div>
-                                            <p>Used Count: {(() => {
+                                            {/* <p>Used Count: {(() => {
                                               const coupon = Array.isArray(singleOrder?.couponUsages?.[0]?.coupon)
                                                 ? singleOrder?.couponUsages?.[0]?.coupon?.[0]
                                                 : singleOrder?.couponUsages?.[0]?.coupon;
                                               return coupon?.usedCount || 0;
-                                            })()}</p>
+                                            })()}</p> */}
                                           </div>
                                         </div>
                                       </div>

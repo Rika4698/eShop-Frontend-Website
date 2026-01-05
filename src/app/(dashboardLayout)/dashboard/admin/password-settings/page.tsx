@@ -54,7 +54,7 @@ const Security = () => {
        // Clear cookies
        await logoutService();
        
-       // Redirect to login
+       // Redirect 
      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
   };
 

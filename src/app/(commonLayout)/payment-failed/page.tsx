@@ -1,14 +1,21 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
+// import useUserDetails from "@/hooks/useUser";
 import { XCircle } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const PaymentFailedPage = () => {
   const searchParams = useSearchParams();
   const [transactionId, setTransactionId] = useState("");
+  // const userData = useUserDetails();
+  // const router = useRouter();
+    // if(!userData?.userData){
+    //   router.replace("/login");
+    // }
+  
 
   useEffect(() => {
     const txnId = searchParams.get("transactionId");

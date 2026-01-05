@@ -3,23 +3,33 @@
 
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/redux/hooks";
 import { clearCart } from "@/redux/features/products/productSlice";
 import { clearCoupon } from "@/redux/features/coupon/couponSlice";
+// import useUserDetails from "@/hooks/useUser";
 
 const PaymentSuccessPage = () => {
   const searchParams = useSearchParams();
+   const router = useRouter();
+    //  const userData = useUserDetails();
+    //  const user = userData?.userData;
+    //  console.log(userData);
   const dispatch = useAppDispatch();
   const [orderDetails, setOrderDetails] = useState({
     orderId: "",
     transactionId: ""
   });
+  
 
+   
   useEffect(() => {
     const orderId = searchParams.get("orderId");
     const transactionId = searchParams.get("transactionId");
+      if (!orderId || !transactionId) {
+      router.replace("/");
+    }
     
     if (orderId && transactionId) {
       setOrderDetails({ orderId, transactionId });
@@ -28,6 +38,8 @@ const PaymentSuccessPage = () => {
       dispatch(clearCart());
       dispatch(clearCoupon());
     }
+   
+
   }, [searchParams, dispatch]);
 
   return (

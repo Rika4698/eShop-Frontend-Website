@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deleteCookie, getCookie } from "./lib/tokenHandlers";
-import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, isShopRoute, isValidRedirectForRole, UserRole } from "./lib/auth-utils";
+import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, isPayment, isShopRoute, isValidRedirectForRole, UserRole } from "./lib/auth-utils";
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 
@@ -23,7 +23,7 @@ export async function proxy(request:NextRequest){
     }
 
 
-    const accessToken = (await getCookie("accessToken")) || null;
+    const accessToken = (await getCookie("clientAccessToken")) || null;
     let userRole: UserRole | null = null;
     console.log(accessToken);
     
@@ -32,12 +32,12 @@ export async function proxy(request:NextRequest){
         try{
             const verifyToken:JwtPayload | string = jwt.verify(
                 accessToken,
-                process.env.JWT_SECRET as string
+                process.env.JWT_ACCESS_SECRET as string
             );
 
             if(typeof verifyToken === "string"){
-                await deleteCookie("accessToken");
-                await deleteCookie("refreshToken");
+                await deleteCookie("clientAccessToken");
+                await deleteCookie("clientRefreshToken");
 
                 if(pathname !== "/login"){
                     return NextResponse.redirect(new URL("/login", request.url));
@@ -47,8 +47,8 @@ export async function proxy(request:NextRequest){
 
             userRole = verifyToken.role as UserRole;
         } catch(error){
-            await deleteCookie("accessToken");
-            await deleteCookie("refreshToken");
+            await deleteCookie("clientAccessToken");
+            await deleteCookie("clientRefreshToken");
 
             if(!isAuthRoute(pathname)){
                 const loginUrl = new URL("/login", request.url);
@@ -85,6 +85,12 @@ export async function proxy(request:NextRequest){
     return NextResponse.redirect(loginUrl);
   }
 
+  if (!accessToken && isPayment(pathname) && routeOwner === "CUSTOMER") {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname + search);
+    return NextResponse.redirect(loginUrl);
+  }
+
   
     if(routeOwner === null){
         if (pathname.startsWith("/product") && !accessToken) {
@@ -100,6 +106,13 @@ export async function proxy(request:NextRequest){
         loginUrl.searchParams.set("redirect", pathname);
         return NextResponse.redirect(loginUrl);
     }
+
+      if (!accessToken && routeOwner) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname + search);
+    return NextResponse.redirect(loginUrl);
+  }
+
 
     if(routeOwner === "COMMON"){
         return NextResponse.next();

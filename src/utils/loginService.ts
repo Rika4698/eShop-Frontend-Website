@@ -19,49 +19,58 @@ console.log(role,"login");
         ? `${envData.baseUrl}/users/create-customer`
         : `${envData.baseUrl}/users/create-vendor`;
 
+        
+
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+       credentials: "include",
       body: JSON.stringify(remaining),
     });
 
     const data = await response.json();
-    // console.log("Register Response:", JSON.stringify(data, null, 2));
+    console.log("Register Response:", JSON.stringify(data, null, 2));
 
     if (!response.ok || !data.success) {
-      throw new Error(data.message || "Registration failed");
+       return { success: false, message: data.message || "Registration failed" };
     }
 
     const accessToken = data?.data?.accessToken || data.token;
     const refreshToken = data?.data?.refreshToken;
 
-    // console.log(" Access Token:", data?.token ? "Found " : "Missing ");
-    // console.log("Refresh Token:", data?.data?.refreshToken ? "Found " : "Missing ");
+    console.log(" Access Token:", data?.token ? "Found " : "Missing ");
+    console.log("Refresh Token:", data?.data?.refreshToken ? "Found " : "Missing ");
         
     if(accessToken){
-      await setCookie("accessToken", accessToken, {
+      await setCookie("clientAccessToken", accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24, // 1 day
-      path: "/",
+    secure: true,
+    sameSite: "none",
+    path: "/",
     });
   }
 
    
     if (refreshToken) {
-      await setCookie("refreshToken", refreshToken, {
+      await setCookie("clientRefreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: "/",
+    secure: true,
+    sameSite: "none",
+    path: "/",
       });
-    }
+    } 
+
+  // const token = data.token || data?.data?.accessToken;
+
+  //   if (!token) {
+  //     throw new Error("No token returned from server");
+  //   }
 
     return data;
+
   } catch (error: any) {
-    throw new Error(error.message || "An unexpected error occurred");
+     console.error("Registration error:", error);
+    return { success: false, message: error.message || "Unexpected error" };
   }
 };
 
@@ -76,39 +85,69 @@ export const loginUser = async (userData: Record<string, any>) => {
       headers: {
         "Content-Type": "application/json",
       },
-      
+       credentials: "include",
       
       body: JSON.stringify(userData),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to log in");
-    }
+     const data = await response.json();
+//  console.log("Register Response:", JSON.stringify(data, null, 2));
 
-    const data = await response.json();
+    if (!response.ok || !data.success) {
+      
+      throw new Error(data?.message || "Failed to log in");
+    }
+    // const token = data.accessToken || data?.data?.accessToken;
+
+    // if (!token) {
+    //   throw new Error("No token returned from server");
+    // }
+
+    // console.log(token,data, "hello");
+    //   return {
+    //     success: true,
+    //     token,
+    //     data,
+    //   };
+
+   
     // console.log("Register Response:", JSON.stringify(data, null, 2));
 
     if (data.success) {
-        await setCookie("accessToken", data?.data?.accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24, // 1 day
-        path: "/",
-      });
+      const accessToken = data?.data?.accessToken || data?.accessToken;
+      const refreshToken = data?.data?.refreshToken;
 
-      await setCookie("refreshToken", data?.data?.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: "/",
-      }); 
+      console.log("Login successful");
+      console.log("Access Token:", accessToken ? "Found" : "Missing");
+      console.log("Refresh Token:", refreshToken ? "Found" : "Missing");
+
+      if (accessToken) {
+        await setCookie("clientAccessToken", accessToken, {
+         httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
+        });
+      }
+
+      if (refreshToken) {
+        await setCookie("clientRefreshToken", refreshToken, {
+         httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
+        });
+      }
+        return data;
+
+
     }
 
-    return data;
+    throw new Error(data.message || "Login failed");
   } catch (error: any) {
+    console.error("Login error:", error);
     throw new Error(error.message || "An unexpected error occurred");
   }
 };
@@ -119,8 +158,8 @@ export const loginUser = async (userData: Record<string, any>) => {
 
 export const logoutService = async () => {
   
- await deleteCookie("accessToken");
-  await deleteCookie("refreshToken");
+ await deleteCookie("clientAccessToken");
+  await deleteCookie("clientRefreshToken");
   
 };
 
@@ -129,7 +168,7 @@ export const logoutService = async () => {
 
 export const getAccessToken = async () => {
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
+  const accessToken = cookieStore.get("clientAccessToken")?.value;
   return accessToken;
 };
 

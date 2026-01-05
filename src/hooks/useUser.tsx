@@ -1,15 +1,10 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-// import { getClientCookie } from "@/lib/clientCookie";
-
-// import { selectCurrentToken } from "@/redux/features/auth/authSlice";
+import { selectCurrentUser, selectCurrentToken } from "@/redux/features/auth/authSlice";
 import { useGetMyProfileQuery } from "@/redux/features/category/authApi";
 import { useAppSelector } from "@/redux/hooks";
-// import { useEffect, useState } from "react";
-// import { useAppSelector } from "@/redux/hooks";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 
 // function getCookie(name: string): string | null {
@@ -26,26 +21,33 @@ import { useAppSelector } from "@/redux/hooks";
 
 const useUserDetails = () => {
   const authUser = useAppSelector(selectCurrentUser);
-  // const token = useAppSelector(selectCurrentToken);
-  // const [isRefetching, setIsRefetching] = useState(false);
+  console.log(authUser , "userrrrr");
+  const token = useAppSelector(selectCurrentToken);
+  console.log(token , "userrrrr");
+  const [isRefetching, setIsRefetching] = useState(false);
 //  const [token, setToken] = useState<string | null>(null);
   // undefined = still checking cookie
 
-  //  useEffect(() => {
-  //   setToken(getClientCookie("accessToken"));
-  // }, []);
+  
 
 
   // Only skip query if token is explicitly null
   // const skipQuery = token === null || token === undefined;
 
   const { data, isLoading, refetch, isFetching, error } = useGetMyProfileQuery(undefined, {
-    skip: !authUser, 
+    skip: !token, 
   });
 
-  if (error && "status" in error && error.status === 401) {
-    return { userData: null };
-  }
+  //   useEffect(() => {
+  //   if (authUser) {
+  //     console.log("User in Redux, fetching profile...");
+  //     refetch();
+  //   }
+  // }, [authUser, refetch]);
+
+  // if (error && "status" in error && error.status === 401) {
+  //   return { userData: null };
+  // }
     
 
 
@@ -53,22 +55,22 @@ const useUserDetails = () => {
 
   // console.log(token);
 
-  // useEffect(() => {
-  //   if (token) {
-  //     setIsRefetching(true);
-  //     refetch().finally(() => {
-  //       setIsRefetching(false);
-  //     });
-  //   }
-  // }, [token]);
+  useEffect(() => {
+    if (token) {
+      setIsRefetching(true);
+      refetch().finally(() => {
+        setIsRefetching(false);
+      });
+    }
+  }, [token, refetch]);
 
-  // const effectiveLoading = isLoading || isRefetching;
+  const effectiveLoading = isLoading || isRefetching;
     // userData: token ? data : null, 
 
   return { 
   
-     userData: authUser ? data ?? null : null,
-    isLoading,
+    userData: token ? data : null,
+    isLoading: effectiveLoading,
     isFetching,
     refetch,
     error,

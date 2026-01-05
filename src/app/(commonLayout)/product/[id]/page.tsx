@@ -245,16 +245,17 @@ const formatDateTime = (dateString: string) => {
       </div>
     );
   }
-console.log(data,"rev");
+// console.log(data,"rev");
 
 
 
   return (
     <div className="py-6 md:py-10 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
-      {/* Product Main Section */}
+     {/* Product Main Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-12">
         {/* Image Gallery */}
         <div className="flex flex-col-reverse md:flex-row gap-4">
+          
           {/* Thumbnail Images */}
           <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-visible">
             {data?.image?.map((singleImage: string, index: number) => (

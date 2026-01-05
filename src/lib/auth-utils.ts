@@ -27,8 +27,10 @@ export const vendorProtectedRoutes:RouteConfig = {
 
 
 export const customerProtectedRoutes:RouteConfig ={
-       exact:["/dashboard/customer", "/checkout"],
-       patterns:[/^\/dashboard\/customer/, /^\/checkout/, /^\/payment-(success|failed)/, ],
+       exact:["/dashboard/customer", "/checkout", "/payment-success",
+    "/payment-failed", "/payment-cancel"],
+       patterns:[/^\/dashboard\/customer/, /^\/checkout/,   /^\/payment-success/,
+    /^\/payment-failed/,  /^\/payment-cancel/,],
 };
 
 
@@ -38,6 +40,10 @@ export const  isAuthRoute = (pathname:string): boolean => {
 
 export const isShopRoute = (pathname: string) => {
   return pathname === "/shop" || pathname === "/shop-page";
+};
+
+export const isPayment = (pathname: string) => {
+  return pathname === "/payment-success" || pathname === "/payment-failed" || pathname === "/payment-cancel";
 };
 
 

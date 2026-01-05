@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { resetPassword } from "@/utils/loginService";
+import { useState } from "react";
 
 interface FormValues {
   newPassword: string;
@@ -18,6 +19,7 @@ const ResetPassword = () => {
   const email = searchParams.get("email")!;
   const resetToken = searchParams.get("token")!;
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -26,13 +28,15 @@ const ResetPassword = () => {
   } = useForm<FormValues>();
 
   const onSubmit = async (data: FormValues) => {
-    toast.loading("Resetting Password...");
+    setIsLoading(true);
+    const toastId = toast.loading("Resetting Password...");
 
     const userData = { email, newPassword: data.newPassword };
 
     try {
       const response = await resetPassword(userData, resetToken);
-      toast.dismiss();
+       toast.dismiss(toastId);
+    setIsLoading(false);
       if (response?.success) {
         toast.success("Password reset successful!", {
           duration: 6000,
@@ -40,6 +44,8 @@ const ResetPassword = () => {
         router.push("/login");
       }
     } catch (error: any) {
+      toast.dismiss(toastId);
+    setIsLoading(false);
       toast.error(error.message);
     }
   };
@@ -92,9 +98,15 @@ const ResetPassword = () => {
             <div className="flex justify-center items-center mb-10">
               <button
                 type="submit"
-                className="relative h-10 w-full origin-top transform rounded-lg border-2 border-green-800 text-green-800 before:absolute before:top-0 before:block before:h-0 before:w-full before:duration-500 hover:text-white hover:before:absolute hover:before:left-0 hover:before:-z-10 hover:before:h-full hover:before:bg-green-700 uppercase font-bold"
-              >
-                Reset Password
+                 disabled={isLoading}
+  className={`relative h-10 w-full origin-top transform rounded-lg border-2 
+    border-green-800 uppercase font-bold
+    ${isLoading
+      ? "bg-green-700 text-white cursor-not-allowed"
+      : "text-green-800 hover:text-white hover:before:absolute hover:before:left-0 hover:before:-z-10 hover:before:h-full hover:before:bg-green-700"}
+  `}
+>
+                {isLoading ? "Resetting..." : "Reset Password"}
               </button>
             </div>
           </form>

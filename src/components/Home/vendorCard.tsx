@@ -58,7 +58,7 @@ export const VendorCard = ({ vendor, userData, refetch, followUser, unfollowUser
             width={110}
             height={110}
             className="relative h-28 w-28 rounded-full object-cover border-4 border-gray-200 group-hover:border-green-500 transition-colors"
-            src={vendor?.vendor?.logo || "https://via.placeholder.com/110?text=No+Logo"}
+            src={vendor?.vendor?.logo || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
             alt={vendor?.vendor?.name || "Vendor"}
           />
         </div>

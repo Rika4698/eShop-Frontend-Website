@@ -47,7 +47,7 @@ const FlashSale = () => {
 
   const {
     data: allProductsResponse,
-    isLoading,
+    isLoading,isFetching
   } = useGetAllProductsQuery(queryObj);
 
   const totalPages = Math.ceil(
@@ -69,7 +69,7 @@ const FlashSale = () => {
     };
   }, [searchTerm]);
 
-  // Handle window resize - this is valid because it's responding to external system (window)
+
   useEffect(() => {
     const updateDataPerPage = () => {
       const width = window.innerWidth;
@@ -87,7 +87,7 @@ const FlashSale = () => {
     return () => {
       window.removeEventListener("resize", updateDataPerPage);
     };
-  }, []); // Empty dependency array - only run once on mount
+  }, []); 
 
   const handleCategorySelect = (key: Key) => {
     setCategory(String(key));
@@ -96,13 +96,13 @@ const FlashSale = () => {
 
   const handleSortSelect = (key: Key) => {
     setSort(String(key));
-    setCurrentPage(1); // Reset to first page when sort changes
+    setCurrentPage(1); 
   };
 
   const handleSliderChange = (values: number[]) => {
     setMinPrice(values[0]);
     setMaxPrice(values[1]);
-    setCurrentPage(1); // Reset to first page when price range changes
+    setCurrentPage(1); 
   };
 
   return (
@@ -110,7 +110,7 @@ const FlashSale = () => {
       {/* Filter part - You can add your filter UI here */}
     
       <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-3">
-        {isLoading
+        {isLoading || isFetching
           ? Array.from({ length: dataPerPage }).map((_, index) => (
               <div key={index}>
                 <Loading/>

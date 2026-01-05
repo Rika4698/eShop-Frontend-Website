@@ -29,7 +29,7 @@ export default function Error({
         </p>
         <div className="mt-6 ">
           <Link
-            href="#"
+            href="/"
             className="inline-flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mr-4"
             prefetch={false}
           >

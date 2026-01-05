@@ -21,6 +21,7 @@ const authApi = baseApi.injectEndpoints({
       query: () => ({
         url: "/users/me",
         method: "GET",
+        credentials: "include",
       }),
       transformResponse: (response: TResponseRedux<any>) => ({
         userData: response.data, 

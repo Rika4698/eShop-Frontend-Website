@@ -65,8 +65,8 @@ const features = [
                 
                 <div className={`relative max-w-7xl mx-auto px-4 md:px-10 lg:px-20 py-10 transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
                     <h2 className="text-3xl md:text-5xl font-bold text-center text-green-700 underline mb-9">
-  About <span className="text-green-500 ">Us</span>
-</h2>
+          About <span className="text-green-500 ">Us</span>
+             </h2>
 
                     <div className="flex flex-col lg:flex-row items-center gap-12">
                         {/* Content Section */}
@@ -149,10 +149,10 @@ const features = [
                          height={450}
                          
                        />
-                       {/* Green Gradient Overlay */}
+                     
                        <div className="absolute inset-0 bg-gradient-to-r from-green-600/90 via-emerald-600/85 to-green-700/90"></div>
                        
-                       {/* Animated Patterns Hidden mobile*/}
+                     
                        <div className="absolute inset-0 opacity-10 hidden sm:block">
                          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-white rounded-full animate-ping"></div>
                          <div className="absolute bottom-10 right-10 w-40 h-40 border-4 border-white rounded-full animate-float"></div>
@@ -170,7 +170,7 @@ const features = [
                          </p>
                        </div>
            
-                       {/* Stats Grid */}
+                   
                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-12 w-full max-w-5xl">
                          {stats.map((stat, index) => (
                            <div
@@ -215,6 +215,9 @@ const features = [
                       Experience excellence in every aspect of your shopping journey
                     </p>
                   </header>
+
+
+                  
           
                   {/* Feature Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-20">

@@ -52,7 +52,7 @@ const RecentProduct = () => {
     }
   };
 
-  console.log(totalProducts,"rr");
+  // console.log(totalProducts,"rr");
 
   return (
     <div className="py-12  bg-gradient-to-br from-green-50/50 via-white to-green-50/50">

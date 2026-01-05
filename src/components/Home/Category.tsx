@@ -99,8 +99,10 @@ const categoryCount = allCategories?.length || 0;
       </div>
     );
   }
-  console.log(allCategories,"cat");
+  // console.log(allCategories,"cat");
 
+
+  
   return (
     <div className="py-12 lg:py-16 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-7xl mx-auto ">

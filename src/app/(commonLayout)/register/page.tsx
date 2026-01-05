@@ -66,24 +66,19 @@ export default function Registration() {
     try {
       const res = await registerUser(signUpData);
 
-      if (res.success && typeof res.token === 'string') {
-        const user = verifyToken(res.token) as TUser; 
-        dispatch(setUser({ user: user, token: res.token }));
-
+      if (res.success && res.token ) {
+       
+       const user = verifyToken(res.token) as TUser;
+        dispatch(setUser({ user, token: res.token }));
         // setIsLogInSuccess(true);
         toast.success("Account created successfully!", { duration: 3000 });
-        const redirect = searchParams.get("redirect");
-  
-        let targetRoute = "/";
-        if (redirect && redirect !== "/login") {
-          targetRoute = redirect;
-        }
-  
-        router.replace(targetRoute);
+        
+         const target = redirect && redirect !== "/login" ? redirect : "/";
+      router.replace(target);
          router.refresh(); 
 
       } else {
-        toast.error("Failed to create account. Invalid token.");
+        toast.error(res.message  || "Failed to create account. Invalid token.");
         setIsRegistering(false);
       }
     } catch (error: unknown) {

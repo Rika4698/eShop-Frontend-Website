@@ -41,9 +41,9 @@ const FavoriteShops = () => {
                 <div className="overflow-x-auto  rounded-lg shadow-lg">
                   <table className="min-w-full table-auto text-black">
                     <thead>
-                      <tr className="border-b border-gray-700">
+                      <tr className="border-b border-gray-300">
                         <th className="px-4 py-2 text-left">Logo</th>
-                        <th className="px-4 py-2 text-left">Shop Name</th>
+                        <th className="px-4 py-2 text-left whitespace-nowrap">Shop Name</th>
                         <th className="px-4 py-2 text-left">Description</th>
                         <th className="px-4 py-2 text-left">Actions</th>
                       </tr>
@@ -51,14 +51,14 @@ const FavoriteShops = () => {
                     <tbody>
                       {userData?.userData?.following?.map(
                         (singleFollow: IFollow) => (
-                          <tr key={singleFollow?.id} className="border-b border-gray-700">
+                          <tr key={singleFollow?.id} className="border-b border-gray-300">
                             <td className="px-4 py-2">
                               <Image
-                                className="object-cover h-16 w-16 rounded-full"
-                                src={singleFollow?.vendor?.logo || "/BannerImg.JPG"}
+                                className="object-cover h-20 w-20 rounded-full"
+                                src={singleFollow?.vendor?.logo || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
                                 alt="Shop Logo"
-                                width={64}
-                                height={64}
+                                width={60}
+                                height={60}
                               />
                             </td>
                             <td className="px-4 py-2">{singleFollow?.vendor?.shopName}</td>

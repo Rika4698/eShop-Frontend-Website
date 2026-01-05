@@ -24,7 +24,7 @@ export const Countdown = ({ targetDate }: { targetDate: string }) => {
 
     return timeLeft;
   };
-  console.log(targetDate.length);
+  // console.log(targetDate.length);
 
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
 
@@ -74,6 +74,12 @@ const BestDeal = () => {
 
 
     const [isTimeRemaining, setIsTimeRemaining] = useState(true);
+    const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const checkTime = () => {
@@ -133,7 +139,7 @@ const BestDeal = () => {
 
            {isTimeRemaining && (
             <Link href={'/flashSale'}>
-              <button className="group mt-4 sm:mt-6 px-6 sm:px-8 lg:px-10 py-4 sm:py-5 bg-gradient-to-r from-[#18b500] to-[#48ad39] hover:from-[#48ad39] hover:to-[#80b500] text-white font-bold rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex flex-col items-center gap-2">
+              <button onClick={scrollToTop}  className="group mt-4 sm:mt-6 px-6 sm:px-8 lg:px-10 py-4 sm:py-5 bg-gradient-to-r from-[#18b500] to-[#48ad39] hover:from-[#48ad39] hover:to-[#80b500] text-white font-bold rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex flex-col items-center gap-2">
                 <span className="text-base sm:text-lg lg:text-xl">Shop Now 🛍️</span>
                 
               

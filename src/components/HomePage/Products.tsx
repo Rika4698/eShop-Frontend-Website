@@ -5,99 +5,131 @@ import { useGetAllProductsQuery } from "@/redux/features/products/productApi";
 import Loading from "@/app/loading";
 import { IProduct } from "@/types/modal";
 import HomePageProductCard from "./HomePageProductCard";
-import { ChevronLeft, ChevronRight, Package } from "lucide-react";
+import { ChevronLeft, ChevronRight, Package, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const HomeProducts = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(4);
 
-  const [queryObj, setQueryObj] = useState({
-    flashSale: false,
-    page: 1,
-    limit: 4,
-  });
+   const [limit, setLimit] = useState(4);
 
-  const {
-    data: allProductsResponse,
-    isLoading,
-    refetch,
-  } = useGetAllProductsQuery(queryObj);
-
-  const totalPages = Math.ceil(
-    (allProductsResponse?.meta?.total || 0) / dataPerPage
-  );
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    // Smooth scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Update dataPerPage on resize
+  // responsive product limit
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      let newDataPerPage = 4;
 
-      if (width >= 1280) newDataPerPage = 8;
-      else if (width >= 768) newDataPerPage = 6;
-
-      requestAnimationFrame(() => setDataPerPage(newDataPerPage));
+      if (width >= 1280) {
+        setLimit(8);
+      } else if (width >= 768 && width < 1280) {
+        setLimit(6);
+      } else {
+        setLimit(4);
+      }
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
 
+  const { data, isLoading } =
+    useGetAllProductsQuery({
+      flashSale: false,
+      limit,
+    });
+ const products: IProduct[] = data?.data?.slice(0, limit) || [];
+
+
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [dataPerPage, setDataPerPage] = useState(4);
+
+  // const [queryObj, setQueryObj] = useState({
+  //   flashSale: false,
+  //   page: 1,
+  //   limit: 4,
+  // });
+
+  // const {
+  //   data: allProductsResponse,
+  //   isLoading,
+  //   refetch,
+  // } = useGetAllProductsQuery(queryObj);
+
+  // const totalPages = Math.ceil(
+  //   (allProductsResponse?.meta?.total || 0) / dataPerPage
+  // );
+
+  // const handlePageChange = (page: number) => {
+  //   setCurrentPage(page);
+  //   // Smooth scroll to top
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // };
+
+  // // Update dataPerPage on resize
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     const width = window.innerWidth;
+  //     let newDataPerPage = 4;
+
+  //     if (width >= 1280) newDataPerPage = 8;
+  //     else if (width >= 768) newDataPerPage = 6;
+
+  //     requestAnimationFrame(() => setDataPerPage(newDataPerPage));
+  //   };
+
+  //   handleResize();
+  //   window.addEventListener("resize", handleResize);
+
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
+
+
   
 
-  // Update queryObj whenever currentPage or dataPerPage changes
-  useEffect(() => {
-    const newQueryObj = {
-      flashSale: false,
-      page: currentPage,
-      limit: dataPerPage,
-    };
-    requestAnimationFrame(() => setQueryObj(newQueryObj));
-  }, [currentPage, dataPerPage]);
+  // // Update queryObj whenever currentPage or dataPerPage changes
+  // useEffect(() => {
+  //   const newQueryObj = {
+  //     flashSale: false,
+  //     page: currentPage,
+  //     limit: dataPerPage,
+  //   };
+  //   requestAnimationFrame(() => setQueryObj(newQueryObj));
+  // }, [currentPage, dataPerPage]);
 
-  // Refetch data when queryObj changes
-  useEffect(() => {
-    refetch();
-  }, [queryObj, refetch]);
+  // // Refetch data when queryObj changes
+  // useEffect(() => {
+  //   refetch();
+  // }, [queryObj, refetch]);
 
-  // Generate page numbers with ellipsis
-  const getPageNumbers = () => {
-    const pages = [];
-    const showEllipsisAfter = 3;
+  // // Generate page numbers with ellipsis
+  // const getPageNumbers = () => {
+  //   const pages = [];
+  //   const showEllipsisAfter = 3;
     
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) pages.push(i);
-        pages.push('...');
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1);
-        pages.push('...');
-        for (let i = totalPages - 3; i <= totalPages; i++) pages.push(i);
-      } else {
-        pages.push(1);
-        pages.push('...');
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
-        pages.push('...');
-        pages.push(totalPages);
-      }
-    }
+  //   if (totalPages <= 5) {
+  //     for (let i = 1; i <= totalPages; i++) {
+  //       pages.push(i);
+  //     }
+  //   } else {
+  //     if (currentPage <= 3) {
+  //       for (let i = 1; i <= 4; i++) pages.push(i);
+  //       pages.push('...');
+  //       pages.push(totalPages);
+  //     } else if (currentPage >= totalPages - 2) {
+  //       pages.push(1);
+  //       pages.push('...');
+  //       for (let i = totalPages - 3; i <= totalPages; i++) pages.push(i);
+  //     } else {
+  //       pages.push(1);
+  //       pages.push('...');
+  //       for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+  //       pages.push('...');
+  //       pages.push(totalPages);
+  //     }
+  //   }
     
-    return pages;
-  };
+  //   return pages;
+  // };
 
   return (
     <section className="py-8 sm:py-12 md:py-16 max-w-7xl mx-auto ">
@@ -112,11 +144,11 @@ const HomeProducts = () => {
           </div>
           
           {/* Product Count */}
-          {allProductsResponse?.meta?.total && (
+          {data?.meta?.total && (
             <div className="flex items-center gap-2 bg-[#18b500]/10 px-4 py-2 rounded-lg">
               <Package className="w-5 h-5 text-[#18b500]" />
               <span className="text-sm sm:text-base font-semibold text-gray-700">
-                {allProductsResponse.meta.total} Products Available
+                {data.meta.total} Products Available
               </span>
             </div>
           )}
@@ -124,23 +156,25 @@ const HomeProducts = () => {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
-        {isLoading
-          ? Array.from({ length: dataPerPage }).map((_, index) => (
-              <div key={index} className="animate-pulse">
-                <Loading />
-              </div>
-            ))
-          : allProductsResponse?.data?.length > 0 
-          ? allProductsResponse.data.map((singleProduct: IProduct) => (
+       {isLoading ? (
+        <div className="flex items-center justify-center">
+          {Array.from({ length: 1 }).map((_, index) => (
+            <Loading key={index} />
+          ))}
+        </div>
+      ) : products?.length > 0 
+          ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+          {products.map((singleProduct: IProduct) => (
               <div 
                 key={singleProduct.id} 
                 className="transform transition-all duration-300 hover:scale-105"
               >
                 <HomePageProductCard singleProduct={singleProduct} />
               </div>
-            ))
-          : (
+            ))}
+            </div>
+          ): (
             <div className="col-span-full flex flex-col items-center justify-center py-12 sm:py-16">
               <Package className="w-16 h-16 sm:w-20 sm:h-20 text-gray-300 mb-4" />
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-600 mb-2">
@@ -151,21 +185,32 @@ const HomeProducts = () => {
               </p>
             </div>
           )}
+ 
+       <div className="mt-10 flex justify-center">
+        <Link href="/all-products">
+          <button className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#18b500] to-[#48ad39] text-white font-bold rounded-full shadow-lg hover:scale-105 transition-all">
+            View All Products
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </Link>
       </div>
 
+
+
+
+
       {/* Pagination - Now visible on all devices */}
-      {allProductsResponse?.data?.length > 0 && totalPages > 1 && (
+     {/* {allProductsResponse?.data?.length > 0 && totalPages > 1 && (
         <div className="mt-8 sm:mt-10 md:mt-12">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            {/* Page Info */}
+          
             <div className="text-sm text-gray-600 order-2 sm:order-1">
               Showing page <span className="font-semibold text-[#18b500]">{currentPage}</span> of{" "}
               <span className="font-semibold">{totalPages}</span>
             </div>
 
-            {/* Pagination Buttons */}
             <div className="flex items-center gap-2 order-1 sm:order-2">
-              {/* Previous Button */}
+           
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -183,7 +228,7 @@ const HomeProducts = () => {
                 <ChevronLeft className="w-5 h-5" />
               </button>
 
-              {/* Page Numbers */}
+            
               <div className="flex items-center gap-1 sm:gap-2">
                 {getPageNumbers().map((page, index) => (
                   page === '...' ? (
@@ -210,7 +255,7 @@ const HomeProducts = () => {
                 ))}
               </div>
 
-              {/* Next Button */}
+              
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
@@ -230,7 +275,7 @@ const HomeProducts = () => {
             </div>
           </div>
 
-          {/* Quick Jump - Only on larger screens */}
+   
           {totalPages > 5 && (
             <div className="hidden md:flex justify-center items-center gap-3 mt-6">
               <label htmlFor="pageJump" className="text-sm text-gray-600 font-medium">
@@ -251,7 +296,7 @@ const HomeProducts = () => {
             </div>
           )}
         </div>
-      )}
+      )}       */}
     </section>
   );
 };

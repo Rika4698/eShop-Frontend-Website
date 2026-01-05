@@ -106,7 +106,7 @@ export default function EditProductPage() {
 
   if (isFetching) return <p>Loading...</p>;
   if (!product) return <p className="text-gray-200 text-base">Product not found!</p>;
- console.log(product,"update");
+//  console.log(product,"update");
 
   return (
     <div className="mx-auto max-w-4xl">

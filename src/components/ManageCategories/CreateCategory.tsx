@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Button } from "@/components/ui/button";
 import {
@@ -62,13 +63,20 @@ const CreateCategory = () => {
       );
 
       await createCategory(payload).unwrap();
-      toast.success("Category created successfully!");
+      toast.success("Category created successfully!", { id: loadingToast });
       setIsOpen(false);
       setFormData({ category: "", image: null, label: "" }); // Reset form
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error creating category!");
-    } finally {
+    } catch (error: any) {
+    console.error("Create category error:", error);
+
+    
+    const errorMessage =
+      error?.data?.message ||
+      error?.error ||
+      "Failed to create category";
+
+    toast.error(errorMessage);
+  } finally {
       toast.dismiss(loadingToast);
     }
   };

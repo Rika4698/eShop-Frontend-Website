@@ -108,7 +108,7 @@ const Views = () => {
     return <Loading />;
   }
 
-  console.log(singleVendor.shopName, paginatedProducts, email,"sa");
+  // console.log(singleVendor.shopName, paginatedProducts, email,"sa");
 
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
@@ -135,7 +135,7 @@ const Views = () => {
                     <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-4 border-green-500 overflow-hidden bg-gray-100 shadow-lg">
                       <Image 
                         className="w-full h-full object-cover" 
-                        src={singleVendor?.logo || "https://i.pinimg.com/originals/d9/4e/34/d94e34a2679cbfcc38c8d8d7a58b5503.jpg"} 
+                        src={singleVendor?.logo || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"} 
                         alt="shop" 
                         width={112} 
                         height={112}

@@ -44,7 +44,7 @@ const ManageVendorProducts = () => {
     return <Loading />;
   }
  
-  console.log(products);
+  // console.log(products);
 
   return (
     <div>

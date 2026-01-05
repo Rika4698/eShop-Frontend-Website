@@ -25,3 +25,8 @@ export const deleteCookie = async (key:string) => {
 };
 
 
+export const getCookieHeader = async () => {
+  const cookieStore = await cookies();
+  const allCookies = cookieStore.getAll();
+  return allCookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
+};

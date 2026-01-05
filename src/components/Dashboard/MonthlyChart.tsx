@@ -53,7 +53,7 @@ export default function MonthlyChart({ data }: { data: TMonthlyData[] }) {
         Monthly Products & Orders Overview
       </h2>
 
-      {/* Responsive chart container */}
+   
       <div className="w-full h-[320px] sm:h-[360px] md:h-[400px] lg:h-[450px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart

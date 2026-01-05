@@ -4,6 +4,7 @@ import BundleSet from "@/components/Home/BundleSet";
 import Category from "@/components/Home/Category";
 import FlashSale from "@/components/Home/FlashSaleProduct";
 import Support from "@/components/Home/Support";
+import Testimonials from "@/components/Home/Testimonials";
 import WhyChooseUs from "@/components/Home/WhyChoseUs";
 import HomeProducts from "@/components/HomePage/Products";
 import RecentProduct from "@/components/MostViewsProducts/RecentProduct";
@@ -12,6 +13,7 @@ import useUserDetails from "@/hooks/useUser";
 
 export default function HomeClient() {
     const { userData } = useUserDetails();
+    // console.log(userData);
     return (
      <div className="w-full mt-[30px] z-10">
             <Banner />
@@ -19,10 +21,11 @@ export default function HomeClient() {
             <HomeProducts/>
             <FlashSale/>
             <BestDeal/>
-            {userData?.userData.role === "CUSTOMER"? <RecentProduct/> :""}
+            {userData?.userData?.role === "CUSTOMER"? <RecentProduct/> :""}
             {/* <RecentProduct/> */}
             <BundleSet/>
             <WhyChooseUs/>
+            <Testimonials/>
             <Support/>
 
      

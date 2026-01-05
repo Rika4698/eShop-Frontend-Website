@@ -1,3 +1,4 @@
+"use client"
 import FlashSaleView from "@/views/FlashSaleView";
 
 

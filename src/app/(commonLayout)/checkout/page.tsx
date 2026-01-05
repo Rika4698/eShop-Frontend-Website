@@ -247,7 +247,7 @@ const CheckOut = () => {
         toast.success("Coupon removed successfully!", { duration: 2000 });
     };
 
-console.log( !userData?.userData?.customerCoupons);
+// console.log( !userData?.userData?.customerCoupons);
 
     return (
         <div>

@@ -48,7 +48,7 @@ const HomePageProductCard = (
     const router = useRouter();
     const dispatch = useAppDispatch();
     const productsForComparison = useAppSelector(selectCompareProducts);
-console.log(singleProduct,"sa");
+// console.log(singleProduct,"sa");
     const [addRecentProduct] = useAddRecentProductMutation();
 
     const addProductToCart = () => {
@@ -66,7 +66,7 @@ console.log(singleProduct,"sa");
     const handleAddToCart = () => {
         const existingVendorId = cart[0]?.vendorId;
 
-        console.log(existingVendorId,  singleProduct );
+        // console.log(existingVendorId,  singleProduct );
 
         if (
             existingVendorId &&
@@ -130,7 +130,7 @@ console.log(singleProduct,"sa");
         toast.success(`${singleProduct.name} added for comparison.`);
     };
 
-    console.log("from redux", productsForComparison);
+    // console.log("from redux", productsForComparison);
 
 
     return (
@@ -192,10 +192,11 @@ console.log(singleProduct,"sa");
     )
   ) : (<>
         <Link
-      href={`/login`}>
-    <li  className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#36931e] hover:text-white hover:rotate-[360deg] transition-all">
+      href={`/login`}  onClick={(e) => e.preventDefault()} >
+    <li  className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border  bg-white flex justify-center items-center rounded-full hover:bg-[#36931e] hover:text-white hover:rotate-[360deg] transition-all cursor-not-allowed">
       <button title="Login as a customer" className="w-full h-full flex justify-center items-center">
         <FaArrowRightArrowLeft className="text-sm sm:text-base" />
+        
       </button>
     </li>
     </Link>

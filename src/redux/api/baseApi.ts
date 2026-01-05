@@ -2,7 +2,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // import { RootState } from "../store";
 import envData from "@/config/envData";
-
+import type { RootState } from "../store";
 
 // function getCookie(name:string):string | null {
 //   if(typeof document === "undefined")
@@ -24,22 +24,33 @@ export const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: envData.baseUrl,
     credentials: "include",
-    // prepareHeaders: (headers, { getState }) => {
+
+    //   prepareHeaders: (headers, { getState }) => {
     //   const token = (getState() as RootState).auth.token;
+
     //   if (token) {
-    //     headers.set("authorization", `${token}`);
+    //     headers.set("clientAccessToken", token);
     //   }
 
     //   return headers;
     // },
+    
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token;
+      if (token) {
+        headers.set("authorization", `${token}`);
+      }
+
+      return headers;
+    },
     // prepareHeaders:(headers)=>{
     //   const token = getCookie("accessToken");
-    //    console.log("🔑 Token from cookie:", token ? "Found ✅" : "Missing ❌");
-    //   console.log("🔑 Token preview:", token ? token.substring(0, 30) + "..." : "null");
+    //    console.log("Token from cookie:", token ? "Found " : "Missing ❌");
+    //   console.log("Token preview:", token ? token.substring(0, 30) + "..." : "null");
       
     //   if(token){
     //   headers.set("Authorization", token);
-    //   console.log("✅ Authorization header set");
+    //   console.log(" Authorization header set");
     // }
     // return headers;
     // },

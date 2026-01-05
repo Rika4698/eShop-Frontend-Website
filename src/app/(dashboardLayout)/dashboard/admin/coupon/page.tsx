@@ -53,7 +53,7 @@ const Coupon = () => {
       toast.error(error.message || "This is used in customerCoupon.");
     }
   };
-console.log(paginatedCoupons);
+// console.log(paginatedCoupons);
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Coupon Management</h1>

@@ -15,6 +15,7 @@ const ForgotPassword = () => {
   const [value, setValue] = useState("");
   const [isSent, setIsSent] = useState(false);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (value: string) =>
     value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
@@ -30,11 +31,15 @@ const ForgotPassword = () => {
     e.preventDefault();
     // toast.loading("Loading...");
 
+      setIsLoading(true);
+  const toastId = toast.loading("Sending reset email...");
+
     const userData = { email: value };
 
     try {
       const response = await forgotPassword(userData);
-      toast.dismiss();
+       toast.dismiss(toastId);
+    setIsLoading(false);
 
       if ("success" in response && response?.success) {
         // setValue("");
@@ -45,7 +50,9 @@ const ForgotPassword = () => {
         });
       }
     } catch (error: any) {
-      toast.error(error.message);
+       toast.dismiss(toastId);
+    setIsLoading(false);
+    toast.error(error.message || "Something went wrong");
     }
   };
 
@@ -88,6 +95,7 @@ const ForgotPassword = () => {
             errorMessage=""
             onValueChange={setValue}
             size="lg"
+            required
             className="border rounded-lg"
           />
            {isInvalid && (
@@ -98,9 +106,13 @@ const ForgotPassword = () => {
         </div>
         <button
           type="submit"
-          className="w-full py-3 text-white bg-[#269f34] focus:ring-4 focus:ring-blue-300 rounded-lg text-lg font-semibold focus:outline-none"
-        >
-          Reset Password
+           disabled={isLoading}
+  className={`w-full py-3 rounded-lg text-lg font-semibold text-white
+    ${isLoading
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-[#269f34] hover:bg-green-700 focus:ring-4 focus:ring-green-300"}
+  `}>
+         {isLoading ? "Sending..." : "Reset Password"}
         </button>
       </form>
     </div>

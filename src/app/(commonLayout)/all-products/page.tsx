@@ -40,7 +40,7 @@ const AllProducts = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(
   selectedCategory || null);
   const { data: allCategories } = useGetAllCategoriesQuery(undefined);
-  const { data: allProductsResponse, isLoading, refetch } =
+  const { data: allProductsResponse, isLoading, isFetching, refetch } =
 
   useGetAllProductsQuery({
     page: currentPage,
@@ -65,7 +65,7 @@ useEffect(() => {
   setCurrentPage(1);
 }, [selectedCategory]);
 
-// Debounce search term for performance
+
 useEffect(() => {
   const handler = setTimeout(() => setDebouncedSearchTerm(searchTerm), 300);
   return () => clearTimeout(handler);
@@ -187,11 +187,14 @@ useEffect(() => {
           </div>
         </div>
 
+
+
+
         {/* Product Cards - Right Side */}
         <div className="col-span-12 md:col-span-8 lg:col-span-9">
            <div className="md:col-span-8 lg:col-span-9 col-span-12">
     <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-      {isLoading
+      {isLoading || isFetching
           ? Array.from({ length: dataPerPage }).map((_, index) => (
               <div key={index}>
                 <Loading />

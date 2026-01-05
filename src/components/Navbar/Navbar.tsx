@@ -19,6 +19,13 @@ const Navbar = () => {
   const router = useRouter();
   const [categoryOpen, setCategoryOpen] = useState(false);
   const { data: allCategories, } = useGetAllCategoriesQuery(undefined);
+
+    const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
   const Home = [
     {
       title: "About Us",
@@ -94,7 +101,7 @@ const Navbar = () => {
             href="/flashSale"
             className={path === "/flashSale" ? "bg-gray-200 text-green-700 font-bold" : ""}
           >
-            <button className="text-[18px] font-bold hover:bg-gray-200 hover:text-green-700 flex text-gray-700 items-center gap-2 px-[15px] py-[5px]  uppercase rounded-md">
+            <button  onClick={scrollToTop} className="text-[18px] font-bold hover:bg-gray-200 hover:text-green-700 flex text-gray-700 items-center gap-2 px-[15px] py-[5px]  uppercase rounded-md">
               <span>
                
               </span>{" "}
