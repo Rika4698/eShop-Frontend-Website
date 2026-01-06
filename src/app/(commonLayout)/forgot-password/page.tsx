@@ -29,31 +29,25 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // toast.loading("Loading...");
 
-      setIsLoading(true);
+  setIsLoading(true);
   const toastId = toast.loading("Sending reset email...");
 
-    const userData = { email: value };
+  const response = await forgotPassword({ email: value });
 
-    try {
-      const response = await forgotPassword(userData);
-       toast.dismiss(toastId);
-    setIsLoading(false);
+  toast.dismiss(toastId);
+  setIsLoading(false);
 
-      if ("success" in response && response?.success) {
-        // setValue("");
-        // router.push("/login");
-        setIsSent(true);
-        return toast.success("Please check email inbox or spam!", {
-          duration: 6000,
-        });
-      }
-    } catch (error: any) {
-       toast.dismiss(toastId);
-    setIsLoading(false);
-    toast.error(error.message || "Something went wrong");
-    }
+  if (!response.success) {
+    toast.error(response.message);
+    return;
+  }
+
+  setIsSent(true);
+  toast.success("Please check email inbox or spam!", {
+    duration: 6000,
+  });
+  
   };
 
   if(isSent){

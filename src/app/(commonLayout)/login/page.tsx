@@ -39,34 +39,33 @@ export default function Login() {
   // }, [isLogInSuccess, redirect, router]);
 
   const handleLogin: SubmitHandler<FieldValues> = async (data) => {
- setIsLoading(true);
+   setIsLoading(true);
   const loadingToast = toast.loading("Logging in...");
 
-  try {
-    const res = await loginUser(data);
-    console.log(res);
-   if (res.success ) {
-   
-        const user = verifyToken(res.data.accessToken) as TUser;
-      dispatch(setUser({ user, token: res.data.accessToken }));
-      
-         toast.dismiss(loadingToast);
-        toast.success("Login successful!", { duration: 3000 });
+  const res = await loginUser(data);
+  console.log(res);
 
-        let targetRoute = "/";
-        if (redirect && redirect !== "/login") {
-          targetRoute = redirect;
-        }
+  toast.dismiss(loadingToast);
 
-        router.replace(targetRoute);
-        router.refresh();
-      } 
-    
-  } catch (error: any) {
-    toast.dismiss(loadingToast);
-    toast.error(error?.message ||  error?.response?.data?.message || "Login failed");
+  if (!res.success) {
+    toast.error(res.message || "Invalid email or password");
     setIsLoading(false);
+    return;
   }
+
+  // success case
+  const user = verifyToken(res.data.accessToken) as TUser;
+  dispatch(setUser({ user, token: res.data.accessToken }));
+
+  toast.success("Login successful!", { duration: 3000 });
+
+  let targetRoute = "/";
+  if (redirect && redirect !== "/login") {
+    targetRoute = redirect;
+  }
+
+  router.replace(targetRoute);
+  router.refresh();
   };
 
  

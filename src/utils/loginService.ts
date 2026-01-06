@@ -91,11 +91,13 @@ export const loginUser = async (userData: Record<string, any>) => {
     });
 
      const data = await response.json();
-//  console.log("Register Response:", JSON.stringify(data, null, 2));
+ console.log("Register Response:", JSON.stringify(data, null, 2));
 
-    if (!response.ok || !data.success) {
-      
-      throw new Error(data?.message || "Failed to log in");
+     if (!response.ok || !data.success) {
+      return {
+        success: false,
+        message: data.message || "Invalid email or password",
+      };
     }
     // const token = data.accessToken || data?.data?.accessToken;
 
@@ -113,7 +115,7 @@ export const loginUser = async (userData: Record<string, any>) => {
    
     // console.log("Register Response:", JSON.stringify(data, null, 2));
 
-    if (data.success) {
+   if (data.success) {
       const accessToken = data?.data?.accessToken || data?.accessToken;
       const refreshToken = data?.data?.refreshToken;
 
@@ -126,7 +128,6 @@ export const loginUser = async (userData: Record<string, any>) => {
          httpOnly: true,
     secure: true,
     sameSite: "none",
-    maxAge: 24 * 60 * 60 * 1000,
     path: "/",
         });
       }
@@ -136,19 +137,21 @@ export const loginUser = async (userData: Record<string, any>) => {
          httpOnly: true,
     secure: true,
     sameSite: "none",
-    maxAge: 24 * 60 * 60 * 1000,
     path: "/",
         });
       }
-        return data;
-
-
+    
+    return data;
     }
-
-    throw new Error(data.message || "Login failed");
+      
+console.log(data);
+  
   } catch (error: any) {
     console.error("Login error:", error);
-    throw new Error(error.message || "An unexpected error occurred");
+     return {
+      success: false,
+      message: error.message || "Something went wrong. Please try again.",
+    };
   }
 };
 
@@ -186,18 +189,26 @@ export const forgotPassword = async (userEmail: { email: string }) => {
       },
       body: JSON.stringify(userEmail),
     });
+    const data = await response.json();
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to send reset link");
+     return {
+        success: false,
+        message:
+          data?.message ||
+          "If the email exists, a reset link has been sent",
+      };
     }
 
-    const result = await response.json();
-    console.log("Response received:", result);
-    return result;
+    // const result = await response.json();
+    // console.log("Response received:", result);
+    return data;
   } catch (error: any) {
     console.error("Error in forgotPassword:", error);
-    throw error;
+      return {
+      success: false,
+      message: error.message || "Something went wrong. Please try again.",
+    };
   }
 };
 
