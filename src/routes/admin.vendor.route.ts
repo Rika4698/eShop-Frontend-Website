@@ -114,7 +114,7 @@ export const customerLinks: NavItem[] = [
   },
   {
     href: "/dashboard/customer/followed-shop",
-    title: "Favourite Shop",
+    title: "Favorite Shop",
     Icon: RiLockPasswordLine,
   },
 ];
