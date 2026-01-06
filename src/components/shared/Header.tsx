@@ -100,7 +100,7 @@ const Header = () => {
         <div className={path === "/dashboard" ? "hidden" : ""}>
             <div className="lg:px-2 md:px-0 overflow-hidden py-2 lg:py-0">
                 <div className="border-b-[1px] pb-2 lg:border-white">
-                    <div className="lg:max-w-full lg:mx-auto lg:pr-2 xl:pl-2 xl:pr-6 ">
+                    <div className="lg:w-full lg:mx-auto lg:pr-2 xl:pl-2 xl:pr-6 ">
                         <div className="flex justify-between lg:items-center lg:justify-between gap-16 md:gap-0">
                             <div className=" flex items-center ">
                                 <div className="flex lg:gap-12  items-center ">

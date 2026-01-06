@@ -60,7 +60,7 @@ const Navbar = () => {
   
   return (
     <div className={path === "/dashboard" ? "hidden" : ""}>
-      <div className={`lg:flex hidden items-center justify-between lg:max-w-full lg:mx-auto bg-white lg:px-4 xl:px-8  py-2 `}>
+      <div className={`lg:flex hidden items-center justify-between lg:w-full lg:mx-auto bg-white lg:px-4 xl:px-8  py-2 `}>
         <div>
           <Select open={categoryOpen} onOpenChange={setCategoryOpen} >
             <SelectTrigger className="w-[220px] px-4 bg-[#1c9d29] text-white font-bold rounded-sm">
