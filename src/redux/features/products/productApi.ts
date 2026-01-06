@@ -87,6 +87,8 @@ const productApi = baseApi.injectEndpoints({
           : [{ type: "products", id: "LIST" }],
     }),
 
+
+
     getSingleProduct: builder.query({
       query: (id) => {
         let url = `/products/${id}`;
@@ -101,6 +103,7 @@ const productApi = baseApi.injectEndpoints({
       providesTags: (result, error, id) => [{ type: "products", id }],
     }),
 
+    
 
     getRecentViewProducts: builder.query({
       query: () => {

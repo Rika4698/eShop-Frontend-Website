@@ -95,6 +95,7 @@ A full-stack e-commerce platform built with **Next.js 16, TypeScript, Prisma, Re
 ### Backend:
 
 - **Runtime**: Node.js with Express
+- **Language**: TypeScript
 - **Database**: PostgreSQL
 - **ORM**: Prisma
 - **Authentication**: JWT + bcrypt
