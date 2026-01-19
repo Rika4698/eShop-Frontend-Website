@@ -83,7 +83,7 @@ const AdminReviewsPage = () => {
 
   const { data: allProductsResponse, isLoading } = useGetAllProductsQuery(undefined);
 
-  // console.log(allProductsResponse?.data,"admin");
+  console.log(allProductsResponse?.data,"admin");
 
   // Extract and flatten all reviews from product data
   const allReviews: IReview[] =
@@ -143,7 +143,8 @@ const AdminReviewsPage = () => {
   // Paginate reviews
   const startIndex = (currentPage - 1) * dataPerPage;
   const paginatedReviews = allReviews?.slice(startIndex, startIndex + dataPerPage) || [];
-  // console.log(paginatedReviews,"adm")
+
+  console.log(paginatedReviews,"adm")
 
   return (
     <div>

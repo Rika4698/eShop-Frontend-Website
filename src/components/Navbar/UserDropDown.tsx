@@ -44,7 +44,7 @@ const fullPath = searchParams.toString()
   : pathname;
 
     const shouldRedirectAfterLogout =
-    pathname.startsWith("/product") ||
+    // pathname.startsWith("/product") ||
     pathname === "/shop" ||
     pathname === "/shop-page";
 

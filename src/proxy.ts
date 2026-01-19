@@ -93,7 +93,7 @@ export async function proxy(request:NextRequest){
 
   
     if(routeOwner === null){
-        if (pathname.startsWith("/product") && !accessToken) {
+        if (pathname.startsWith("/products") && !accessToken) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);

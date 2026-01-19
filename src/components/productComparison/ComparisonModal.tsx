@@ -5,13 +5,34 @@ import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import { IoSwapHorizontal } from "react-icons/io5";
 import { MdSwapHorizontalCircle } from "react-icons/md";
-import { X } from "lucide-react";
+import { X, Star } from "lucide-react";
 
 const ComparisonModal = ({ openWishlist, setOpenWishlist }: any) => {
   const productsForComparison = useAppSelector(selectCompareProducts);
   const dispatch = useAppDispatch();
 
-  
+  // Calculate average rating for a product
+  const calculateAverageRating = (reviews: any[]): number => {
+    if (!reviews || reviews.length === 0) return 0;
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return parseFloat((totalRating / reviews.length).toFixed(1));
+  };
+
+  // Get total review count
+  const getTotalReviews = (reviews: any[]) => {
+    return reviews?.length || 0;
+  };
+
+  // Get latest comment
+  const getLatestComment = (reviews: any[]) => {
+    if (!reviews || reviews.length === 0) return "No reviews yet";
+    const sortedReviews = [...reviews].sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    return sortedReviews[0]?.comment || "No comment";
+  };
+
+  console.log(productsForComparison, "li");
 
   return (
     <div
@@ -41,7 +62,7 @@ const ComparisonModal = ({ openWishlist, setOpenWishlist }: any) => {
             </button>
           </div>
 
-          {/* Clear  Button */}
+          {/* Clear Button */}
           {productsForComparison?.length > 0 && (
             <div className="mt-3 sm:mt-4">
               <button
@@ -150,21 +171,67 @@ const ComparisonModal = ({ openWishlist, setOpenWishlist }: any) => {
                           {product.stockQuantity} 
                         </span>
                       </div>
+
+                      {/* Rating Section */}
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs sm:text-sm font-medium text-gray-500">
+                          Rating:
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <div className="flex items-center">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`w-3 h-3 sm:w-4 sm:h-4 ${
+                                  star <= calculateAverageRating(product.reviews)
+                                    ? "fill-yellow-400 text-yellow-400"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs sm:text-sm font-semibold text-gray-700">
+                            {calculateAverageRating(product.reviews).toFixed(1)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Review Count */}
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs sm:text-sm font-medium text-gray-500">
+                          Reviews:
+                        </span>
+                        <span className="text-xs sm:text-sm font-semibold text-gray-700 bg-blue-50 px-2 py-1 rounded">
+                          {getTotalReviews(product.reviews)} Reviews
+                        </span>
+                      </div>
                     </div>
 
-                    
+                    {/* Latest Comment Section */}
                     <div className="mt-4 pt-4 border-t">
+                      <div className="mb-2">
+                        <span className="text-xs sm:text-sm font-medium text-gray-500">
+                          Latest Review:
+                        </span>
+                      </div>
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <p className="text-xs sm:text-sm text-gray-600 line-clamp-3 ">
+                          {getLatestComment(product.reviews)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="mt-4 pt-4 border-t">
+                      <div className="mb-2">
+                        <span className="text-xs sm:text-sm font-medium text-gray-500">
+                          Description:
+                        </span>
+                      </div>
                       <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">
                         {product.description}
                       </p>
                     </div>
-
-                    {/* View Details Button */}
-                    {/* <div className="mt-4">
-                      <button className="w-full bg-[#18b500] hover:bg-[#48ad39] text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 text-sm sm:text-base">
-                        View Details
-                      </button>
-                    </div> */}
                   </div>
                 ))}
               </div>

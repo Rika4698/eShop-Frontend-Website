@@ -70,7 +70,7 @@ export const Countdown = ({ targetDate }: { targetDate: string }) => {
 
 
 const BestDeal = () => {
-  const targetDate = '2026-01-31T00:00:00';
+  const targetDate = '2026-02-28T00:00:00';
 
 
     const [isTimeRemaining, setIsTimeRemaining] = useState(true);

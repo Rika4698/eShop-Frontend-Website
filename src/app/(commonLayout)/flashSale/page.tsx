@@ -5,7 +5,10 @@ import FlashSale from "@/components/falshSale/FlashSaleProducts";
 const page = () => {
   return (
    
-    <> <FlashSaleBanner/> <FlashSale/></>
+    <> 
+    <FlashSaleBanner/> 
+    <FlashSale/>
+    </>
   )
 };
 

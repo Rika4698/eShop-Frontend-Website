@@ -32,7 +32,7 @@ const Header = () => {
     const path = usePathname();
 
     const { userData, isLoading: userLoading  } = useUserDetails();
-    console.log(userData,"data");
+    // console.log(userData,"data");
     const cartProduct = useAppSelector((state) => state.products.cart);
     const [openCart, setOpenCart] = useState(false);
     const [openWishlist, setOpenWishlist] = useState(false);
@@ -42,7 +42,7 @@ const Header = () => {
     const productsForComparison = useAppSelector(selectCompareProducts);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-    console.log(userData,"uu");
+    // console.log(userData,"uu");
 
     const { data: allProductsResponse, isLoading } = useGetAllProductsQuery(
         {

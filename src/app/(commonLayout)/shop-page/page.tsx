@@ -16,6 +16,7 @@ import { FaUserFriends, FaStore } from "react-icons/fa";
 import { toast } from "sonner";
 import { MapPin, Package, UserCheck, UserPlus } from "lucide-react";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
+import ShopViewSkeleton from "@/components/HomePage/ShopViewSkeleton";
 
 const Views = () => {
   const searchParams = useSearchParams();
@@ -105,7 +106,7 @@ const Views = () => {
   };
 
   if (isLoading) {
-    return <Loading />;
+    return <ShopViewSkeleton />;
   }
 
   // console.log(singleVendor.shopName, paginatedProducts, email,"sa");
@@ -279,16 +280,72 @@ const Views = () => {
             </div>
 
             {/* Pagination */}
-            {totalPages > 1 && (
+              {totalPages > 1 && (
               <div className="flex justify-center mt-8 md:mt-12">
                 <Pagination
                   total={totalPages}
                   page={currentPage}
                   onChange={setCurrentPage}
                   showControls
-                  color="success"
-                  size="lg"
-                  className="gap-2"
+                  variant="flat"
+                  classNames={{
+                    wrapper: "gap-1 sm:gap-2",
+                    item: `
+                      w-8 h-8 sm:w-10 sm:h-10
+                      border-2 border-green-500
+                      text-green-700
+                      font-semibold
+                      rounded-lg
+                      hover:bg-green-50
+                      hover:border-green-600
+                      transition-all
+                      duration-200
+                      text-sm sm:text-base
+                    `,
+                    cursor: `
+                      bg-gradient-to-br from-green-500 to-green-600
+                      text-white
+                      w-8 h-8 sm:w-10 sm:h-10
+                      font-bold
+                      rounded-lg
+                      shadow-lg
+                      shadow-green-500/50
+                      hover:shadow-xl
+                      hover:shadow-green-600/50
+                      border-2 border-green-600
+                      scale-110
+                      transition-all
+                      duration-200
+                    `,
+                    prev: `
+                      w-8 h-8 sm:w-10 sm:h-10
+                      border-2 border-green-500
+                      text-green-700
+                      hover:bg-green-50
+                      hover:border-green-600
+                      rounded-lg
+                      transition-all
+                      duration-200
+                       data-[disabled=true]:opacity-40
+                      data-[disabled=true]:cursor-not-allowed
+                      data-[disabled=true]:hover:bg-transparent
+                      data-[disabled=true]:hover:border-green-500
+                    `,
+                    next: `
+                      w-8 h-8 sm:w-10 sm:h-10
+                      border-2 border-green-500
+                      text-green-700
+                      hover:bg-green-50
+                      hover:border-green-600
+                      rounded-lg
+                      transition-all
+                      duration-200
+                        data-[disabled=true]:opacity-40
+                      data-[disabled=true]:cursor-not-allowed
+                      data-[disabled=true]:hover:bg-transparent
+                      data-[disabled=true]:hover:border-green-500
+                    `,
+                  }}
                 />
               </div>
             )}

@@ -117,8 +117,8 @@ const HomePageProductCard = (
             }
         }
 
-        if (productsForComparison.length >= 3) {
-            toast.error("You can only compare up to 3 products.");
+        if (productsForComparison.length >= 5) {
+            toast.error("You can only compare up to 5 products.");
             return;
         }
 
@@ -131,6 +131,9 @@ const HomePageProductCard = (
     };
 
     // console.log("from redux", productsForComparison);
+// console.log("from redux", singleProduct);
+
+
 
 
     return (
@@ -159,7 +162,7 @@ const HomePageProductCard = (
                                 )}
                             </div>
 
-  {userData?.userData ? (
+ 
          <div>
  {singleProduct.stockQuantity > 0 && (
     <div>
@@ -242,8 +245,8 @@ const HomePageProductCard = (
           </div>
              )}
              </div>
-   )   : (
-   <div className="flex justify-center">
+ 
+   {/* <div className="flex justify-center">
    <ul className="flex gap-2 sm:gap-3 h-[40px] rounded-full bg-opacity-90 opacity-0 group-hover:opacity-100 transition-all duration-700 top-1/2 -translate-y-1/2 justify-center items-center absolute">
    <Link href={`/login`}>
    <li className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shadow-md border cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#36931e] hover:text-white hover:rotate-[360deg] transition-all">
@@ -274,8 +277,8 @@ const HomePageProductCard = (
              Add to Cart
               </span>
          </span>
-  </div>
-      )}
+  </div> */}
+     
 </div>
                         {/* view details  */}
                         <div className="flex-1 flex flex-col">
@@ -289,6 +292,7 @@ const HomePageProductCard = (
                                     <h1 className="text-sm sm:text-base md:text-lg font-semibold text-black flex-grow line-clamp-2">
                                         {singleProduct.name}
                                     </h1>
+                                    <p className="text-xs sm:text-sm text-gray-500 line-clamp-2 mb-2">{singleProduct.description || "No description available"}</p>
                                     <div className="flex gap-2 items-center pb-2">
                                         <span className="font-medium text-sm sm:text-base md:text-lg text-black">
                                             Price:
@@ -313,10 +317,14 @@ const HomePageProductCard = (
                                     </div>
                                     <div className="flex gap-2 items-center pb-2">
                                          {singleProduct?.vendor?.shopName || shopName ?(<>
-                                        <span className="font-medium text-sm sm:text-base md:text-lg text-black">Shop Name:</span>
+                                        <span className="font-medium text-sm sm:text-base md:text-lg text-black line-clamp-1">Shop:</span>
                                         <h2 className="font-medium text-sm sm:text-base md:text-lg text-primary line-clamp-1">{singleProduct?.vendor?.shopName || shopName }</h2> </>) :""}
 
                                     </div>
+                                  {/* Rating
+                                    <div>
+
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

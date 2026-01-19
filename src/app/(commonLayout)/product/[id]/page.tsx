@@ -34,6 +34,8 @@ import "swiper/css/pagination";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import useUserDetails from "@/hooks/useUser";
+import ProductDetailsSkeleton from "@/components/HomePage/ProductDetailsSkeleton";
+import HomePageProductCardSkeleton from "@/components/HomePage/HomePageProductCardSkeleton";
 
 const ProductDetails = () => {
   const params = useParams();
@@ -162,7 +164,7 @@ const userRole = userData?.userData?.role;
     const cardCount = getCardCount();
     return Array.from({ length: cardCount }).map((_, index) => (
       <SwiperSlide key={index}>
-        <Loading />
+        <HomePageProductCardSkeleton />
       </SwiperSlide>
     ));
   };
@@ -212,7 +214,7 @@ const formatDateTime = (dateString: string) => {
   }
 
   if (isLoading) {
-    return <Loading />;
+    return <ProductDetailsSkeleton />;
   }
 
   if (isError) {
@@ -250,7 +252,7 @@ const formatDateTime = (dateString: string) => {
 
 
   return (
-    <div className="py-6 md:py-10 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="py-6 md:py-10 px-4  lg:px-0 max-w-7xl mx-auto">
      {/* Product Main Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-12">
         {/* Image Gallery */}
@@ -570,7 +572,7 @@ const formatDateTime = (dateString: string) => {
 
       {/* Related Products */}
       <section>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 ">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">
             Related Products
           </h2>
@@ -630,6 +632,10 @@ const formatDateTime = (dateString: string) => {
           }}
           modules={[Navigation]}
           className="mySwiper"
+          style={{ 
+            height: 'auto',
+            paddingBottom: '20px'
+          }}
           breakpoints={{
             320: { slidesPerView: 1 },
             640: { slidesPerView: 2 },
@@ -653,8 +659,10 @@ const formatDateTime = (dateString: string) => {
                 }
 
                 return filteredProducts?.map((singleProduct: IProduct, index: number) => (
-                  <SwiperSlide key={index}>
-                    <HomePageProductCard singleProduct={singleProduct} />
+                   <SwiperSlide key={index} style={{ height: 'auto', display: 'flex' }}>
+                    <div style={{ width: '100%', height: '100%' }}>
+                      <HomePageProductCard singleProduct={singleProduct} />
+                    </div>
                   </SwiperSlide>
                 ));
               })()}

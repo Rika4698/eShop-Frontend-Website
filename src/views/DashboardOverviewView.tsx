@@ -8,6 +8,7 @@ import OverviewPieChart from "@/components/Dashboard/OverviewPieChart";
 import UserDistributionChart from "@/components/Dashboard/UserDistributionChart";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { calculateStats, calculateUserDistribution, getMonthlyData } from "@/utils/dashboardHelpers";
+import DashboardSkeleton from "./DashboardSkeleton";
 
 
 
@@ -18,11 +19,7 @@ const DashboardOverviewView = () => {
   const dashboardData = useDashboardData();
   
   if (dashboardData.isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-xl font-semibold text-gray-600">Loading Dashboard...</div>
-      </div>
-    );
+    return <DashboardSkeleton/>;
   }
 
   const stats = calculateStats(dashboardData);

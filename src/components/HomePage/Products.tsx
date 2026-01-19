@@ -7,6 +7,7 @@ import { IProduct } from "@/types/modal";
 import HomePageProductCard from "./HomePageProductCard";
 import { ChevronLeft, ChevronRight, Package, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import HomePageProductCardSkeleton from "./HomePageProductCardSkeleton";
 
 const HomeProducts = () => {
 
@@ -157,9 +158,9 @@ const HomeProducts = () => {
 
       {/* Product Grid */}
        {isLoading ? (
-        <div className="flex items-center justify-center">
-          {Array.from({ length: 1 }).map((_, index) => (
-            <Loading key={index} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+          {Array.from({ length: limit }).map((_, index) => (
+            <HomePageProductCardSkeleton key={index} />
           ))}
         </div>
       ) : products?.length > 0 
@@ -187,12 +188,13 @@ const HomeProducts = () => {
           )}
  
        <div className="mt-10 flex justify-center">
+         {isLoading ? "" :
         <Link href="/all-products">
           <button className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#18b500] to-[#48ad39] text-white font-bold rounded-full shadow-lg hover:scale-105 transition-all">
             View All Products
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
-        </Link>
+        </Link>}
       </div>
 
 

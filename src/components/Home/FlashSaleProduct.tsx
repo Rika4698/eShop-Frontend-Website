@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import HomePageProductCard from "../HomePage/HomePageProductCard";
 import Link from "next/link";
 import { Zap, ArrowRight, Flame } from "lucide-react";
+import HomePageProductCardSkeleton from "../HomePage/HomePageProductCardSkeleton";
 
 const FlashSale = () => {
    const [limit, setLimit] = useState(4);
@@ -136,24 +137,22 @@ const products: IProduct[] = data?.data?.slice(0, limit) || [];
 
       {/* Product Grid */}
       {isLoading ? (
-        <div className="flex items-center justify-center">
-          {Array.from({ length: 1 }).map((_, index) => (
-            <div key={index} className="animate-pulse">
-              <Loading />
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+          {Array.from({ length: limit }).map((_, index) => (
+            <HomePageProductCardSkeleton key={index} />
           ))}
         </div>
       ) :  products.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 auto-rows-fr">
           {products.map((singleProduct: IProduct, index: number) => (
             <div 
               key={singleProduct.id}
-              className="transform transition-all duration-300 hover:scale-105"
+              className="transform transition-all duration-300 hover:scale-105 h-full "
               style={{
                 animation: `fadeInUp 0.5s ease-out ${index * 0.1}s both`
               }}
             >
-              <div className="relative">
+              <div className="relative h-full">
                 {/* Flash Sale Badge */}
                 <div className="absolute -top-2 -right-2 z-10">
                   <div className="relative">

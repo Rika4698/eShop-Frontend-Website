@@ -15,9 +15,10 @@ import Loading from "@/app/loading";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import {  Package } from "lucide-react";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import RangeSlider from "@/components/Home/RangeSlider";
+import HomePageProductCardSkeleton from "@/components/HomePage/HomePageProductCardSkeleton";
 
 interface ICategory {
   id: string;
@@ -101,7 +102,7 @@ useEffect(() => {
 
   
   return (
-    <div className="lg:container lg:mx-auto lg:px-4 py-8">
+    <div className="lg:container lg:mx-auto  py-8">
       <h1 className="text-3xl md:text-5xl text-green-700 font-bold mb-6 text-center">All Products</h1>
 
       <div className="grid grid-cols-12 gap-6">
@@ -197,19 +198,25 @@ useEffect(() => {
       {isLoading || isFetching
           ? Array.from({ length: dataPerPage }).map((_, index) => (
               <div key={index}>
-                <Loading />
+                <HomePageProductCardSkeleton />
               </div>
             ))
-          : allProductsResponse?.data?.length
+          : allProductsResponse?.data?.length > 0
     ? allProductsResponse.data.map((singleProduct: IProduct) => (
         <div key={singleProduct.id}>
           <HomePageProductCard singleProduct={singleProduct} />
         </div>
       ))
     : (
-        <div className="col-span-full text-center text-gray-500 text-lg py-20">
-          No products found.
-        </div>
+         <div className="col-span-full flex flex-col items-center justify-center py-12 sm:py-16">
+              <Package className="w-16 h-16 sm:w-20 sm:h-20 text-gray-300 mb-4" />
+              <h3 className="text-xl sm:text-2xl font-semibold text-gray-600 mb-2">
+                No Products Found
+              </h3>
+              <p className="text-gray-500 text-sm sm:text-base text-center">
+                Check back later for new products
+              </p>
+            </div>
       )
             
             }

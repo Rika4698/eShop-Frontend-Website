@@ -14,6 +14,7 @@ import { verifyToken } from "@/utils/verifyToken";
 import { setUser, TUser } from "@/redux/features/auth/authSlice";
 import { loginUser } from "@/utils/loginService";
 import { getDefaultDashboardRoute, UserRole } from "@/lib/auth-utils";
+import { Button } from "@/components/ui/button";
 
 export type TLogin = {
   email: string;
@@ -66,6 +67,11 @@ export default function Login() {
 
   router.replace(targetRoute);
   router.refresh();
+  };
+
+   const handleClickLogin = (email: string, password: string) => {
+    // Pre-fill login form for specific roles
+    handleLogin({ email, password });
   };
 
  
@@ -172,7 +178,38 @@ export default function Login() {
             Register
           </Link>
         </p>
+           <div className="mt-8 space-y-4">
+          <Button
+            onClick={() => handleClickLogin("person12@gmail.com", "*Person12")}
+          
+            className="w-full bg-blue-500 hover:bg-blue-600  text-white"
+            variant={"default"}
+          >
+            Demo Login as Admin
+     
+            
+          </Button>
 
+          <Button
+            onClick={() => handleClickLogin("samira12@gmail.com", "*Samira12")}
+            
+            className="w-full bg-lime-500 hover:bg-lime-600  text-white"
+            variant={"default"}
+          >
+            Demo Login as Vendor
+            
+          </Button>
+          <Button
+            onClick={() => handleClickLogin("karim12@gmail.com", "*Karim12")}
+           
+            className="w-full bg-purple-500 hover:bg-purple-600 text-white"
+            variant={"default"}
+          >
+            Demo Login as Customer
+            
+         
+          </Button>
+        </div>
       
       </div>
     </div>

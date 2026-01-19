@@ -6,7 +6,9 @@ import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi"
 import { useGetAllProductsQuery } from "@/redux/features/products/productApi";
 import { ICategory, IProduct } from "@/types/modal";
 import Loading from "@/app/loading";
+import { Flame } from "lucide-react";
 import HomePageProductCard from "../HomePage/HomePageProductCard";
+import HomePageProductCardSkeleton from "../HomePage/HomePageProductCardSkeleton";
 
 // Helper function to get data per page based on window width
 const getDataPerPageByWidth = (width: number): number => {
@@ -104,24 +106,41 @@ const FlashSale = () => {
     setMaxPrice(values[1]);
     setCurrentPage(1); 
   };
+  // console.log(allProductsResponse,"bb");
 
   return (
-    <div className="pb-16">
+    <div className="pb-16 ">
       {/* Filter part - You can add your filter UI here */}
-    
-      <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-3">
-        {isLoading || isFetching
-          ? Array.from({ length: dataPerPage }).map((_, index) => (
+    {isLoading || isFetching ?
+      <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ">
+         {Array.from({ length: dataPerPage }).map((_, index) => (
               <div key={index}>
-                <Loading/>
+                <HomePageProductCardSkeleton/>
               </div>
-            ))
-          : allProductsResponse?.data?.map((singleProduct: IProduct) => (
+            ))}
+
+            </div>
+          : allProductsResponse?.data?.length > 0 ? (
+          <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ">
+          {allProductsResponse?.data?.map((singleProduct: IProduct) => (
               <div key={singleProduct.id}>
                 <HomePageProductCard singleProduct={singleProduct} />
               </div>
             ))}
-      </div>
+            </div>
+            
+          ) : (<div className=" flex flex-col items-center justify-center py-12 sm:py-16  ">
+                    <Flame className="w-16 h-16 sm:w-20 sm:h-20 text-gray-300 mb-4" />
+                    <h3 className="text-xl sm:text-2xl font-semibold text-gray-600 mb-2">
+                      No Flash Sale Available
+                    </h3>
+                    <p className="text-gray-500 text-sm sm:text-base text-center">
+                      Check back later for amazing deals!
+                    </p>
+                  </div>)
+            
+            }
+      
 
       {/* Pagination part */}
       <div className="pt-7">
