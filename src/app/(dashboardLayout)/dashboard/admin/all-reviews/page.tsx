@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useGetAllProductsQuery } from "@/redux/features/products/productApi";
+
 import { useState } from "react";
 import {
   Table,
@@ -22,6 +22,7 @@ import {
 import Image from "next/image";
 import { Star, Eye } from "lucide-react";
 import NoTableDataFound from "@/components/uiElements/NoTableDataFound";
+import { useGetAllReviewsQuery } from "@/redux/features/review/reviewsApi";
 
 interface IReview {
   id: string;
@@ -77,37 +78,41 @@ const StarDisplay = ({ rating }: { rating: number }) => {
 
 const AdminReviewsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const dataPerPage = 10;
+   const [dataPerPage, setDataPerPage] = useState(10);
+  // const dataPerPage = 10;
   const [selectedReview, setSelectedReview] = useState<IReview | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data: allProductsResponse, isLoading } = useGetAllProductsQuery(undefined);
+  const { data: allProductsResponse, isLoading } = useGetAllReviewsQuery({
+    page: currentPage,
+    limit: dataPerPage,
+  });
 
-  console.log(allProductsResponse?.data,"admin");
+  // console.log(allProductsResponse,"admin");
 
   // Extract and flatten all reviews from product data
-  const allReviews: IReview[] =
-    allProductsResponse?.data?.flatMap((product: any) => 
-      (product.reviews || []).map((review: any) => ({
-        ...review,
-        product: {
-          id: product.id,
-          name: product.name,
-          image: product.image,
-        },
-        vendor: {
-          id: product.vendorId,
-          name:product.vendor.name,
-          email:product.vendor.email,
-          logo:product.vendor.logo,
-          shopName: product.vendor?.shopName || "No Shop Name",
-        },
-      }))
-    ) || [];
-    //  console.log(allProductsResponse,"admin");
+  // const allReviews: IReview[] =
+  //   allProductsResponse?.data?.flatMap((product: any) => 
+  //     (product.reviews || []).map((review: any) => ({
+  //       ...review,
+  //       product: {
+  //         id: product.id,
+  //         name: product.name,
+  //         image: product.image,
+  //       },
+  //       vendor: {
+  //         id: product.vendorId,
+  //         name:product.vendor.name,
+  //         email:product.vendor.email,
+  //         logo:product.vendor.logo,
+  //         shopName: product.vendor?.shopName || "No Shop Name",
+  //       },
+  //     }))
+  //   ) || [];
+  //    console.log(allReviews,"admi");
 
-
-  const totalPages = Math.ceil(allReviews.length / dataPerPage);
+const review = allProductsResponse?.data;
+  const totalPages = Math.ceil((allProductsResponse?.meta?.total || 0) / dataPerPage);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
@@ -141,10 +146,10 @@ const AdminReviewsPage = () => {
   }
 
   // Paginate reviews
-  const startIndex = (currentPage - 1) * dataPerPage;
-  const paginatedReviews = allReviews?.slice(startIndex, startIndex + dataPerPage) || [];
+  // const startIndex = (currentPage - 1) * dataPerPage;
+  // const paginatedReviews = allReviews?.slice(startIndex, startIndex + dataPerPage) || [];
 
-  console.log(paginatedReviews,"adm")
+  // console.log(paginatedReviews,"adm")
 
   return (
     <div>
@@ -166,12 +171,12 @@ const AdminReviewsPage = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedReviews && paginatedReviews.length > 0 ? (
-              paginatedReviews.map((review: IReview, index: number) => (
+            {review && review.length > 0 ? (
+              review.map((review: IReview, index: number) => (
                 <TableRow key={review.id}>
                   {/* Serial Number */}
                   <TableCell className="font-medium">
-                    {startIndex + index + 1}
+                   {(currentPage - 1) * dataPerPage + index + 1}
                   </TableCell>
 
                   {/* Product Info */}
@@ -428,7 +433,7 @@ const AdminReviewsPage = () => {
       </div>
 
       {/* Pagination */}
-      {allReviews && allReviews.length > 0 && totalPages > 1 && (
+      {review && review.length > 0 && totalPages > 0 && (
         <div className="flex justify-center items-center mt-6 space-x-2">
           <button
             onClick={() => handlePageChange(currentPage - 1)}

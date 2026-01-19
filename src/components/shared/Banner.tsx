@@ -9,7 +9,7 @@ const Banner = () => {
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:gap-5">
         {/* Main Large Banner - Grocery */}
         <div className="col-span-4 group">
-          <div className="relative w-full xl:h-[450px] lg:h-[355px] md:h-[290px] h-[320px] rounded-sm overflow-hidden shadow-lg">
+          <div className="relative w-full xl:h-[450px] lg:h-[355px]  h-[320px] rounded-sm overflow-hidden shadow-lg  ">
             <Image
               src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1400&q=80"
               alt="Fresh Grocery"
@@ -22,7 +22,7 @@ const Banner = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
             
             {/* Content */}
-            <div className="absolute inset-0 flex flex-col justify-center pl-[30px] md:pl-[60px] text-white">
+            <div className="absolute inset-0 flex flex-col justify-center pl-[30px] md:pl-[60px] text-white ">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-5 h-5" />
                 <span className="uppercase text-sm md:text-base font-semibold tracking-wider">
@@ -56,7 +56,7 @@ const Banner = () => {
 
         {/* Side Banner - Pet Care */}
         <div className="col-span-4 md:col-span-2 group">
-          <div className=" relative w-full xl:h-[450px] lg:h-[355px] md:h-[290px] h-[280px] rounded-sm overflow-hidden shadow-lg">
+          <div className=" relative w-full xl:h-[450px] lg:h-[355px] md:h-[320px] h-[280px] rounded-sm overflow-hidden shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1415369629372-26f2fe60c467?w=800&q=80"
               alt="Pet Care Products"

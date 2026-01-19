@@ -52,6 +52,7 @@ const AllProducts = () => {
     category: activeCategory || "", 
     sort,
   });
+  console.log(allProductsResponse,"jaa");
 
 const totalPages = Math.ceil(
   (allProductsResponse?.meta?.total || 0) / dataPerPage
