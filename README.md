@@ -621,4 +621,12 @@ npm run dev
 
 ---
 
+## 👤 Author & Contact
+
+**Name: Sharmin Akter Reka**
+**Role: Frontend Developer**
+**Portfolio: https://sharmin-rika-portfolio.vercel.app/**
+
+---
+
 For more information or support, please open an issue on the repository.
