@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/shared/Footer";
 import Header from "@/components/shared/Header";
 import React from "react";
+import AIChatbot from "../../components/AI/AIChatbot";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -15,6 +16,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <main className="w-full  min-h-screen relative z-[1]">
         <div className="lg:max-w-full lg:mx-auto lg:px-4 xl:px-8 px-2">{children}</div>
       </main>
+      <AIChatbot/>
       <Footer/>
     </>
   );
