@@ -4,7 +4,9 @@ import { NextRequest } from 'next/server';
 export async function POST(req: NextRequest) {
     const body = await req.json();
 
-    const response = await fetch(`${envData.baseUrl}/ai/chat`, {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_URL || 'http://localhost:5000/api/v1';
+
+    const response = await fetch(`${baseUrl}/ai/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
