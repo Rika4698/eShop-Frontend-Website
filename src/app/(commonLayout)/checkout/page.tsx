@@ -240,7 +240,7 @@ const CheckOut = () => {
         }
 
         const now = new Date();
-        const isExpired = matchingCoupon.endDate && !isNaN(new Date(matchingCoupon.endDate).getTime()) && new (matchingCoupon.endDate) < now;
+        const isExpired = matchingCoupon.endDate && !isNaN(new Date(matchingCoupon.endDate).getTime()) && new Date(matchingCoupon.endDate) < now;
         const isNotStarted = matchingCoupon.startDate && !isNaN(new Date(matchingCoupon.startDate).getTime()) && new Date(matchingCoupon.startDate) > now;
         
         if(!matchingCoupon.isActive || isExpired || isNotStarted){
@@ -261,8 +261,14 @@ const CheckOut = () => {
             discountValue: matchingCoupon.discountValue,
         };
 
-        Clg
-    }
+        console.log("Valid coupon info:", couponInfo);
+
+        dispatch(setCoupon({ couponInfo }));
+        setIsCouponVerified(true);
+        setShowCoupon(false);
+        setInputCoupon("");
+        toast.success("Coupon applied successfully", { duration: 3000 });
+    };
 
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -736,9 +742,9 @@ const CheckOut = () => {
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                                    {/* customers can use them multiple times */}
-                                    {allCoupons && allCoupons.length > 0 ? (
-                                        allCoupons.map((singleCoupon: ICoupon) => (
+                                    {/* Show only active and non-expired coupons */}
+                                    {activeCoupons && activeCoupons.length > 0 ? (
+                                        activeCoupons.map((singleCoupon: ICoupon) => (
                                             <div
                                                 key={singleCoupon?.id}
                                                 className="container border border-green-700 text-black p-5 rounded-lg shadow-lg max-w-md mx-auto"
@@ -758,7 +764,7 @@ const CheckOut = () => {
                                                             <span className="text-primary font-bold">
                                                                 {singleCoupon.discountValue} <span>TK</span> OFF
                                                             </span>{" "}
-                                                            your next purchase!
+                                                            your current purchase!
                                                         </p>
                                                     )}
                                                 </div>
