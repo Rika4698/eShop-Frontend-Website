@@ -15,9 +15,9 @@ import {
   removeProduct,
 } from "@/redux/features/products/productSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { ICoupon } from "@/types/modal";
+import { DiscountStatus, ICoupon } from "@/types/modal";
 import { formatDate } from "date-fns";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
 import Image from "next/image";
@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import Loading from "../../loading";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { CloudCog } from "lucide-react";
 
 const CheckOut = () => {
     const { userData } = useUserDetails();
@@ -64,6 +65,30 @@ const CheckOut = () => {
     );
     const [isCouponVerified, setIsCouponVerified] = useState(false);
     const [showCoupon, setShowCoupon] = useState(false);
+
+    //Filter only active and non-expired coupons
+
+    const activeCoupons = useMemo(() => {
+        if(!allCoupons || !Array.isArray(allCoupons)) return [];
+        const now = new Date();
+        return allCoupons.filter((coupon: ICoupon) => {
+            if(!coupon?.isActive) return false;
+            if (coupon.endDate) {
+                const endDate = new Date(coupon.endDate);
+                if(!isNaN(endDate.getTime()) && endDate < now){
+                    return false;
+                }
+            }
+            if(coupon.startDate){
+                const startDate = new Date(coupon.startDate);
+                if(!isNaN(startDate.getTime()) && startDate > now){
+                    return false;
+                }
+            }
+            return true;
+        });
+    }, [allCoupons]);
+
 
     const handlePlaceOrder = async () => {
         if (!togglePayment) {
@@ -157,39 +182,87 @@ const CheckOut = () => {
         }
     };
 
+    // const handleInput = async (event: React.FormEvent<HTMLFormElement>) => {
+    //     event.preventDefault();
+    //     // toast.loading("Applying Coupon...");
+
+    //     // Check if the coupon exists in allCoupons
+    //     const validCoupon = allCoupons?.find(
+    //         (coupon: ICoupon) =>
+    //             coupon.code.toLowerCase() === inputCoupon.toLowerCase()
+    //     );
+
+    //     toast.dismiss();
+
+    //     if (validCoupon) {
+    //         const couponInfo = {
+    //             code: validCoupon.code,
+    //             discountStatus: validCoupon.discountStatus,
+    //             discountValue: validCoupon.discountValue,
+    //         };
+
+    //         console.log("Valid coupon info:", couponInfo);
+
+    //         dispatch(setCoupon({ couponInfo }));
+    //         setIsCouponVerified(true);
+    //          setShowCoupon(false); 
+    //         setInputCoupon(""); 
+    //         toast.success("Coupon applied successfully", { duration: 3000 });
+    //     } else {
+    //         setIsCouponVerified(false);
+    //         toast.error("Invalid coupon code. Please check and try again.", {
+    //             duration: 3000,
+    //         });
+    //     }
+    // };
+
+
     const handleInput = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // toast.loading("Applying Coupon...");
+        const trimmedCode = inputCoupon.trim();
+        if(!trimmedCode) {
+            toast.error("Please enter a coupon code");
+            return;
+        }
 
-        // Check if the coupon exists in allCoupons
-        const validCoupon = allCoupons?.find(
-            (coupon: ICoupon) =>
-                coupon.code.toLowerCase() === inputCoupon.toLowerCase()
+        //check if the coupon exists in all coupons
+        const matchingCoupon = allCoupons?.find(
+            (coupon: ICoupon) => coupon.code.trim().toLowerCase() === trimmedCode.toLowerCase()
         );
-
         toast.dismiss();
 
-        if (validCoupon) {
-            const couponInfo = {
-                code: validCoupon.code,
-                discountStatus: validCoupon.discountStatus,
-                discountValue: validCoupon.discountValue,
-            };
-
-            console.log("Valid coupon info:", couponInfo);
-
-            dispatch(setCoupon({ couponInfo }));
-            setIsCouponVerified(true);
-             setShowCoupon(false); 
-            setInputCoupon(""); 
-            toast.success("Coupon applied successfully", { duration: 3000 });
-        } else {
+        if(!matchingCoupon) {
             setIsCouponVerified(false);
             toast.error("Invalid coupon code. Please check and try again.", {
                 duration: 3000,
             });
+            return;
         }
-    };
+
+        const now = new Date();
+        const isExpired = matchingCoupon.endDate && !isNaN(new Date(matchingCoupon.endDate).getTime()) && new (matchingCoupon.endDate) < now;
+        const isNotStarted = matchingCoupon.startDate && !isNaN(new Date(matchingCoupon.startDate).getTime()) && new Date(matchingCoupon.startDate) > now;
+        
+        if(!matchingCoupon.isActive || isExpired || isNotStarted){
+            setIsCouponVerified(false);
+            if(isExpired) {
+                toast.error("This coupon has expired.", {duration: 3000});
+            } else if (isNotStarted){
+                toast.error("This coupon is not active yet.", { duration: 3000 });
+            } else {
+                toast.error("This coupon is inactive.", {duration: 3000 });
+            }
+            return;
+        }
+
+        const couponInfo = {
+            code: matchingCoupon.code,
+            discountStatus: matchingCoupon.discountStatus,
+            discountValue: matchingCoupon.discountValue,
+        };
+
+        Clg
+    }
 
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,6 +287,26 @@ const CheckOut = () => {
    
 
     const appliedCoupon = useAppSelector(selectAppliedCoupon);
+
+    // If an applied coupon is found to be expired or inactive, remove it automatically
+    useEffect(() => {
+        if(appliedCoupon && allCoupons && allCoupons.length > 0){
+            const currentCoupon = allCoupons.find(
+                (c: ICoupon) => c.code.toLocaleLowerCase() === appliedCoupon.code.toLocaleLowerCase()
+            );
+            if (currentCoupon){
+                const now = new Date();
+                const isExpired = currentCoupon.endDate && !isNaN(new Date(currentCoupon.endDate).getTime()) && new Date(currentCoupon.endDate) < now;
+                const isNotStarted = currentCoupon.startDate && !isNaN(new Date(currentCoupon.startDate).getTime()) && new Date(currentCoupon.startDate) > now;
+                if(!currentCoupon.isActive || isExpired || isNotStarted){
+                    dispatch(clearCoupon());
+                    toast.error(
+                        `Coupon "${appliedCoupon.code}" is no longer active or has expired and was removed.`
+                    );
+                }
+            }
+        }
+    }, [appliedCoupon, allCoupons, dispatch]);
 
     const handleRemoveFromCart = (id: string) => {
         dispatch(removeProduct({id}));
