@@ -70,7 +70,7 @@ export const Countdown = ({ targetDate }: { targetDate: string }) => {
 
 // BestDeal
 const BestDeal = () => {
-  const targetDate = "2026-04-30T00:00:00";
+  const targetDate = "2026-10-01T00:00:00";
   const [isTimeRemaining, setIsTimeRemaining] = useState(true);
 
   const scrollToTop = () => {
