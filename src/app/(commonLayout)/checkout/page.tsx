@@ -12,6 +12,8 @@ import {
 import { usePlaceOrderMutation } from "@/redux/features/orders/orderApi";
 import {
   clearCart,
+  decrementQuantity,
+  incrementQuantity,
   removeProduct,
 } from "@/redux/features/products/productSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -318,6 +320,15 @@ const CheckOut = () => {
         dispatch(removeProduct({id}));
         dispatch(clearCoupon());
         toast.success("Product removed successfully!");
+    };
+
+
+    const handleIncrementQuantity = (id: string) => {
+        dispatch(incrementQuantity({id}));
+    };
+
+    const handleDecrementQuantity = (id: string) => {
+        dispatch(decrementQuantity({id}));
     };
 
     const subtotal = cart.reduce(
