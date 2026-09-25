@@ -550,7 +550,20 @@ const CheckOut = () => {
 
                             <div className="mt-4 shadow-sm">
                                 <div>
-                                    {cart.length > 0 &&
+                                    {cart.length > 0 &&  (
+                                        <ul role="list" className="divide-y divide-gray-200">
+                                            {
+                                                cart.map((singleProduct) => (
+                                                    <li key={singleProduct.id} className="flex flex-wrap sm:flex-row py-4 px-4 sm:px-6 gap-4 items-start sm:items-center">
+                                                        
+
+                                                    </li>
+                                                ))
+                                            }
+
+                                        </ul>
+                                    )
+
                                         cart.map((singleProduct) => (
                                             <div key={singleProduct.id}>
                                                 <ul role="list" className="divide-y divide-gray-200">
