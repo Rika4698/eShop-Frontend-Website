@@ -28,7 +28,7 @@ import { FaCircleXmark } from "react-icons/fa6";
 import { RiCoupon2Fill, RiErrorWarningFill } from "react-icons/ri";
 import { toast } from "sonner";
 import Loading from "../../loading";
-import { FaArrowLeft, FaMinus } from "react-icons/fa";
+import { FaArrowLeft, FaMinus, FaPlus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { CloudCog } from "lucide-react";
 
@@ -574,7 +574,19 @@ const CheckOut = () => {
                                                             <div className="flex items-center border border-green-600 rounded-lg overflow-hidden bg-white shadow-sm">
                                                                 <button type="button" onClick={() => handleDecrementQuantity(singleProduct.id)} className="w-8 h-8 flex items-center justify-center text-gray-700 hover:bg-green-600 hover:text-white font-bold transition-colors active:scale-95" title="Decrease quantity">  <FaMinus className="w-3 h-3"/></button>
                                                                 <span className="w-10 text-center font-bold text-black text-sm select-none"> {singleProduct.quantity} </span>
-                                                                <button type="button" onClick={() => handleIncrementQuantity(singleProduct.id)} className="w-8 h-8 flex items-center justify-center text-gray-700 hover:bg-green-600 hover:text-white font-bold transition-colors active:scale-95" title="Increa"></button>
+                                                                <button type="button" onClick={() => handleIncrementQuantity(singleProduct.id)} className="w-8 h-8 flex items-center justify-center text-gray-700 hover:bg-green-600 hover:text-white font-bold transition-colors active:scale-95" title="Increase quantity"> <FaPlus className="w-3 h-3"/></button>
+
+                                                            </div>
+
+                                                            {/* Item Price */}
+                                                            <div className="text-right">
+                                                                <span className="text-xs text-gray-500 block"> {singleProduct.price.toFixed(2)} TK / item
+
+                                                                </span>
+
+                                                                <span className="text-sm sm:text-base font-bold text-green-700"> {(singleProduct.price * singleProduct.quantity).toFixed(2)} TK
+
+                                                                </span>
 
                                                             </div>
 
@@ -585,9 +597,10 @@ const CheckOut = () => {
                                             }
 
                                         </ul>
-                                    )
+                                    )}
 
-                                        cart.map((singleProduct) => (
+                                        
+                                        {/* cart.map((singleProduct) => (
                                             <div key={singleProduct.id}>
                                                 <ul role="list" className="divide-y divide-gray-200">
                                                     <li className="flex py-6 px-4 sm:px-6">
@@ -628,7 +641,7 @@ const CheckOut = () => {
                                                     </li>
                                                 </ul>
                                             </div>
-                                        ))}
+                                        ))} */}
 
                                     {/* Coupon Section */}
                                     <div>
