@@ -28,7 +28,7 @@ import { FaCircleXmark } from "react-icons/fa6";
 import { RiCoupon2Fill, RiErrorWarningFill } from "react-icons/ri";
 import { toast } from "sonner";
 import Loading from "../../loading";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaMinus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { CloudCog } from "lucide-react";
 
@@ -555,7 +555,30 @@ const CheckOut = () => {
                                             {
                                                 cart.map((singleProduct) => (
                                                     <li key={singleProduct.id} className="flex flex-wrap sm:flex-row py-4 px-4 sm:px-6 gap-4 items-start sm:items-center">
-                                                        
+                                                        <div className="flex-shrink-0">
+                                                            <Image width={80} height={80} src={singleProduct.image[0] as unknown as string} alt={singleProduct.name} className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-contain border border-gray-200 bg-white p-1"/>
+
+
+                                                        </div>
+
+                                                        <div className="flex-1 w-full min-w-0 flex flex-col justify-between gap-2">
+                                                            <h4 className="text-base font-semibold text-black leading-tight line-clamp-2">{singleProduct.name}
+
+                                                            </h4>
+                                                            <button type="button" onClick={() => handleRemoveFromCart(singleProduct.id)} className="text-[#f50c0c] hover:text-red-700 transition-colors  p-1"  title="Remove item"> <FaCircleXmark className="text-lg" /></button>
+
+                                                        </div>
+
+                                                        <div className="flex flex-wrap items-center justify-between gap-2 mt-1">
+                                                            {/* Quantity Increment / Decrement Option*/}
+                                                            <div className="flex items-center border border-green-600 rounded-lg overflow-hidden bg-white shadow-sm">
+                                                                <button type="button" onClick={() => handleDecrementQuantity(singleProduct.id)} className="w-8 h-8 flex items-center justify-center text-gray-700 hover:bg-green-600 hover:text-white font-bold transition-colors active:scale-95" title="Decrease quantity">  <FaMinus className="w-3 h-3"/></button>
+                                                                <span className="w-10 text-center font-bold text-black text-sm select-none"> {singleProduct.quantity} </span>
+                                                                <button type="button" onClick={() => handleIncrementQuantity(singleProduct.id)} className="w-8 h-8 flex items-center justify-center text-gray-700 hover:bg-green-600 hover:text-white font-bold transition-colors active:scale-95" title="Increa"></button>
+
+                                                            </div>
+
+                                                        </div>
 
                                                     </li>
                                                 ))
